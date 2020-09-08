@@ -5,6 +5,7 @@ import com.example.taskmanagerapp.Model.User.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class TasksRepository  implements IRepository<Task> {
 
@@ -32,7 +33,8 @@ public class TasksRepository  implements IRepository<Task> {
     }
 
     @Override
-    public Task get(Task task) {
+    public Task get(UUID uuid) {
         return null;
     }
+
 }

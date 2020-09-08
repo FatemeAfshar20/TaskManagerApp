@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.taskmanagerapp.Controller.Activity.LoginActivity;
+import com.example.taskmanagerapp.Model.User.Admin;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.ViewElem.LoginView;
@@ -51,6 +52,12 @@ public class SignFragment extends Fragment {
                 if(isTrueFormatInput(loginView)){
                     mUser.setUserName(loginView.getUsername().getText().toString());
                     mUser.setPassword(loginView.getPassword().getText().toString());
+
+                    // checking isAdmin or no and setting result
+                    if(loginView.getAdminPassword().getText().
+                            toString().equals(Admin.getAdminPass()))
+                        mUser.setAdmin(true);
+
                     User.addInRepository(mUser);
                     LoginActivity.start(getContext(),mUser.getUUID());
                 }else

@@ -30,6 +30,7 @@ public class LoginFragment extends Fragment {
     public static final String ARG_USER_ID = "User Id";
     public UserRepository mUserRepository = UserRepository.getInstance();
     private UUID mUserId;
+    private User mUser;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -47,6 +48,8 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUserId = (UUID) getArguments().getSerializable(ARG_USER_ID);
+        if(mUserId != null)
+            mUser=mUserRepository.get(mUserId);
     }
 
     @Override
@@ -66,8 +69,9 @@ public class LoginFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                if (getNewUser(loginView).equals(mUserRepository.get(mUserId))) {
-
+                if (getNewUser(loginView).equals(mUser)) {
+                    if(mUser.isAdmin())
+                        LoginView.returnToast(getContext(),"You are Admin");
                 } else
                     LoginView.returnToast(getContext(), R.string.invalid_input);
             }

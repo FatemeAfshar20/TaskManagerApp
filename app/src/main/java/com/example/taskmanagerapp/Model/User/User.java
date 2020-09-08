@@ -14,6 +14,7 @@ public class User {
     private UUID mUUID=UUID.randomUUID();
     private String mUserName;
     private String mPassword;
+    private boolean isAdmin;
     private TasksRepository mTasksRepository;
 
     public User(String userName, String password) {
@@ -52,6 +53,15 @@ public class User {
         mTasksRepository = tasksRepository;
     }
 
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static void addInRepository(User user){
         UserRepository.getInstance().insert(user);
     }

@@ -1,5 +1,9 @@
 package com.example.taskmanagerapp.Repository;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.example.taskmanagerapp.Model.User.User;
 
 import java.util.ArrayList;
@@ -13,21 +17,20 @@ public class UserRepository  implements IRepository<User> {
     private List<User> mUserList=new ArrayList<>();
 
     private UserRepository() {
-
+        getUserList();
     }
 
     public static UserRepository getInstance() {
         if(sInstance==null)
-            return new UserRepository();
+            sInstance= new UserRepository();
         return sInstance;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void insert(User user) {
-        for (int i = 0; i <mUserList.size() ; i++) {
-            if(mUserList.get(i).equals(user))
-                mUserList.add(user);
-        }
+        if(user!=null)
+            mUserList.add(user);
     }
 
     @Override
@@ -43,10 +46,14 @@ public class UserRepository  implements IRepository<User> {
     @Override
     public User get(UUID uuid) {
         for (int i = 0; i <mUserList.size() ; i++) {
-            if(mUserList.get(i).getUUID()==uuid)
+            if(mUserList.get(i).getUUID().equals(uuid))
                 return mUserList.get(i);
         }
         return null;
+    }
+
+    public List<User> getUserList() {
+        return mUserList;
     }
 
 }

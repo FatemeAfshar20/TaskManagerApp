@@ -69,4 +69,9 @@ public class LoginView {
                 .show();;
     }
 
+    public static void returnToast(Context context,String msg){
+        Toast.makeText(context,msg,Toast.LENGTH_LONG)
+                .show();;
+    }
+
 }
