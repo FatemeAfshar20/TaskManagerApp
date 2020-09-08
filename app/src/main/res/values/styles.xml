@@ -1,0 +1,15 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.Bridge">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/light_orange</item>
+        <item name="colorPrimaryDark">@color/dark_gray</item>
+        <item name="colorAccent">@color/dark_orange</item>
+        <item name="colorOnPrimary">@color/light</item>
+
+    </style>
+
+<style name="MyTheme" parent="AppTheme">
+
+</style>
+</resources>
