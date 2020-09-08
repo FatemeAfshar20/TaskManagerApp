@@ -4,6 +4,7 @@ import com.example.taskmanagerapp.Model.User.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class UserRepository  implements IRepository<User> {
 
@@ -23,7 +24,10 @@ public class UserRepository  implements IRepository<User> {
 
     @Override
     public void insert(User user) {
-
+        for (int i = 0; i <mUserList.size() ; i++) {
+            if(mUserList.get(i).equals(user))
+                mUserList.add(user);
+        }
     }
 
     @Override
@@ -37,7 +41,12 @@ public class UserRepository  implements IRepository<User> {
     }
 
     @Override
-    public User get(User user) {
+    public User get(UUID uuid) {
+        for (int i = 0; i <mUserList.size() ; i++) {
+            if(mUserList.get(i).getUUID()==uuid)
+                return mUserList.get(i);
+        }
         return null;
     }
+
 }

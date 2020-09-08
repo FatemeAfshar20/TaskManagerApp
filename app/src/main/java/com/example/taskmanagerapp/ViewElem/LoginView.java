@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.taskmanagerapp.R;
 import com.google.android.material.button.MaterialButton;
@@ -14,7 +15,7 @@ public class LoginView {
     private MaterialButton mButtonLogin,mButtonSign;
     private EditText mUsername,mPassword,mAdminPassword;
 
-    public LoginView( ViewGroup container
+    public LoginView(ViewGroup container
             , LayoutInflater layoutInflater,int layoutId) {
         setView(container,layoutInflater,layoutId);
     }
@@ -57,10 +58,15 @@ public class LoginView {
     }
 
     public void findElemSign(){
-        mButtonSign=mView.findViewById(R.id.btn_sign);
+        mButtonSign=mView.findViewById(R.id.btn_sign_up);
         mUsername=mView.findViewById(R.id.user_name);
         mPassword=mView.findViewById(R.id.pass);
         mAdminPassword=mView.findViewById(R.id.admin_pass);
+    }
+
+    public static void returnToast(Context context,int msgId){
+        Toast.makeText(context,msgId,Toast.LENGTH_LONG)
+                .show();;
     }
 
 }

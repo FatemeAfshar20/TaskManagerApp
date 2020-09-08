@@ -1,7 +1,13 @@
 package com.example.taskmanagerapp.Model.User;
 
-import com.example.taskmanagerapp.Repository.TasksRepository;
+import android.os.Build;
 
+import androidx.annotation.RequiresApi;
+
+import com.example.taskmanagerapp.Repository.TasksRepository;
+import com.example.taskmanagerapp.Repository.UserRepository;
+
+import java.util.Objects;
 import java.util.UUID;
 
 public class User {
@@ -44,5 +50,25 @@ public class User {
 
     public void setTasksRepository(TasksRepository tasksRepository) {
         mTasksRepository = tasksRepository;
+    }
+
+    public static void addInRepository(User user){
+        UserRepository.getInstance().insert(user);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(mUserName, user.mUserName) &&
+                Objects.equals(mPassword, user.mPassword);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public int hashCode() {
+        return Objects.hash(mUserName, mPassword);
     }
 }

@@ -7,15 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.taskmanagerapp.Controller.Fragment.LoginFragment;
 import com.example.taskmanagerapp.Controller.Fragment.SignFragment;
 import com.example.taskmanagerapp.Controller.SingleFragment;
-import com.example.taskmanagerapp.R;
 
-public class Activity extends SingleFragment {
+import java.util.UUID;
+
+public class SignActivity extends SingleFragment {
 
     public static void start(Context context) {
-        Intent starter = new Intent(context, Activity.class);
+        Intent starter = new Intent(context, SignActivity.class);
         context.startActivity(starter);
     }
 
