@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.taskmanagerapp.Controller.Fragment.LoginFragment;
+import com.example.taskmanagerapp.Controller.Fragment.SignFragment;
 import com.example.taskmanagerapp.Controller.SingleFragment;
 import com.example.taskmanagerapp.R;
 
@@ -20,6 +21,6 @@ public class Activity extends SingleFragment {
 
     @Override
     public Fragment getFragment() {
-        return LoginFragment.newInstance();
+        return SignFragment.newInstance();
     }
 }

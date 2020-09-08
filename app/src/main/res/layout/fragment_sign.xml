@@ -8,24 +8,17 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:layout_width="214dp"
-        android:layout_height="173dp"
-        android:background="@drawable/login_img"
-        android:layout_margin="@dimen/mrg_5"
-        />
-
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/username"
+            android:id="@+id/user_name"
             android:layout_width="300dp"
             android:layout_height="64dp"
             android:layout_gravity="center"
-            android:background="@drawable/indigo_light_border"
+            android:background="@drawable/purple_light_border"
             android:hint="@string/userneme"
             android:padding="10dp"
             android:textColor="@color/black" />
@@ -36,39 +29,50 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/password"
+            android:id="@+id/pass"
             android:layout_width="300dp"
             android:layout_height="64dp"
             android:layout_gravity="center"
-            android:background="@drawable/indigo_border"
+            android:background="@drawable/purple_dark_border"
             android:hint="@string/password"
             android:padding="@dimen/pad_10"
             android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:orientation="horizontal">
+        android:text="@string/check_admin"
+        android:layout_margin="@dimen/mrg_5"
+        android:textColor="@color/dark_purple"
+        android:textSize="18sp"
+        android:padding="@dimen/pad_10"
+        android:gravity="center_horizontal" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/admin_pass"
+            android:layout_width="300dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:background="@drawable/purple_so_light"
+            android:hint="@string/admin_code"
+            android:padding="@dimen/pad_10"
+            android:textColor="@color/black" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_login"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/mrg_5"
-            android:text="@string/login"
-            app:icon="@drawable/ic_login" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_sign"
+            android:id="@+id/btn_sign_up"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/mrg_5"
+            android:layout_marginTop="@dimen/mrg_10"
             android:text="@string/sign_up"
             app:icon="@drawable/ic_sign" />
-    </LinearLayout>
+
 
 </LinearLayout>

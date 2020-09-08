@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
+import com.example.taskmanagerapp.ViewElem.LoginView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +18,8 @@ import com.example.taskmanagerapp.R;
  * create an instance of this fragment.
  */
 public class LoginFragment extends Fragment {
+
+    private User mUser=new User();
 
     public LoginFragment() {
         // Required empty public constructor
@@ -37,9 +41,21 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_login, container, false);
-        return view;
+        LoginView loginView = new LoginView(container,inflater,R.layout.fragment_login);
+        loginView.findElemLogin();
+        setListener(loginView);
+        return loginView.getView();
     }
 
+private void setListener(final LoginView loginView){
+
+        loginView.getButtonLogin().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mUser.setUserName(loginView.getUsername().getText().toString());
+                mUser.setPassword(loginView.getPassword().getText().toString());
+            }
+        });
+}
 
 }

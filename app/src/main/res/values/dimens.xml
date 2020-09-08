@@ -2,4 +2,5 @@
 <resources>
     <dimen name="pad_10">10dp</dimen>
     <dimen name="mrg_5">5dp</dimen>
+    <dimen name="mrg_10">10dp</dimen>
 </resources>
