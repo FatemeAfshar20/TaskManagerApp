@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#f1f1f1"
+    tools:context=".Controller.Fragment.DONE"
+    android:layout_margin="@dimen/mrg_5"
+    >
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/task_img"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="@dimen/mrg_10"
+        android:src="@drawable/ic_sign"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/task_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/mrg_5"
+        android:padding="@dimen/pad_5"
+        android:textColor="@color/dark_orange"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        tools:text="Task Title" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/task_content"
+        android:layout_width="220dp"
+        android:layout_height="70dp"
+        android:layout_margin="@dimen/mrg_5"
+        android:layout_toStartOf="@+id/task_title"
+        android:layout_toLeftOf="@+id/task_title"
+        android:layout_toEndOf="@+id/task_img"
+        android:layout_toRightOf="@+id/task_img"
+        android:padding="@dimen/pad_5"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="italic"
+        tools:text="@tools:sample/avatars" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/task_txt_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/task_img"
+        android:layout_margin="@dimen/mrg_10"
+        android:textColor="@color/light_orange"
+        android:textSize="18sp"
+        tools:text="Date : 99/6/20" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/task_txt_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/task_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="@dimen/mrg_10"
+        android:layout_marginLeft="@dimen/mrg_10"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="@dimen/mrg_10"
+        android:layout_marginRight="13dp"
+        android:layout_marginBottom="@dimen/mrg_10"
+        android:textColor="@color/beauty_yellow"
+        android:textSize="18sp"
+        tools:text="Time :  12:17:30 PM" />
+
+
+</RelativeLayout>
