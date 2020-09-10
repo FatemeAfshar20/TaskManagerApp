@@ -47,7 +47,7 @@ public class UserRepository  implements IRepository<User> {
     public User get(UUID uuid) {
         for (int i = 0; i <mUserList.size() ; i++) {
             if(mUserList.get(i).getUUID().equals(uuid)) {
-                mUserList.get(i).setTasksRepository(new TasksRepository());
+                mUserList.get(i).getTaskList();
                 return mUserList.get(i);
             }
         }

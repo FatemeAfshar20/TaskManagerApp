@@ -34,12 +34,7 @@ public class TasksRepository  implements IRepository<Task> {
     }
 
     public List<Task> getTaskList() {
-        Task task=new Task();
-        task.setTaskContent("This is Default Task");
-        task.setTaskTitle("Maktab Task");
-        task.setTaskDate(new Date());
-        task.setTaskTime(new Date());
-        mTaskList.add(task);
+
         return mTaskList;
     }
 

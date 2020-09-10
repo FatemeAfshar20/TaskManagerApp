@@ -3,12 +3,16 @@ package com.example.taskmanagerapp.Controller.Fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
+import com.example.taskmanagerapp.Repository.UserRepository;
+import com.example.taskmanagerapp.StateAdapter.TODOAdapter;
 import com.example.taskmanagerapp.ViewElem.FragmentStateView;
 
 /**
@@ -17,6 +21,7 @@ import com.example.taskmanagerapp.ViewElem.FragmentStateView;
  * create an instance of this fragment.
  */
 public class DOING extends Fragment {
+    public UserRepository mUserRepository = UserRepository.getInstance();
 
     public DOING() {
         // Required empty public constructor
@@ -41,7 +46,14 @@ public class DOING extends Fragment {
         FragmentStateView stateView=new FragmentStateView(container,inflater,R.layout.fragment_state);
         stateView.findElem();
         setListener(stateView);
+
+        stateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
+        stateView.getRecyclerView().setAdapter(new TODOAdapter(getUser().getDOINGTaskList(),getContext()));
         return stateView.getView();
+    }
+
+    private User getUser() {
+        return mUserRepository.getUserList().get(0);
     }
 
     private void setListener(FragmentStateView stateView){
@@ -52,5 +64,6 @@ public class DOING extends Fragment {
 
             }
         });
+
     }
 }

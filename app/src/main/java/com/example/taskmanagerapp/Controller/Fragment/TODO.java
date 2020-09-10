@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.UserRepository;
 import com.example.taskmanagerapp.StateAdapter.TODOAdapter;
@@ -16,6 +17,8 @@ import com.example.taskmanagerapp.ViewElem.FragmentStateView;
 
 public class TODO extends Fragment {
 
+
+    public UserRepository mUserRepository = UserRepository.getInstance();
 
     public TODO() {
         // Required empty public constructor
@@ -44,8 +47,12 @@ public class TODO extends Fragment {
         setListener(stateView);
 
         stateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
-        stateView.getRecyclerView().setAdapter(new TODOAdapter(UserRepository.getInstance().getUserList().get(0),getContext()));
+        stateView.getRecyclerView().setAdapter(new TODOAdapter(getUser().getTODOTaskList(),getContext()));
         return stateView.getView();
+    }
+
+    private User getUser() {
+        return mUserRepository.getUserList().get(0);
     }
 
     private void setListener(FragmentStateView stateView){
