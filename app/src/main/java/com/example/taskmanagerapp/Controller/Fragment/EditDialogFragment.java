@@ -1,49 +1,37 @@
 package com.example.taskmanagerapp.Controller.Fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
 
+import com.example.taskmanagerapp.Model.Task.Task;
+import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.R;
+import com.example.taskmanagerapp.ViewElem.EditDialogView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link EditDialogFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class EditDialogFragment extends Fragment {
+import java.util.Calendar;
+import java.util.Date;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class EditDialogFragment extends DialogFragment {
+    private EditDialogView mDialogView;
+    private Task mTask=new Task();
 
     public EditDialogFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EditDialogFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static EditDialogFragment newInstance(String param1, String param2) {
+    public static EditDialogFragment newInstance() {
         EditDialogFragment fragment = new EditDialogFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,16 +39,87 @@ public class EditDialogFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_dialog, container, false);
+        mDialogView = new EditDialogView(container, inflater, R.layout.fragment_edit_dialog);
+        mDialogView.findElem();
+        setListener(mDialogView);
+        return mDialogView.getView();
+    }
+
+    private void setListener(EditDialogView dialogView) {
+
+        dialogView.getButtonOK().setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                userChangingTask(dialogView);
+            }
+        });
+
+        dialogView.getButtonCancel().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void userChangingTask(EditDialogView dialogView) {
+        if (dialogView.getEditTitle() != null)
+            mTask.setTaskTitle(dialogView.getEditTitle().
+                    getText().toString());
+        if (dialogView.getEditContent() != null)
+            mTask.setTaskContent(dialogView.getEditContent().
+                    getText().toString());
+        if (dialogView.getTimePicker() != null)
+            mTask.setTaskTime(getNewTime(dialogView.
+                    getTimePicker()));
+        if (dialogView.getDatePicker() != null)
+            mTask.setTaskDate(
+                    getNewDate(dialogView.getDatePicker()));
+        if(dialogView.getEditState() != null)
+            mTask.setTaskState(getNewState(
+                    dialogView.getEditState().toString()));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private Date getNewTime(TimePicker timePicker) {
+        Calendar calendar = Calendar.getInstance();
+        int hour = timePicker.getHour();
+        calendar.set(Calendar.HOUR, hour);
+        int minute = timePicker.getMinute();
+        calendar.set(Calendar.MINUTE, minute);
+
+        return calendar.getTime();
+    }
+
+    private Date getNewDate(DatePicker datePicker) {
+        Calendar calendar = Calendar.getInstance();
+        int year = datePicker.getYear();
+        calendar.set(Calendar.YEAR, year);
+        int month = datePicker.getMonth();
+        calendar.set(Calendar.MONTH, month);
+        int dayOfMonth = datePicker.getDayOfMonth();
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        return calendar.getTime();
+    }
+
+    private TaskState getNewState(String str){
+        switch (str.toLowerCase()){
+            case "todo":
+                return TaskState.TODO;
+            case  "doing":
+                return TaskState.DOING;
+            case "done":
+                return TaskState.DONE;
+            default:
+                return null;
+        }
     }
 }

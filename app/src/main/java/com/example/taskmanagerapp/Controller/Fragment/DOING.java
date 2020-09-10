@@ -48,7 +48,9 @@ public class DOING extends Fragment {
         setListener(stateView);
 
         stateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
-        stateView.getRecyclerView().setAdapter(new StateAdapter(getUser().getDOINGTaskList(),getContext()));
+        stateView.getRecyclerView().setAdapter(
+                new StateAdapter(getUser().getDOINGTaskList()
+                        ,getContext(),getActivity().getSupportFragmentManager()));
         return stateView.getView();
     }
 

@@ -7,10 +7,11 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.taskmanagerapp.Controller.Fragment.EditDialogFragment;
 import com.example.taskmanagerapp.Model.Task.Task;
-import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.R;
 
 import com.google.android.material.textview.MaterialTextView;
@@ -21,13 +22,20 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
+    public static final String
+            FRAGMENT_EDIT_DIALOG_FRAGMENT =
+            "Edit Dialog Fragment";
 
     private List<Task> mUserTasks;
-    private Context mContext;
 
-    public StateAdapter(List<Task> userTasks, Context context) {
+    public Context mContext;
+
+    public FragmentManager mFragmentManager;
+
+    public StateAdapter(List<Task> userTasks, Context context, FragmentManager fragmentManager) {
         mUserTasks = userTasks;
         mContext = context;
+        mFragmentManager=fragmentManager;
     }
 
     @NonNull
@@ -49,9 +57,9 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
     }
 
     public class Holder extends RecyclerView.ViewHolder {
-        private DateFormat mDateFormat=
+        private DateFormat mDateFormat =
                 DateFormat.getDateInstance(DateFormat.SHORT);
-        private DateFormat mTimeFormat=
+        private DateFormat mTimeFormat =
                 DateFormat.getTimeInstance(DateFormat.SHORT);
 
         private AppCompatImageButton mButtonEdit;
@@ -64,7 +72,43 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
             super(itemView);
 
             findElem(itemView);
+            setListener();
         }
+
+        private void findElem(View view) {
+            mTaskImage = view.findViewById(R.id.task_img);
+            mTaskTitle = view.findViewById(R.id.task_title);
+            mTaskContent = view.findViewById(R.id.task_content);
+            mTaskInitDate = view.findViewById(R.id.task_txt_date);
+            mTaskInitTime = view.findViewById(R.id.task_txt_time);
+            mButtonEdit = view.findViewById(R.id.btn_edit);
+        }
+
+        private void setListener(){
+            mButtonEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EditDialogFragment editDialogFragment=
+                            EditDialogFragment.newInstance();
+
+                    editDialogFragment.show(mFragmentManager,
+                            FRAGMENT_EDIT_DIALOG_FRAGMENT);
+                }
+            });
+        }
+
+        private void bind(Task task) {
+            mTask = task;
+            mTaskTitle.setText(task.getTaskTitle());
+            mTaskContent.setText(task.getTaskContent());
+            mTaskInitDate.setText(mDateFormat.format(
+                    task.getTaskDate()
+            ));
+            mTaskInitTime.setText(mTimeFormat.format(
+                    task.getTaskTime()
+            ));
+        }
+
 
         public AppCompatImageButton getButtonEdit() {
             return mButtonEdit;
@@ -80,33 +124,6 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
 
         public void setTaskImage(CircleImageView taskImage) {
             mTaskImage = taskImage;
-        }
-
-        private void findElem(View view) {
-            mTaskImage = view.findViewById(R.id.task_img);
-            mTaskTitle = view.findViewById(R.id.task_title);
-            mTaskContent = view.findViewById(R.id.task_content);
-            mTaskInitDate = view.findViewById(R.id.task_txt_date);
-            mTaskInitTime = view.findViewById(R.id.task_txt_time);
-            mButtonEdit=view.findViewById(R.id.btn_edit);
-        }
-
-        private void bind(Task task) {
-            mTask = task;
-            mTaskTitle.setText(task.getTaskTitle());
-            mTaskContent.setText(task.getTaskContent());
-            mTaskInitDate.setText(mDateFormat.format(
-                    task.getTaskDate()
-            ));
-            mTaskInitTime.setText(mTimeFormat.format(
-                    task.getTaskTime()
-            ));
-        }
-
-        private boolean isTODO() {
-            if (mTask.getTaskState().equals(TaskState.TODO))
-                return true;
-            return false;
         }
     }
 }

@@ -6,11 +6,12 @@ import androidx.annotation.RequiresApi;
 
 import com.example.taskmanagerapp.Model.User.User;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class UserRepository  implements IRepository<User> {
+public class UserRepository implements IRepository<User>, Serializable {
 
     private static UserRepository sInstance;
     private User mUser;

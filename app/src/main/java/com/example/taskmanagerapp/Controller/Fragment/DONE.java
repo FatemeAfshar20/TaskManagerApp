@@ -47,7 +47,9 @@ public class DONE extends Fragment {
         setListener(stateView);
 
         stateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
-        stateView.getRecyclerView().setAdapter(new StateAdapter(getUser().getDONETaskList(),getContext()));
+        stateView.getRecyclerView().setAdapter(
+                new StateAdapter(getUser().getDONETaskList(),
+                        getContext(),getActivity().getSupportFragmentManager()));
         return stateView.getView();
     }
 

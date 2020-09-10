@@ -17,7 +17,6 @@ import com.example.taskmanagerapp.ViewElem.FragmentStateView;
 
 public class TODO extends Fragment {
 
-
     public UserRepository mUserRepository = UserRepository.getInstance();
 
     public TODO() {
@@ -47,7 +46,9 @@ public class TODO extends Fragment {
         setListener(stateView);
 
         stateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
-        stateView.getRecyclerView().setAdapter(new StateAdapter(getUser().getTODOTaskList(),getContext()));
+        stateView.getRecyclerView().setAdapter(new
+                StateAdapter(getUser().getTODOTaskList()
+                ,getContext(),getActivity().getSupportFragmentManager()));
         return stateView.getView();
     }
 
@@ -63,5 +64,13 @@ public class TODO extends Fragment {
 
             }
         });
+
+/*        mHolder.getButtonEdit().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });*/
+
     }
 }
