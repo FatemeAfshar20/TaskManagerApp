@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Controller.Fragment.EditDialogFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/mrg_5"
+        android:text="New Title :"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:padding="@dimen/pad_10"/>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_title"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/mrg_5"
+            android:background="@drawable/orange_border"
+            android:hint="new edit text"
+            android:padding="@dimen/pad_10"
+            android:textSize="20sp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/contentt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/mrg_5"
+            android:layout_below="@+id/title"
+            android:text="New Content :"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:padding="@dimen/pad_5"/>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_content"
+            android:layout_width="262dp"
+            android:layout_height="106dp"
+            android:layout_below="@+id/edit_title"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="9dp"
+            android:layout_marginBottom="@dimen/mrg_5"
+            android:background="@drawable/orange_border"
+            android:hint="new edit text"
+            android:padding="@dimen/pad_10"
+            android:textSize="20sp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/new_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/mrg_5"
+            android:layout_below="@+id/edit_content"
+            android:text="New Date : "
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:padding="@dimen/pad_5"/>
+
+        <DatePicker
+            android:id="@+id/date_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/new_date"
+            android:layout_alignParentRight="true"
+            />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/new_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/mrg_5"
+            android:layout_below="@+id/date_picker"
+            android:text="New Time : "
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:padding="@dimen/pad_5"/>
+
+        <TimePicker
+            android:id="@+id/time_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/new_time"
+            android:layout_alignParentRight="true"
+            />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/new_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/mrg_5"
+            android:layout_below="@+id/time_picker"
+            android:text="New State :"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:padding="@dimen/pad_10"/>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_state"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/mrg_5"
+            android:layout_below="@id/time_picker"
+            android:background="@drawable/orange_border"
+            android:hint="new edit text"
+            android:padding="@dimen/pad_10"
+            android:textSize="20sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dialog_ok_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/new_state"
+            android:layout_alignParentRight="true"
+            android:text="OK"
+            android:layout_margin="@dimen/mrg_5"
+            app:icon="@drawable/ic_check"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dialog_cancel_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/new_state"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="33dp"
+            android:layout_marginRight="33dp"
+            android:layout_toStartOf="@+id/dialog_ok_btn"
+            android:layout_toLeftOf="@+id/dialog_ok_btn"
+            android:text="Cancel"
+            android:layout_margin="@dimen/mrg_5"
+            app:icon="@drawable/ic_close" />
+    </RelativeLayout>
+
+</ScrollView>

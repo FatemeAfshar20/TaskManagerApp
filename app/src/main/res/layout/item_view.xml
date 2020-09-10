@@ -1,20 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#f1f1f1"
-    tools:context=".Controller.Fragment.DONE"
     android:layout_margin="@dimen/mrg_5"
-    >
+    android:background="#FDFDFD"
+    tools:context=".Controller.Fragment.DONE">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/task_img"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_margin="@dimen/mrg_10"
         android:src="@drawable/ic_sign"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btn_edit"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/task_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/mrg_10"
+        android:background="#FFFFFF"
+        android:src="@drawable/ic_edit"
         app:civ_border_color="#FF000000"
         app:civ_border_width="2dp" />
 
@@ -28,8 +39,8 @@
         android:layout_margin="@dimen/mrg_5"
         android:padding="@dimen/pad_5"
         android:textColor="@color/dark_orange"
-        android:textStyle="bold"
         android:textSize="20sp"
+        android:textStyle="bold"
         tools:text="Task Title" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -62,13 +73,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/task_content"
-        android:layout_alignParentRight="true"
         android:layout_marginStart="@dimen/mrg_10"
         android:layout_marginLeft="@dimen/mrg_10"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="@dimen/mrg_10"
-        android:layout_marginRight="13dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="11dp"
+        android:layout_marginRight="11dp"
         android:layout_marginBottom="@dimen/mrg_10"
+        android:layout_toStartOf="@+id/btn_edit"
+        android:layout_toLeftOf="@+id/btn_edit"
         android:textColor="@color/beauty_yellow"
         android:textSize="18sp"
         tools:text="Time :  12:17:30 PM" />
