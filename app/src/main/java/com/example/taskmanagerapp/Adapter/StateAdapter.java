@@ -1,6 +1,7 @@
 package com.example.taskmanagerapp.Adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
     public static final String
             FRAGMENT_EDIT_DIALOG_FRAGMENT =
             "Edit Dialog Fragment";
+    public static final String BUNDLE_USER_TASK = "User Task in Bind";
 
     private List<Task> mUserTasks;
 
@@ -90,6 +92,9 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
                 public void onClick(View v) {
                     EditDialogFragment editDialogFragment=
                             EditDialogFragment.newInstance();
+
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable(BUNDLE_USER_TASK,mTask);
 
                     editDialogFragment.show(mFragmentManager,
                             FRAGMENT_EDIT_DIALOG_FRAGMENT);

@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +12,12 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
+import com.example.taskmanagerapp.Adapter.StateAdapter;
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.Task.TaskState;
+import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
+import com.example.taskmanagerapp.Repository.UserRepository;
 import com.example.taskmanagerapp.ViewElem.EditDialogView;
 
 import java.util.Calendar;
@@ -24,6 +26,8 @@ import java.util.Date;
 public class EditDialogFragment extends DialogFragment {
     private EditDialogView mDialogView;
     private Task mTask=new Task();
+    private Task mOldTask;
+    private  Bundle mBundle =new Bundle();
 
     public EditDialogFragment() {
         // Required empty public constructor
@@ -56,7 +60,11 @@ public class EditDialogFragment extends DialogFragment {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
+                mOldTask=(Task) mBundle.get(StateAdapter.BUNDLE_USER_TASK);
                 userChangingTask(dialogView);
+                User user=UserRepository.getInstance().getUserList().get(0);
+                user.updateTask(mTask);
+
             }
         });
 
