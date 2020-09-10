@@ -46,8 +46,10 @@ public class UserRepository  implements IRepository<User> {
     @Override
     public User get(UUID uuid) {
         for (int i = 0; i <mUserList.size() ; i++) {
-            if(mUserList.get(i).getUUID().equals(uuid))
+            if(mUserList.get(i).getUUID().equals(uuid)) {
+                mUserList.get(i).setTasksRepository(new TasksRepository());
                 return mUserList.get(i);
+            }
         }
         return null;
     }
@@ -55,5 +57,7 @@ public class UserRepository  implements IRepository<User> {
     public List<User> getUserList() {
         return mUserList;
     }
+
+
 
 }
