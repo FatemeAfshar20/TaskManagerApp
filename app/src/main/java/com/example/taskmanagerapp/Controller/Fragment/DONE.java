@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.UserRepository;
-import com.example.taskmanagerapp.StateAdapter.TODOAdapter;
+import com.example.taskmanagerapp.Adapter.StateAdapter;
 import com.example.taskmanagerapp.ViewElem.FragmentStateView;
 
 /**
@@ -47,7 +47,7 @@ public class DONE extends Fragment {
         setListener(stateView);
 
         stateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
-        stateView.getRecyclerView().setAdapter(new TODOAdapter(getUser().getDOINGTaskList(),getContext()));
+        stateView.getRecyclerView().setAdapter(new StateAdapter(getUser().getDONETaskList(),getContext()));
         return stateView.getView();
     }
 
