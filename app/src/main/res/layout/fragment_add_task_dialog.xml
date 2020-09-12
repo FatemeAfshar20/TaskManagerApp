@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Controller.Fragment.EditDialogFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/task_exist_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/mrg_10"
+            android:text="Task Title :"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:padding="@dimen/pad_10"/>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/exist_task_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/task_exist_title"
+            android:layout_margin="@dimen/mrg_5"
+            android:background="@drawable/orange_border"
+            android:hint="Task Title"
+            android:padding="@dimen/pad_10"
+            android:textSize="20sp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/task_exist_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/mrg_10"
+            android:layout_below="@+id/exist_task_title"
+            android:text="Task Content :"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:padding="@dimen/pad_5"/>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/exist_task_content"
+            android:layout_width="match_parent"
+            android:layout_height="106dp"
+            android:layout_below="@+id/task_exist_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="9dp"
+            android:layout_marginBottom="@dimen/mrg_5"
+            android:background="@drawable/orange_border"
+            android:hint="Task Content"
+            android:layout_margin="@dimen/mrg_5"
+            android:padding="@dimen/pad_10"
+            android:textSize="20sp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/exist_date_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/mrg_10"
+            android:layout_below="@+id/exist_task_content"
+            android:text="Task Exist Date : "
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:padding="@dimen/pad_5"/>
+
+        <DatePicker
+            android:id="@+id/date_picker_exist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/exist_date_task"
+            android:layout_alignParentRight="true"
+            />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/exist_time_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/mrg_10"
+            android:layout_below="@+id/date_picker_exist"
+            android:text="Task Exist Time : "
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:padding="@dimen/pad_5"/>
+
+        <TimePicker
+            android:id="@+id/time_picker_exist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/exist_time_task"
+            android:layout_alignParentRight="true"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/exist_dialog_ok_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/time_picker_exist"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/mrg_10"
+            android:text="OK"
+            app:icon="@drawable/ic_check"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/exist_dialog_cancel_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/time_picker_exist"
+            android:layout_margin="@dimen/mrg_10"
+            android:text="Cancel"
+            app:icon="@drawable/ic_close"
+            />
+    </RelativeLayout>
+
+</ScrollView>

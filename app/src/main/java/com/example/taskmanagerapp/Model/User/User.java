@@ -119,12 +119,11 @@ public class User implements Serializable {
 
     public void updateTask(Task oldTask,Task newTask) {
         updateList(oldTask,newTask);
-        Task findTask = getTask(oldTask.getUUID());
-        findTask.setTaskTitle(newTask.getTaskTitle());
-        findTask.setTaskContent(newTask.getTaskContent());
-        findTask.setTaskState(newTask.getTaskState());
-        findTask.setTaskDate(newTask.getTaskDate());
-        findTask.setTaskTime(newTask.getTaskTime());
+        oldTask.setTaskTitle(newTask.getTaskTitle());
+        oldTask.setTaskContent(newTask.getTaskContent());
+        oldTask.setTaskState(newTask.getTaskState());
+        oldTask.setTaskDate(newTask.getTaskDate());
+        oldTask.setTaskTime(newTask.getTaskTime());
 
     }
 
@@ -161,6 +160,18 @@ public class User implements Serializable {
             default:
                 break;
         }
+    }
+
+    public List<Task> getStateTODO() {
+        return stateTODO;
+    }
+
+    public List<Task> getStateDOING() {
+        return stateDOING;
+    }
+
+    public List<Task> getStateDONE() {
+        return stateDONE;
     }
 
     public List<Task> getTaskList() {

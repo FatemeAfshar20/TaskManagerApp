@@ -1,10 +1,13 @@
 package com.example.taskmanagerapp.Controller.Fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +17,6 @@ import android.widget.TimePicker;
 
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.Task.TaskState;
-import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.UserRepository;
 import com.example.taskmanagerapp.ViewElem.DialogView;
@@ -22,19 +24,17 @@ import com.example.taskmanagerapp.ViewElem.DialogView;
 import java.util.Calendar;
 import java.util.Date;
 
-public class EditDialogFragment extends DialogFragment {
-    public static final String ARG_OLD_USER = "Old User";
-    private Task mTask=new Task();
-    private Task mOldTask;
-
-    public EditDialogFragment() {
+public class AddTaskDialogFragment extends DialogFragment {
+    public static final String EXTRA_NEW_TASK = "com.example.taskmanagerapp.New Task";
+    private Task mTask;
+    public AddTaskDialogFragment() {
         // Required empty public constructor
     }
 
-    public static EditDialogFragment newInstance(Task task) {
-        EditDialogFragment fragment = new EditDialogFragment();
+    // TODO: Rename and change types and number of parameters
+    public static AddTaskDialogFragment newInstance() {
+        AddTaskDialogFragment fragment = new AddTaskDialogFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_OLD_USER,task);
         fragment.setArguments(args);
         return fragment;
     }
@@ -42,58 +42,53 @@ public class EditDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mOldTask= (Task) getArguments().get(ARG_OLD_USER);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        DialogView dialogView = new DialogView(container, inflater, R.layout.fragment_edit_dialog);
-        dialogView.findElemEditDialog();
+        DialogView dialogView = new DialogView(container, inflater, R.layout.fragment_add_task_dialog);
+        dialogView.findElemAddDialog();
         setListener(dialogView);
         return dialogView.getView();
     }
 
-    private void setListener(DialogView dialogView) {
-
+    private void setListener(DialogView dialogView){
         dialogView.getButtonOK().setOnClickListener(new View.OnClickListener() {
+
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
-                userChangingTask(dialogView);
-                User user=UserRepository.getInstance().getUserList().get(0);
-                user.updateTask(mOldTask,mTask);
-                dismiss();
-            }
-        });
-
-        dialogView.getButtonCancel().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+               mTask=returnNewTask(dialogView);
+                sendData();
                 dismiss();
             }
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void userChangingTask(DialogView dialogView) {
-        if (dialogView.getEditTitle() != null)
-            mTask.setTaskTitle(dialogView.getEditTitle());
-        if (dialogView.getEditContent() != null)
-            mTask.setTaskContent(dialogView.getEditContent());
-        if (dialogView.getTimePicker() != null)
-            mTask.setTaskTime(getNewTime(dialogView.
-                    getTimePicker()));
-        if (dialogView.getDatePicker() != null)
-            mTask.setTaskDate(
-                    getNewDate(dialogView.getDatePicker()));
-        if(dialogView.getEditState() != null)
-            mTask.setTaskState(getNewState(
-                    dialogView.getEditState()));
+    private void sendData() {
+        Fragment fragment=getTargetFragment();
+        Intent data=new Intent();
+        data.putExtra(EXTRA_NEW_TASK,mTask);
+        fragment.onActivityResult(
+                getTargetRequestCode(), Activity.RESULT_OK,data);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private Date getNewTime(TimePicker timePicker) {
+    private Task returnNewTask(DialogView dialogView) {
+        Task newTask=new Task();
+        newTask.setTaskTitle(dialogView.getEditTitle());
+        newTask.setTaskContent(dialogView.getEditContent());
+        //this is  default
+        newTask.setTaskState(TaskState.TODO);
+        newTask.setTaskDate(getDate(dialogView.getDatePicker()));
+        newTask.setTaskTime(getTime(dialogView.getTimePicker()));
+
+        return newTask;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private Date getTime(TimePicker timePicker) {
         Calendar calendar = Calendar.getInstance();
         int hour = timePicker.getHour();
         calendar.set(Calendar.HOUR, hour);
@@ -103,7 +98,7 @@ public class EditDialogFragment extends DialogFragment {
         return calendar.getTime();
     }
 
-    private Date getNewDate(DatePicker datePicker) {
+    private Date getDate(DatePicker datePicker) {
         Calendar calendar = Calendar.getInstance();
         int year = datePicker.getYear();
         calendar.set(Calendar.YEAR, year);
@@ -115,11 +110,11 @@ public class EditDialogFragment extends DialogFragment {
         return calendar.getTime();
     }
 
-    private TaskState getNewState(String str){
-        switch (str.toLowerCase()){
+    private TaskState getState(String str) {
+        switch (str.toLowerCase()) {
             case "todo":
                 return TaskState.TODO;
-            case  "doing":
+            case "doing":
                 return TaskState.DOING;
             case "done":
                 return TaskState.DONE;

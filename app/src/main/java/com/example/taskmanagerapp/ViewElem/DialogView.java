@@ -11,7 +11,7 @@ import com.example.taskmanagerapp.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class EditDialogView {
+public class DialogView {
     private View mView;
     private TextInputEditText mEditTitle,mEditContent,
     mEditState;
@@ -20,7 +20,7 @@ public class EditDialogView {
     private DatePicker mDatePicker;
     private TimePicker mTimePicker;
 
-    public EditDialogView(ViewGroup container
+    public DialogView(ViewGroup container
             , LayoutInflater layoutInflater, int layoutId) {
         setView(container,layoutInflater,layoutId);
     }
@@ -35,7 +35,7 @@ public class EditDialogView {
         return mView;
     }
 
-    public void findElem(){
+    public void findElemEditDialog(){
         mEditTitle=mView.findViewById(R.id.edit_title);
         mEditContent=mView.findViewById(R.id.edit_content);
         mEditState=mView.findViewById(R.id.edit_state);
@@ -45,16 +45,25 @@ public class EditDialogView {
         mTimePicker=mView.findViewById(R.id.time_picker);
     }
 
-    public TextInputEditText getEditTitle() {
-        return mEditTitle;
+    public void findElemAddDialog(){
+        mEditTitle=mView.findViewById(R.id.exist_task_title);
+        mEditContent=mView.findViewById(R.id.exist_task_content);
+        mButtonOK=mView.findViewById(R.id.exist_dialog_ok_btn);
+        mButtonCancel=mView.findViewById(R.id.exist_dialog_cancel_btn);
+        mDatePicker=mView.findViewById(R.id.date_picker_exist);
+        mTimePicker=mView.findViewById(R.id.time_picker_exist);
     }
 
-    public TextInputEditText getEditContent() {
-        return mEditContent;
+    public String getEditTitle() {
+        return mEditTitle.getText().toString();
     }
 
-    public Editable getEditState() {
-        return mEditState.getText();
+    public String getEditContent() {
+        return mEditContent.getText().toString();
+    }
+
+    public String getEditState() {
+        return mEditState.getText().toString();
     }
 
     public MaterialButton getButtonOK() {
