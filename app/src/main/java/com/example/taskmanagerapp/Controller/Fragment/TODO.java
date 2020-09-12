@@ -15,9 +15,12 @@ import com.example.taskmanagerapp.Repository.UserRepository;
 import com.example.taskmanagerapp.Adapter.StateAdapter;
 import com.example.taskmanagerapp.ViewElem.FragmentStateView;
 
+import javax.xml.parsers.SAXParser;
+
 public class TODO extends Fragment {
 
     public UserRepository mUserRepository = UserRepository.getInstance();
+    private StateAdapter mStateAdapter;
 
     public TODO() {
         // Required empty public constructor
@@ -35,7 +38,13 @@ public class TODO extends Fragment {
 
         super.onCreate(savedInstanceState);
 
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mStateAdapter!=null)
+            mStateAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -44,11 +53,11 @@ public class TODO extends Fragment {
         FragmentStateView stateView=new FragmentStateView(container,inflater,R.layout.fragment_state);
         stateView.findElem();
         setListener(stateView);
-
-        stateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
-        stateView.getRecyclerView().setAdapter(new
+        mStateAdapter=new
                 StateAdapter(getUser().getTODOTaskList()
-                ,getContext(),getActivity().getSupportFragmentManager()));
+                ,getContext(),getActivity().getSupportFragmentManager());
+        stateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
+        stateView.getRecyclerView().setAdapter(mStateAdapter);
         return stateView.getView();
     }
 
@@ -64,13 +73,6 @@ public class TODO extends Fragment {
 
             }
         });
-
-/*        mHolder.getButtonEdit().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });*/
 
     }
 }

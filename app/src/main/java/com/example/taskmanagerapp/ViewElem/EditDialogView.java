@@ -1,5 +1,6 @@
 package com.example.taskmanagerapp.ViewElem;
 
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,55 +49,28 @@ public class EditDialogView {
         return mEditTitle;
     }
 
-    public void setEditTitle(TextInputEditText editTitle) {
-        mEditTitle = editTitle;
-    }
-
     public TextInputEditText getEditContent() {
         return mEditContent;
     }
 
-    public void setEditContent(TextInputEditText editContent) {
-        mEditContent = editContent;
-    }
-
-    public TextInputEditText getEditState() {
-        return mEditState;
-    }
-
-    public void setEditState(TextInputEditText editState) {
-        mEditState = editState;
+    public Editable getEditState() {
+        return mEditState.getText();
     }
 
     public MaterialButton getButtonOK() {
         return mButtonOK;
     }
 
-    public void setButtonOK(MaterialButton buttonOK) {
-        mButtonOK = buttonOK;
-    }
-
     public MaterialButton getButtonCancel() {
         return mButtonCancel;
-    }
-
-    public void setButtonCancel(MaterialButton buttonCancel) {
-        mButtonCancel = buttonCancel;
     }
 
     public DatePicker getDatePicker() {
         return mDatePicker;
     }
 
-    public void setDatePicker(DatePicker datePicker) {
-        mDatePicker = datePicker;
-    }
-
     public TimePicker getTimePicker() {
         return mTimePicker;
     }
 
-    public void setTimePicker(TimePicker timePicker) {
-        mTimePicker = timePicker;
-    }
 }

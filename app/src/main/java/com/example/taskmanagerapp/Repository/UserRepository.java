@@ -14,7 +14,7 @@ import java.util.UUID;
 public class UserRepository implements IRepository<User>, Serializable {
 
     private static UserRepository sInstance;
-    private User mUser;
+    private User mUser=new User("kamran","111111");
     private List<User> mUserList=new ArrayList<>();
 
     private UserRepository() {
@@ -58,7 +58,5 @@ public class UserRepository implements IRepository<User>, Serializable {
     public List<User> getUserList() {
         return mUserList;
     }
-
-
 
 }

@@ -24,18 +24,19 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class EditDialogFragment extends DialogFragment {
+    public static final String ARG_OLD_USER = "Old User";
     private EditDialogView mDialogView;
     private Task mTask=new Task();
     private Task mOldTask;
-    private  Bundle mBundle =new Bundle();
 
     public EditDialogFragment() {
         // Required empty public constructor
     }
 
-    public static EditDialogFragment newInstance() {
+    public static EditDialogFragment newInstance(Task task) {
         EditDialogFragment fragment = new EditDialogFragment();
         Bundle args = new Bundle();
+        args.putSerializable(ARG_OLD_USER,task);
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,6 +44,7 @@ public class EditDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mOldTask= (Task) getArguments().get(ARG_OLD_USER);
     }
 
     @Override
@@ -60,11 +62,10 @@ public class EditDialogFragment extends DialogFragment {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
-                mOldTask=(Task) mBundle.get(StateAdapter.BUNDLE_USER_TASK);
                 userChangingTask(dialogView);
                 User user=UserRepository.getInstance().getUserList().get(0);
-                user.updateTask(mTask);
-
+                user.updateTask(mOldTask,mTask);
+                dismiss();
             }
         });
 

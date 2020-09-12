@@ -117,13 +117,50 @@ public class User implements Serializable {
         return null;
     }
 
-    public void updateTask(Task task) {
-        Task findTask = getTask(task.getUUID());
-        findTask.setTaskTitle(task.getTaskTitle());
-        findTask.setTaskContent(task.getTaskContent());
-        findTask.setTaskState(task.getTaskState());
-        findTask.setTaskDate(task.getTaskDate());
-        findTask.setTaskTime(task.getTaskTime());
+    public void updateTask(Task oldTask,Task newTask) {
+        updateList(oldTask,newTask);
+        Task findTask = getTask(oldTask.getUUID());
+        findTask.setTaskTitle(newTask.getTaskTitle());
+        findTask.setTaskContent(newTask.getTaskContent());
+        findTask.setTaskState(newTask.getTaskState());
+        findTask.setTaskDate(newTask.getTaskDate());
+        findTask.setTaskTime(newTask.getTaskTime());
+
+    }
+
+    private void updateList(Task oldTask, Task newTask) {
+        switch (newTask.getTaskState()){
+            case TODO:
+                    stateTODO.add(newTask);
+                    removeOldTaskInListFromState(oldTask);
+                    break;
+            case DONE:
+                stateDONE.add(newTask);
+                removeOldTaskInListFromState(oldTask);
+                break;
+            case DOING:
+                stateDOING.add(newTask);
+                removeOldTaskInListFromState(oldTask);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void removeOldTaskInListFromState(Task oldList){
+        switch (oldList.getTaskState()){
+            case TODO:
+                stateTODO.remove(oldList);
+                return;
+            case DOING:
+                stateDOING.remove(oldList);
+                return;
+            case DONE:
+                stateDONE.remove(oldList);
+                return;
+            default:
+                break;
+        }
     }
 
     public List<Task> getTaskList() {

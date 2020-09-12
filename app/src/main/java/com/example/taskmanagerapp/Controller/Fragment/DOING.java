@@ -22,7 +22,7 @@ import com.example.taskmanagerapp.ViewElem.FragmentStateView;
  */
 public class DOING extends Fragment {
     public UserRepository mUserRepository = UserRepository.getInstance();
-
+    private StateAdapter mStateAdapter;
     public DOING() {
         // Required empty public constructor
     }
@@ -32,6 +32,13 @@ public class DOING extends Fragment {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mStateAdapter!=null)
+            mStateAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -46,11 +53,11 @@ public class DOING extends Fragment {
         FragmentStateView stateView=new FragmentStateView(container,inflater,R.layout.fragment_state);
         stateView.findElem();
         setListener(stateView);
+        mStateAdapter=   new StateAdapter(getUser().getDOINGTaskList()
+                ,getContext(),getActivity().getSupportFragmentManager());
 
         stateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
-        stateView.getRecyclerView().setAdapter(
-                new StateAdapter(getUser().getDOINGTaskList()
-                        ,getContext(),getActivity().getSupportFragmentManager()));
+        stateView.getRecyclerView().setAdapter(mStateAdapter);
         return stateView.getView();
     }
 

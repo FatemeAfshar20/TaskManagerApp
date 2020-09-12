@@ -26,7 +26,6 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
     public static final String
             FRAGMENT_EDIT_DIALOG_FRAGMENT =
             "Edit Dialog Fragment";
-    public static final String BUNDLE_USER_TASK = "User Task in Bind";
 
     private List<Task> mUserTasks;
 
@@ -34,7 +33,8 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
 
     public FragmentManager mFragmentManager;
 
-    public StateAdapter(List<Task> userTasks, Context context, FragmentManager fragmentManager) {
+    public StateAdapter(List<Task> userTasks, Context context,
+                        FragmentManager fragmentManager) {
         mUserTasks = userTasks;
         mContext = context;
         mFragmentManager=fragmentManager;
@@ -77,7 +77,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
             setListener();
         }
 
-        private void findElem(View view) {
+        public void findElem(View view) {
             mTaskImage = view.findViewById(R.id.task_img);
             mTaskTitle = view.findViewById(R.id.task_title);
             mTaskContent = view.findViewById(R.id.task_content);
@@ -91,10 +91,8 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
                 @Override
                 public void onClick(View v) {
                     EditDialogFragment editDialogFragment=
-                            EditDialogFragment.newInstance();
+                            EditDialogFragment.newInstance(mTask);
 
-                    Bundle bundle=new Bundle();
-                    bundle.putSerializable(BUNDLE_USER_TASK,mTask);
 
                     editDialogFragment.show(mFragmentManager,
                             FRAGMENT_EDIT_DIALOG_FRAGMENT);

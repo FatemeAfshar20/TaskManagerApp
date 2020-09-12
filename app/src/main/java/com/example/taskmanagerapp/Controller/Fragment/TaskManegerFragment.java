@@ -29,7 +29,6 @@ public class TaskManegerFragment extends Fragment {
 
     private ViewPager2 mViewPager2;
     private List<Fragment> mFragments=new ArrayList<>();
-    private TabLayout mTabLayout;
 
     public TaskManegerFragment() {
         // Required empty public constructor
