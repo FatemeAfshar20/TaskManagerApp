@@ -16,6 +16,7 @@ import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
+import com.example.taskmanagerapp.Repository.TasksRepository;
 import com.example.taskmanagerapp.Repository.UserRepository;
 import com.example.taskmanagerapp.Adapter.StateAdapter;
 import com.example.taskmanagerapp.ViewElem.FragmentStateView;
@@ -28,7 +29,10 @@ import com.example.taskmanagerapp.ViewElem.FragmentStateView;
 public class DOING extends Fragment {
     private static final int REQUEST_CODE_ADD_TASK = 0;
     private static final String FRAGMENT_ADD_TASK_DIALOG = "Adding new task";
-    public UserRepository mUserRepository = UserRepository.getInstance();
+    private User mUser =
+            UserRepository.getInstance().getUserList().get(0);
+    private TasksRepository mTasksRepository=
+            mUser.getTasksRepository();
     private StateAdapter mStateAdapter;
     public DOING() {
         // Required empty public constructor
@@ -60,7 +64,7 @@ public class DOING extends Fragment {
         FragmentStateView stateView=new FragmentStateView(container,inflater,R.layout.fragment_state);
         stateView.findElem();
         setListener(stateView);
-        mStateAdapter=   new StateAdapter(getUser().getDOINGTaskList()
+        mStateAdapter=   new StateAdapter(mTasksRepository.getDOINGTaskList()
                 ,getContext(),getActivity().getSupportFragmentManager());
 
         stateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
@@ -77,14 +81,13 @@ public class DOING extends Fragment {
         if (requestCode == REQUEST_CODE_ADD_TASK) {
             Task task=(Task) data.getSerializableExtra(
                     AddTaskDialogFragment.EXTRA_NEW_TASK);
-            mUserRepository.
-                    getUserList().get(0).getStateDOING().add(task);
+            mTasksRepository.getStateDOINGList().add(task);
             task.setTaskState(TaskState.DOING);
         }
     }
 
     private User getUser() {
-        return mUserRepository.getUserList().get(0);
+        return mUser;
     }
 
     private void setListener(FragmentStateView stateView){

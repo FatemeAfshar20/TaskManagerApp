@@ -21,10 +21,15 @@ public class User implements Serializable {
     private String mUserName;
     private String mPassword;
     private boolean isAdmin;
-    private List<Task> mTaskList=new ArrayList<>();
-    List<Task> stateTODO=new ArrayList<>();
-    List<Task> stateDOING=new ArrayList<>();
-    List<Task> stateDONE=new ArrayList<>();
+private TasksRepository mTasksRepository=new TasksRepository();
+
+    public TasksRepository getTasksRepository() {
+        return mTasksRepository;
+    }
+
+    public void setTasksRepository(TasksRepository tasksRepository) {
+        mTasksRepository = tasksRepository;
+    }
 
     public User(String userName, String password) {
         mUserName = userName;
@@ -32,32 +37,6 @@ public class User implements Serializable {
     }
 
     public User() {
-    }
-
-    {
-        Task task=new Task();
-        task.setTaskContent("This is Default Task");
-        task.setTaskTitle("Maktab Task");
-        task.setTaskDate(new Date());
-        task.setTaskTime(new Date());
-        task.setTaskState(TaskState.TODO);
-        mTaskList.add(task);
-
-        Task task1=new Task();
-        task1.setTaskContent("This is Default Task");
-        task1.setTaskTitle("Maktab Task");
-        task1.setTaskDate(new Date());
-        task1.setTaskTime(new Date());
-        task1.setTaskState(TaskState.DOING);
-        mTaskList.add(task1);
-
-        Task task2=new Task();
-        task2.setTaskContent("This is Default Task");
-        task2.setTaskTitle("Maktab Task");
-        task2.setTaskDate(new Date());
-        task2.setTaskTime(new Date());
-        task2.setTaskState(TaskState.DONE);
-        mTaskList.add(task2);
     }
 
     public UUID getUUID() {
@@ -92,125 +71,6 @@ public class User implements Serializable {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static void addInRepository(User user){
         UserRepository.getInstance().insert(user);
-    }
-
-    public void addTask(Task task){
-        for (int i = 0; i <mTaskList.size()+1 ; i++) {
-            if(!mTaskList.get(i).equals(task))
-                mTaskList.add(task);
-        }
-    }
-
-    public void removeTask(Task task){
-        for (int i = 0; i <mTaskList.size()+1 ; i++) {
-            if(mTaskList.get(i).equals(task))
-                mTaskList.remove(task);
-        }
-    }
-
-    public Task getTask(UUID id) {
-        for (Task task: mTaskList) {
-            if (task.getUUID().equals(id))
-                return task;
-        }
-
-        return null;
-    }
-
-    public void updateTask(Task oldTask,Task newTask) {
-        updateList(oldTask,newTask);
-        oldTask.setTaskTitle(newTask.getTaskTitle());
-        oldTask.setTaskContent(newTask.getTaskContent());
-        oldTask.setTaskState(newTask.getTaskState());
-        oldTask.setTaskDate(newTask.getTaskDate());
-        oldTask.setTaskTime(newTask.getTaskTime());
-
-    }
-
-    private void updateList(Task oldTask, Task newTask) {
-        switch (newTask.getTaskState()){
-            case TODO:
-                    stateTODO.add(newTask);
-                    removeOldTaskInListFromState(oldTask);
-                    break;
-            case DONE:
-                stateDONE.add(newTask);
-                removeOldTaskInListFromState(oldTask);
-                break;
-            case DOING:
-                stateDOING.add(newTask);
-                removeOldTaskInListFromState(oldTask);
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void removeOldTaskInListFromState(Task oldList){
-        switch (oldList.getTaskState()){
-            case TODO:
-                stateTODO.remove(oldList);
-                return;
-            case DOING:
-                stateDOING.remove(oldList);
-                return;
-            case DONE:
-                stateDONE.remove(oldList);
-                return;
-            default:
-                break;
-        }
-    }
-
-    public List<Task> getStateTODO() {
-        return stateTODO;
-    }
-
-    public List<Task> getStateDOING() {
-        return stateDOING;
-    }
-
-    public List<Task> getStateDONE() {
-        return stateDONE;
-    }
-
-    public List<Task> getTaskList() {
-        extractTaskList(stateTODO, stateDOING, stateDONE);
-        return stateTODO;
-    }
-
-    public List<Task> getTODOTaskList(){
-        return stateTODO;
-    }
-
-    public List<Task> getDONETaskList(){
-        return stateDONE;
-    }
-
-    public List<Task> getDOINGTaskList(){
-        return stateDOING;
-    }
-
-    private void extractTaskList(List<Task> stateTODO, List<Task> stateDOING, List<Task> stateDONE) {
-        TaskState taskState;
-        for (int i = 0; i <mTaskList.size() ; i++) {
-            taskState=mTaskList.get(i).getTaskState();
-           switch (taskState){
-               case TODO:
-                       stateTODO.add(mTaskList.get(i));
-                       break;
-               case DONE:
-                   stateDONE.add(mTaskList.get(i));
-                   break;
-               case DOING:
-                   stateDOING.add(mTaskList.get(i));
-                   break;
-           }
-        }
-    }
-
-    public void setTaskList(List<Task> taskList) {
-        mTaskList = taskList;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

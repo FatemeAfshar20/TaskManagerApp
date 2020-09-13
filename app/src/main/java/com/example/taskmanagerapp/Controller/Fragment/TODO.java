@@ -16,17 +16,19 @@ import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
+import com.example.taskmanagerapp.Repository.TasksRepository;
 import com.example.taskmanagerapp.Repository.UserRepository;
 import com.example.taskmanagerapp.Adapter.StateAdapter;
 import com.example.taskmanagerapp.ViewElem.FragmentStateView;
-
-import javax.xml.parsers.SAXParser;
 
 public class TODO extends Fragment {
 
     public static final String FRAGMENT_ADD_TASK_DIALOG = "Add Task Dialog";
     public static final int REQUEST_CODE_ADD_TASK = 0;
-    public UserRepository mUserRepository = UserRepository.getInstance();
+    public User mUser =
+            UserRepository.getInstance().getUserList().get(0);
+    public TasksRepository mTasksRepository=
+            mUser.getTasksRepository();
     private StateAdapter mStateAdapter;
 
     public TODO() {
@@ -61,7 +63,7 @@ public class TODO extends Fragment {
         stateView.findElem();
         setListener(stateView);
         mStateAdapter=new
-                StateAdapter(getUser().getTODOTaskList()
+                StateAdapter(mTasksRepository.getTODOTaskList()
                 ,getContext(),getActivity().getSupportFragmentManager());
         stateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
         stateView.getRecyclerView().setAdapter(mStateAdapter);
@@ -69,7 +71,7 @@ public class TODO extends Fragment {
     }
 
     private User getUser() {
-        return mUserRepository.getUserList().get(0);
+        return mUser;
     }
 
     @Override
@@ -81,8 +83,7 @@ public class TODO extends Fragment {
         if (requestCode == REQUEST_CODE_ADD_TASK) {
             Task task=(Task) data.getSerializableExtra(
                     AddTaskDialogFragment.EXTRA_NEW_TASK);
-            mUserRepository.
-                    getUserList().get(0).getStateTODO().add(task);
+            mTasksRepository.getStateTODOList().add(task);
             task.setTaskState(TaskState.TODO);
         }
     }

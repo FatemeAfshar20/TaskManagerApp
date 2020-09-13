@@ -64,6 +64,13 @@ public class AddTaskDialogFragment extends DialogFragment {
                 dismiss();
             }
         });
+
+        dialogView.getButtonCancel().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
     }
 
     private void sendData() {
@@ -108,18 +115,5 @@ public class AddTaskDialogFragment extends DialogFragment {
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
         return calendar.getTime();
-    }
-
-    private TaskState getState(String str) {
-        switch (str.toLowerCase()) {
-            case "todo":
-                return TaskState.TODO;
-            case "doing":
-                return TaskState.DOING;
-            case "done":
-                return TaskState.DONE;
-            default:
-                return null;
-        }
     }
 }

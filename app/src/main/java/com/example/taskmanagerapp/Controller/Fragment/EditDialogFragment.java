@@ -16,6 +16,7 @@ import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
+import com.example.taskmanagerapp.Repository.TasksRepository;
 import com.example.taskmanagerapp.Repository.UserRepository;
 import com.example.taskmanagerapp.ViewElem.DialogView;
 
@@ -26,6 +27,10 @@ public class EditDialogFragment extends DialogFragment {
     public static final String ARG_OLD_USER = "Old User";
     private Task mTask=new Task();
     private Task mOldTask;
+    private User mUser =
+            UserRepository.getInstance().getUserList().get(0);
+    private TasksRepository mTasksRepository=
+            mUser.getTasksRepository();
 
     public EditDialogFragment() {
         // Required empty public constructor
@@ -61,8 +66,8 @@ public class EditDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 userChangingTask(dialogView);
-                User user=UserRepository.getInstance().getUserList().get(0);
-                user.updateTask(mOldTask,mTask);
+
+                mTasksRepository.updateTask(mOldTask,mTask);
                 dismiss();
             }
         });

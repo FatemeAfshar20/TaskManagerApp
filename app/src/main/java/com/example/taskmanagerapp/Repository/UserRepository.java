@@ -48,7 +48,7 @@ public class UserRepository implements IRepository<User>, Serializable {
     public User get(UUID uuid) {
         for (int i = 0; i <mUserList.size() ; i++) {
             if(mUserList.get(i).getUUID().equals(uuid)) {
-                mUserList.get(i).getTaskList();
+                mUserList.get(i).getTasksRepository();
                 return mUserList.get(i);
             }
         }
