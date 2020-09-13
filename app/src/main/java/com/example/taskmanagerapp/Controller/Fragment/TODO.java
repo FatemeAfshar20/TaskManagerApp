@@ -19,7 +19,7 @@ import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.TasksRepository;
 import com.example.taskmanagerapp.Repository.UserRepository;
 import com.example.taskmanagerapp.Adapter.StateAdapter;
-import com.example.taskmanagerapp.ViewElem.FragmentStateView;
+import com.example.taskmanagerapp.ViewElem.StateView;
 
 public class TODO extends Fragment {
 
@@ -30,6 +30,7 @@ public class TODO extends Fragment {
     public TasksRepository mTasksRepository=
             mUser.getTasksRepository();
     private StateAdapter mStateAdapter;
+    private StateView mStateView;
 
     public TODO() {
         // Required empty public constructor
@@ -52,6 +53,12 @@ public class TODO extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        if(mTasksRepository.getTODOTaskList().size()==0)
+            mStateView.getImgEmpty().setVisibility(View.VISIBLE);
+        else
+            mStateView.getImgEmpty().setVisibility(View.GONE);
+
         if(mStateAdapter!=null)
             mStateAdapter.notifyDataSetChanged();
     }
@@ -59,15 +66,15 @@ public class TODO extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentStateView stateView=new FragmentStateView(container,inflater,R.layout.fragment_state);
-        stateView.findElem();
-        setListener(stateView);
+        mStateView=new StateView(container,inflater,R.layout.fragment_state);
+        mStateView.findElem();
+        setListener(mStateView);
         mStateAdapter=new
                 StateAdapter(mTasksRepository.getTODOTaskList()
                 ,getContext(),getActivity().getSupportFragmentManager());
-        stateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
-        stateView.getRecyclerView().setAdapter(mStateAdapter);
-        return stateView.getView();
+        mStateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
+        mStateView.getRecyclerView().setAdapter(mStateAdapter);
+        return mStateView.getView();
     }
 
     private User getUser() {
@@ -89,7 +96,7 @@ public class TODO extends Fragment {
     }
 
 
-    private void setListener(FragmentStateView stateView){
+    private void setListener(StateView stateView){
 
         stateView.getButtonAddTask().setOnClickListener(new View.OnClickListener() {
             @Override

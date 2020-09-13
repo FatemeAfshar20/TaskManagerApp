@@ -19,7 +19,7 @@ import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.TasksRepository;
 import com.example.taskmanagerapp.Repository.UserRepository;
 import com.example.taskmanagerapp.Adapter.StateAdapter;
-import com.example.taskmanagerapp.ViewElem.FragmentStateView;
+import com.example.taskmanagerapp.ViewElem.StateView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +34,8 @@ public class DONE extends Fragment {
     private TasksRepository mTasksRepository=
             mUser.getTasksRepository();
     private StateAdapter mStateAdapter;
+    private StateView mStateView;
+
     public DONE() {
         // Required empty public constructor
     }
@@ -53,6 +55,12 @@ public class DONE extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        if(mTasksRepository.getDONETaskList().size()==0)
+            mStateView.getImgEmpty().setVisibility(View.VISIBLE);
+        else
+            mStateView.getImgEmpty().setVisibility(View.GONE);
+
         if(mStateAdapter!=null)
             mStateAdapter.notifyDataSetChanged();
     }
@@ -60,17 +68,17 @@ public class DONE extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentStateView stateView=new FragmentStateView(container,inflater,R.layout.fragment_state);
-        stateView.findElem();
-        setListener(stateView);
+        mStateView=new StateView(container,inflater,R.layout.fragment_state);
+        mStateView.findElem();
+        setListener(mStateView);
         mStateAdapter=
                 new StateAdapter(mTasksRepository.getDONETaskList(),
                         getContext(),getActivity()
                         .getSupportFragmentManager());
 
-        stateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
-        stateView.getRecyclerView().setAdapter(mStateAdapter);
-        return stateView.getView();
+        mStateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
+        mStateView.getRecyclerView().setAdapter(mStateAdapter);
+        return mStateView.getView();
     }
 
     @Override
@@ -91,7 +99,7 @@ public class DONE extends Fragment {
         return mUser;
     }
 
-    private void setListener(FragmentStateView stateView){
+    private void setListener(StateView stateView){
 
         stateView.getButtonAddTask().setOnClickListener(new View.OnClickListener() {
             @Override

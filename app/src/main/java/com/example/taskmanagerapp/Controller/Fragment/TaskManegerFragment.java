@@ -88,7 +88,6 @@ public class TaskManegerFragment extends Fragment {
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-
             return mFragmentList.get(position);
         }
 
