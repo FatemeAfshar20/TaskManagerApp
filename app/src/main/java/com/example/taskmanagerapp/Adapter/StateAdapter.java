@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskmanagerapp.Controller.Fragment.EditDialogFragment;
+import com.example.taskmanagerapp.Controller.Fragment.ShowTaskDialogFragment;
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.R;
 
@@ -26,6 +27,9 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
     public static final String
             FRAGMENT_EDIT_DIALOG_FRAGMENT =
             "Edit Dialog Fragment";
+    public static final String
+            FRAGMENT_SHOW_DIALOG_FRAGMENT =
+            "Show Task Dialog Fragment";
 
     private List<Task> mUserTasks;
 
@@ -64,7 +68,8 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
         private DateFormat mTimeFormat =
                 DateFormat.getTimeInstance(DateFormat.SHORT);
 
-        private AppCompatImageButton mButtonEdit;
+        private AppCompatImageButton mButtonEdit
+                ,mButtonShow;
         private CircleImageView mTaskImage;
         private Task mTask;
         private MaterialTextView mTaskTitle, mTaskContent,
@@ -84,6 +89,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
             mTaskInitDate = view.findViewById(R.id.task_txt_date);
             mTaskInitTime = view.findViewById(R.id.task_txt_time);
             mButtonEdit = view.findViewById(R.id.btn_edit);
+            mButtonShow=view.findViewById(R.id.btn_show);
         }
 
         private void setListener(){
@@ -96,6 +102,18 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
 
                     editDialogFragment.show(mFragmentManager,
                             FRAGMENT_EDIT_DIALOG_FRAGMENT);
+                }
+            });
+
+            mButtonShow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShowTaskDialogFragment showTaskDialogFragment=
+                            ShowTaskDialogFragment.newInstance(mTask);
+
+
+                    showTaskDialogFragment.show(mFragmentManager,
+                            FRAGMENT_SHOW_DIALOG_FRAGMENT);
                 }
             });
         }

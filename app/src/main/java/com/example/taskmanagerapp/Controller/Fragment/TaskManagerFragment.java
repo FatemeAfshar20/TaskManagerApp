@@ -22,21 +22,21 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link TaskManegerFragment#newInstance} factory method to
+ * Use the {@link TaskManagerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TaskManegerFragment extends Fragment {
+public class TaskManagerFragment extends Fragment {
 
     private ViewPager2 mViewPager2;
     private List<Fragment> mFragments=new ArrayList<>();
 
-    public TaskManegerFragment() {
+    public TaskManagerFragment() {
         // Required empty public constructor
     }
 
 
-    public static TaskManegerFragment newInstance() {
-        TaskManegerFragment fragment = new TaskManegerFragment();
+    public static TaskManagerFragment newInstance() {
+        TaskManagerFragment fragment = new TaskManagerFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;

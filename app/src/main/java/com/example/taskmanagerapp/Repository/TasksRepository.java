@@ -62,18 +62,6 @@ public class TasksRepository  implements IRepository<Task> {
         }
     }
 
-    public List<Task> getStateTODOList() {
-        return mStateTODOList;
-    }
-
-    public List<Task> getStateDOINGList() {
-        return mStateDOINGList;
-    }
-
-    public List<Task> getStateDONEList() {
-        return mStateDONEList;
-    }
-
     public List<Task> getTODOTaskList(){
         return mStateTODOList;
     }
