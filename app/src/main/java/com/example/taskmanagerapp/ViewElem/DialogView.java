@@ -17,7 +17,7 @@ public class DialogView {
     private TextInputEditText mEditTitle,mEditContent,
     mEditState;
     private MaterialButton mButtonOK,
-            mButtonCancel,mButtonClose;
+            mButtonCancel,mButtonClose,mButtonDelete;
 
     private DatePicker mDatePicker;
     private TimePicker mTimePicker;
@@ -66,6 +66,7 @@ public class DialogView {
         mShowDate=mView.findViewById(R.id.task_date_show);
         mShowState=mView.findViewById(R.id.task_state_show);
         mButtonClose=mView.findViewById(R.id.dialog_close_btn);
+        mButtonDelete=mView.findViewById(R.id.dialog_delete_btn);
     }
 
     public MaterialButton getButtonClose() {
@@ -74,6 +75,10 @@ public class DialogView {
 
     public void setButtonClose(MaterialButton buttonClose) {
         mButtonClose = buttonClose;
+    }
+
+    public MaterialButton getButtonDelete() {
+        return mButtonDelete;
     }
 
     public String getShowTitle() {

@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.taskmanagerapp.Model.Task.Task;
+import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
+import com.example.taskmanagerapp.Repository.UserRepository;
 import com.example.taskmanagerapp.ViewElem.DialogView;
 
 import java.text.DateFormat;
@@ -19,6 +21,8 @@ public class ShowTaskDialogFragment extends DialogFragment {
     public static final String ARG_TASK_FOR_SHOW = "Task for show";
     private Task mTask=new Task();
     private DialogView mDialogView;
+    private User mUser=
+            UserRepository.getInstance().getUserList().get(0);
 
     public ShowTaskDialogFragment() {
         // Required empty public constructor
@@ -54,6 +58,14 @@ public class ShowTaskDialogFragment extends DialogFragment {
         dialogView.getButtonClose().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        dialogView.getButtonDelete().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mUser.getTasksRepository().removeTask(mTask);
                 dismiss();
             }
         });

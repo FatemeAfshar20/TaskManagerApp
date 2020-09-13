@@ -14,8 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.taskmanagerapp.Controller.Fragment.EditDialogFragment;
 import com.example.taskmanagerapp.Controller.Fragment.ShowTaskDialogFragment;
 import com.example.taskmanagerapp.Model.Task.Task;
+import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 
+import com.example.taskmanagerapp.Repository.UserRepository;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.DateFormat;
@@ -63,13 +65,15 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
     }
 
     public class Holder extends RecyclerView.ViewHolder {
+        private User mUser=
+                UserRepository.getInstance().getUserList().get(0);
         private DateFormat mDateFormat =
                 DateFormat.getDateInstance(DateFormat.SHORT);
         private DateFormat mTimeFormat =
                 DateFormat.getTimeInstance(DateFormat.SHORT);
 
         private AppCompatImageButton mButtonEdit
-                ,mButtonShow;
+                ,mButtonShow,mButtonDelete;
         private CircleImageView mTaskImage;
         private Task mTask;
         private MaterialTextView mTaskTitle, mTaskContent,
@@ -90,6 +94,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
             mTaskInitTime = view.findViewById(R.id.task_txt_time);
             mButtonEdit = view.findViewById(R.id.btn_edit);
             mButtonShow=view.findViewById(R.id.btn_show);
+            mButtonDelete=view.findViewById(R.id.btn_delete);
         }
 
         private void setListener(){
@@ -114,6 +119,13 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
 
                     showTaskDialogFragment.show(mFragmentManager,
                             FRAGMENT_SHOW_DIALOG_FRAGMENT);
+                }
+            });
+
+            mButtonDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mUser.getTasksRepository().removeTask(mTask);
                 }
             });
         }

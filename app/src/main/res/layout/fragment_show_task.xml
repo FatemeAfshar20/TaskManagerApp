@@ -152,6 +152,7 @@
         tools:text="9/13/2020" />
 
     <com.google.android.material.button.MaterialButton
+        style="@style/MaterialAlertDialog.MaterialComponents.Title.Icon.CenterStacked"
         android:id="@+id/dialog_close_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -160,6 +161,16 @@
         android:layout_margin="@dimen/mrg_10"
         android:text="Close"
         app:icon="@drawable/ic_close" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/MaterialAlertDialog.MaterialComponents.Title.Icon.CenterStacked"
+        android:id="@+id/dialog_delete_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/task_date_show"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="@dimen/mrg_10"
+        android:text="Delete" />
 
 
     <!--<com.google.android.material.button.MaterialButton

@@ -20,17 +20,31 @@
         app:civ_border_width="2dp" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/btn_edit"
+    android:id="@+id/btn_edit"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:layout_below="@+id/task_title"
+    android:layout_marginLeft="@dimen/mrg_10"
+    android:layout_toStartOf="@+id/btn_show"
+    android:layout_toLeftOf="@+id/btn_show"
+    android:background="#FFFFFF"
+    android:src="@drawable/ic_edit"
+    app:civ_border_color="#FF000000"
+    app:civ_border_width="2dp" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btn_delete"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_below="@+id/task_title"
         android:layout_marginLeft="@dimen/mrg_10"
-        android:layout_toStartOf="@+id/btn_show"
-        android:layout_toLeftOf="@+id/btn_show"
+        android:layout_toStartOf="@+id/btn_edit"
+        android:layout_toLeftOf="@+id/btn_edit"
         android:background="#FFFFFF"
-        android:src="@drawable/ic_edit"
+        android:src="@drawable/ic_trashcan"
         app:civ_border_color="#FF000000"
         app:civ_border_width="2dp" />
+
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/btn_show"
@@ -62,7 +76,7 @@
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/task_content"
         android:layout_width="220dp"
-        android:layout_height="70dp"
+        android:layout_height="40dp"
         android:layout_margin="@dimen/mrg_5"
         android:layout_toStartOf="@+id/task_title"
         android:layout_toLeftOf="@+id/task_title"
@@ -72,7 +86,7 @@
         android:textColor="@color/black"
         android:textSize="15sp"
         android:textStyle="italic"
-        tools:text="@tools:sample/avatars" />
+        tools:text="ssssssssssssssssss" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/task_txt_date"

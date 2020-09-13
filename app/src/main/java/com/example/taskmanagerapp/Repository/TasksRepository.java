@@ -1,11 +1,9 @@
 package com.example.taskmanagerapp.Repository;
 
 import com.example.taskmanagerapp.Model.Task.Task;
-import com.example.taskmanagerapp.Model.Task.TaskState;
 
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,31 +29,31 @@ public class TasksRepository  implements IRepository<Task> {
         switch (newTask.getTaskState()){
             case TODO:
                 mStateTODOList.add(newTask);
-                removeOldTaskInListFromState(oldTask);
+                removeTask(oldTask);
                 break;
             case DONE:
                 mStateDONEList.add(newTask);
-                removeOldTaskInListFromState(oldTask);
+                removeTask(oldTask);
                 break;
             case DOING:
                 mStateDOINGList.add(newTask);
-                removeOldTaskInListFromState(oldTask);
+                removeTask(oldTask);
                 break;
             default:
                 break;
         }
     }
 
-    private void removeOldTaskInListFromState(Task oldList){
-        switch (oldList.getTaskState()){
+    public void removeTask(Task task){
+        switch (task.getTaskState()){
             case TODO:
-                mStateTODOList.remove(oldList);
+                mStateTODOList.remove(task);
                 return;
             case DOING:
-                mStateDOINGList.remove(oldList);
+                mStateDOINGList.remove(task);
                 return;
             case DONE:
-                mStateDONEList.remove(oldList);
+                mStateDONEList.remove(task);
                 return;
             default:
                 break;
