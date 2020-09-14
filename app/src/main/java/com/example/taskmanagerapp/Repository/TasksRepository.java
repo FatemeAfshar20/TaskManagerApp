@@ -1,5 +1,6 @@
 package com.example.taskmanagerapp.Repository;
 
+import com.example.taskmanagerapp.Controller.Fragment.TODO;
 import com.example.taskmanagerapp.Model.Task.Task;
 
 
@@ -7,16 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class TasksRepository  implements IRepository<Task> {
+public class TasksRepository implements IRepository<Task> {
 
     private Task mTask;
-    private List<Task> mStateTODOList =new ArrayList<>();
-    private List<Task> mStateDOINGList =new ArrayList<>();
-    private List<Task> mStateDONEList =new ArrayList<>();
+    private List<Task> mStateTODOList = new ArrayList<>();
+    private List<Task> mStateDOINGList = new ArrayList<>();
+    private List<Task> mStateDONEList = new ArrayList<>();
 
 
-    public void updateTask(Task oldTask,Task newTask) {
-        updateList(oldTask,newTask);
+    public void updateTask(Task oldTask, Task newTask) {
+        updateList(oldTask, newTask);
         oldTask.setTaskTitle(newTask.getTaskTitle());
         oldTask.setTaskContent(newTask.getTaskContent());
         oldTask.setTaskState(newTask.getTaskState());
@@ -26,7 +27,7 @@ public class TasksRepository  implements IRepository<Task> {
     }
 
     private void updateList(Task oldTask, Task newTask) {
-        switch (newTask.getTaskState()){
+        switch (newTask.getTaskState()) {
             case TODO:
                 mStateTODOList.add(newTask);
                 removeTask(oldTask);
@@ -44,8 +45,8 @@ public class TasksRepository  implements IRepository<Task> {
         }
     }
 
-    public void removeTask(Task task){
-        switch (task.getTaskState()){
+    public void removeTask(Task task) {
+        switch (task.getTaskState()) {
             case TODO:
                 mStateTODOList.remove(task);
                 return;
@@ -60,15 +61,30 @@ public class TasksRepository  implements IRepository<Task> {
         }
     }
 
-    public List<Task> getTODOTaskList(){
+    public void deleteAll() {
+        if (mStateTODOList.size() != 0)
+            for (int i = 0; i < mStateTODOList.size(); i++) {
+                removeTask(mStateTODOList.get(i));
+            }
+        if (mStateDOINGList.size() != 0)
+            for (int i = 0; i < mStateDOINGList.size(); i++) {
+                removeTask(mStateDOINGList.get(i));
+            }
+        if (mStateDONEList.size() != 0)
+            for (int i = 0; i < mStateDONEList.size(); i++) {
+                removeTask(mStateDONEList.get(i));
+            }
+    }
+
+    public List<Task> getTODOTaskList() {
         return mStateTODOList;
     }
 
-    public List<Task> getDONETaskList(){
+    public List<Task> getDONETaskList() {
         return mStateDONEList;
     }
 
-    public List<Task> getDOINGTaskList(){
+    public List<Task> getDOINGTaskList() {
         return mStateDOINGList;
     }
 

@@ -20,4 +20,5 @@ public class TaskManagerActivity extends SingleFragment {
     public Fragment getFragment() {
         return TaskManagerFragment.newInstance();
     }
+
 }
