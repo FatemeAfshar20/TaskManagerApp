@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.taskmanagerapp.Controller.Activity.AdminActivity;
 import com.example.taskmanagerapp.Controller.Activity.LoginActivity;
 import com.example.taskmanagerapp.Controller.Activity.SignActivity;
 import com.example.taskmanagerapp.Controller.Activity.TaskManagerActivity;
@@ -67,7 +68,10 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (checkUserInfo())
-                    TaskManagerActivity.start(getContext(), mUser.getUUID());
+                    if (mUser.isAdmin())
+                        AdminActivity.start(getContext());
+                    else
+                        TaskManagerActivity.start(getContext(), mUser.getUUID());
             }
         });
 

@@ -10,6 +10,7 @@ import com.example.taskmanagerapp.Repository.TasksRepository;
 import com.example.taskmanagerapp.Repository.UserRepository;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,8 @@ public class User implements Serializable {
     private String mUserName;
     private String mPassword;
     private boolean isAdmin;
-private TasksRepository mTasksRepository=new TasksRepository();
+    private Date mMembership= new Date();
+    private TasksRepository mTasksRepository=new TasksRepository();
 
     public TasksRepository getTasksRepository() {
         return mTasksRepository;
@@ -66,6 +68,11 @@ private TasksRepository mTasksRepository=new TasksRepository();
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }
+
+    public String getMembership() {
+        return DateFormat.getDateInstance
+                (DateFormat.SHORT).format(mMembership);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/beauty_yellow"
+    android:layout_margin="@dimen/mrg_5"
+    >
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/user__name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Kamran Jafari"
+        android:textSize="18sp"
+        android:textColor="@color/red"
+        android:padding="@dimen/pad_5"
+        android:layout_margin="@dimen/mrg_10"
+        android:textStyle="bold"
+
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/num_of_task_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="@dimen/mrg_10"
+        android:layout_toEndOf="@+id/user__name"
+        android:layout_toRightOf="@+id/user__name"
+        android:padding="@dimen/pad_5"
+        android:text="Number Of Task"
+        android:textColor="@color/indigo"
+        android:textSize="18sp"
+        tools:text="Number Of Task : 20" />
+
+    <com.google.android.material.textview.MaterialTextView
+    android:id="@+id/date_membership"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/num_of_task_show"
+    android:padding="@dimen/pad_5"
+    android:layout_margin="@dimen/mrg_10"
+    android:text="Number Of Task"
+    android:textStyle="bold"
+    android:textColor="@color/black"
+    android:textSize="18sp"
+    tools:text="Date Membership : 20"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/show_all_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="11dp"
+        android:layout_marginRight="9dp"
+        android:background="#00FFFFFF"
+        android:pointerIcon="hand"
+        android:src="@drawable/ic_eye_admin" />
+
+
+</RelativeLayout>
