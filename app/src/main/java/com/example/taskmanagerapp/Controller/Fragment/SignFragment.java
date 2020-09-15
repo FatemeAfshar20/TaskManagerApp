@@ -14,11 +14,14 @@ import com.example.taskmanagerapp.Controller.Activity.LoginActivity;
 import com.example.taskmanagerapp.Model.User.Admin;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
+import com.example.taskmanagerapp.Repository.UserRepository;
 import com.example.taskmanagerapp.ViewElem.LoginView;
 
 public class SignFragment extends Fragment {
 
-    private User mUser=new User();
+    private User mUser = new User();
+    private UserRepository mUserRepository =
+            UserRepository.getInstance();
 
     public SignFragment() {
         // Required empty public constructor
@@ -40,47 +43,50 @@ public class SignFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        LoginView loginView=new LoginView(container,inflater,R.layout.fragment_sign);
+        LoginView loginView = new LoginView(container, inflater, R.layout.fragment_sign);
         loginView.findElemSign();
         setListener(loginView);
         return loginView.getView();
     }
 
-    private void setListener(final LoginView loginView){
+    private void setListener(final LoginView loginView) {
 
         loginView.getButtonSign().setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                if(isTrueFormatInput(loginView)){
-                    mUser.setUserName(loginView.getUsername());
-                    mUser.setPassword(loginView.getPasswordText());
+                if (!mUserRepository.
+                        userExist(loginView.getUsername())) {
+                    if (isTrueFormatInput(loginView)) {
+                        mUser.setUserName(loginView.getUsername());
+                        mUser.setPassword(loginView.getPasswordText());
 
-                    // checking isAdmin or no and setting result
-                    if(loginView.getAdminPassword().getText().
-                            toString().equals(Admin.getAdminPass()))
-                        mUser.setAdmin(true);
+                        // checking isAdmin or no and setting result
+                        if (loginView.getAdminPassword()
+                                .equals(Admin.getAdminPass()))
+                            mUser.setAdmin(true);
 
-                    User.addInRepository(mUser);
-                    LoginActivity.start(getContext(),mUser.getUUID());
-                }else
-                    LoginView.returnToast(getContext(),R.string.input_check);
-            }
-        });
-
-        loginView.getPassword().setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                LoginView.returnToast(getContext(),R.string.notify_pass_text);
+                        User.addInRepository(mUser);
+                        LoginActivity.start(getContext(), mUser.getUUID());
+                    } else
+                        LoginView.returnToast(getContext(), R.string.input_check);
+                } else
+                    LoginView.returnToast(getContext(), "User Already Exist");
             }
         });
     }
 
     private boolean isTrueFormatInput(LoginView loginView) {
-        if(loginView.getUsername().equals("") || loginView.getPasswordText().equals("")
-        || !isNumeric(loginView.getPasswordText()))
+        if (loginView.getUsername().equals("") || loginView.getPasswordText().equals("")) {
+            LoginView.returnToast(getActivity(), "Username or password cant be null");
             return false;
-        else
+        } else if (!isNumeric(loginView.getPasswordText())) {
+            LoginView.returnToast(getActivity(), "Password should be number");
+            return false;
+        } else if (loginView.getPasswordText().length() < 8) {
+            LoginView.returnToast(getActivity(), "Password should be more than 8");
+            return false;
+        } else
             return true;
     }
 

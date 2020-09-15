@@ -42,6 +42,13 @@ public class UserRepository implements IRepository<User>, Serializable {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void deleteAll(){
+        for (int i = 0; i < mUserList.size(); i++) {
+           delete(mUserList.get(i));
+        }
+    }
+
     @Override
     public void update(User oldUser, User newUser) {
         oldUser.setUserName(newUser.getUserName());

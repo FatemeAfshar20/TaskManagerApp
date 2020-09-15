@@ -50,8 +50,8 @@ public class LoginView {
         return mPassword;
     }
 
-    public EditText getAdminPassword() {
-        return mAdminPassword;
+    public String getAdminPassword() {
+        return mAdminPassword.getText().toString();
     }
 
     public void findElemLogin(){

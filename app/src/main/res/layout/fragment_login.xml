@@ -42,6 +42,7 @@
             android:layout_gravity="center"
             android:background="@drawable/indigo_border"
             android:hint="@string/password"
+            android:inputType="textPassword"
             android:padding="@dimen/pad_10"
             android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>

@@ -20,7 +20,7 @@
             android:layout_gravity="center"
             android:background="@drawable/purple_light_border"
             android:hint="@string/userneme"
-            android:padding="10dp"
+            android:padding="@dimen/pad_10"
             android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -44,10 +44,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/check_admin"
-        android:layout_margin="@dimen/mrg_5"
         android:textColor="@color/dark_purple"
-        android:textSize="18sp"
-        android:padding="@dimen/pad_10"
+        android:textSize="15sp"
+        android:padding="@dimen/pad_5"
         android:gravity="center_horizontal" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -66,14 +65,13 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_sign_up"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/mrg_10"
-            android:text="@string/sign_up"
-            app:icon="@drawable/ic_sign" />
-
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_sign_up"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="@string/sign_up"
+        app:icon="@drawable/ic_sign" />
 
 </LinearLayout>

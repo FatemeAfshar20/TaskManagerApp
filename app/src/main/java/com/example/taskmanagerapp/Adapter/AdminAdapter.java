@@ -1,11 +1,13 @@
 package com.example.taskmanagerapp.Adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,7 +50,8 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
     class Holder extends RecyclerView.ViewHolder{
         private MaterialTextView mUsername,mNumOfTask,
         mDateMemberShip;
-        private AppCompatImageButton mButtonTaskShow;
+        private AppCompatImageButton mButtonTaskShow,
+        mButtonTrashcan;
 
         private User mUser=new User();
 
@@ -63,6 +66,7 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
             mNumOfTask=view.findViewById(R.id.num_of_task_show);
             mDateMemberShip=view.findViewById(R.id.date_membership);
             mButtonTaskShow=view.findViewById(R.id.show_all_task);
+            mButtonTrashcan=view.findViewById(R.id.delete_task_admin);
         }
 
         public void bind(User user){
@@ -81,6 +85,14 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
                 @Override
                 public void onClick(View v) {
                     TaskManagerActivity.start(mContext,mUser.getUUID());
+                }
+            });
+
+            mButtonTrashcan.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                @Override
+                public void onClick(View v) {
+                    UserRepository.getInstance().delete(mUser);
                 }
             });
         }

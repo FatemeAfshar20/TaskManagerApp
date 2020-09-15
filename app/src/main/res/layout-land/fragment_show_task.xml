@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f1f1f1"
+    tools:context=".Controller.Fragment.EditDialogFragment">
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+      <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/title_show"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/mrg_10"
+          android:padding="@dimen/pad_10"
+          android:text="Task Title :"
+          android:textColor="@color/indigo"
+          android:textSize="20sp"
+          android:textStyle="bold" />
+
+      <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/task_title_show"
+          android:layout_width="277dp"
+          android:layout_height="wrap_content"
+          android:layout_alignParentRight="true"
+          android:layout_margin="@dimen/mrg_10"
+          android:layout_toEndOf="@+id/title_show"
+          android:layout_toRightOf="@+id/title_show"
+          android:padding="@dimen/pad_10"
+          android:textColor="@color/red"
+          android:textSize="20sp"
+          android:textStyle="bold"
+          tools:text="Maktab Sharif" />
+
+      <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/content_show"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/title_show"
+          android:layout_margin="@dimen/mrg_10"
+          android:padding="@dimen/pad_10"
+          android:text="Task Content :"
+          android:textColor="@color/indigo"
+          android:textSize="20sp"
+          android:textStyle="bold" />
+
+      <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/task_content_show"
+          android:layout_width="277dp"
+          android:layout_height="wrap_content"
+          android:scrollbars="vertical"
+          android:layout_below="@+id/task_title_show"
+          android:layout_alignParentRight="true"
+          android:layout_margin="@dimen/mrg_10"
+          android:layout_toEndOf="@+id/title_show"
+          android:layout_toRightOf="@+id/title_show"
+          android:padding="@dimen/pad_5"
+          android:textColor="@color/red"
+          android:textSize="20sp"
+          android:textStyle="bold"
+          tools:text="Task Manager Program" />
+
+      <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/state_show"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/content_show"
+          android:layout_margin="@dimen/mrg_10"
+          android:padding="@dimen/pad_10"
+          android:text="Task State :"
+          android:textColor="@color/indigo"
+          android:textSize="20sp"
+          android:textStyle="bold" />
+
+      <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/task_state_show"
+          android:layout_width="277dp"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/task_content_show"
+          android:layout_alignParentRight="true"
+          android:layout_margin="@dimen/mrg_10"
+          android:layout_toEndOf="@+id/title_show"
+          android:layout_toRightOf="@+id/title_show"
+          android:padding="@dimen/pad_10"
+          android:textColor="@color/red"
+          android:textSize="20sp"
+          android:textStyle="bold"
+          tools:text="TODO" />
+
+      <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/time_show"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/state_show"
+          android:layout_margin="@dimen/mrg_10"
+          android:padding="@dimen/pad_10"
+          android:text="Task Time :"
+          android:textColor="@color/indigo"
+          android:textSize="20sp"
+          android:textStyle="bold" />
+
+      <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/task_time_show"
+          android:layout_width="238dp"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/task_state_show"
+          android:layout_alignParentRight="true"
+          android:layout_marginStart="1dp"
+          android:layout_marginLeft="1dp"
+          android:layout_marginTop="@dimen/mrg_10"
+          android:layout_marginEnd="@dimen/mrg_10"
+          android:layout_marginRight="@dimen/mrg_10"
+          android:layout_marginBottom="@dimen/mrg_10"
+          android:layout_toEndOf="@+id/time_show"
+          android:layout_toRightOf="@+id/time_show"
+          android:padding="@dimen/pad_10"
+          android:textColor="@color/red"
+          android:textSize="20sp"
+          android:textStyle="bold"
+          tools:text="23:12:30" />
+
+      <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/date_show"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/time_show"
+          android:layout_margin="@dimen/mrg_10"
+          android:padding="@dimen/pad_10"
+          android:text="Task Date :"
+          android:textColor="@color/indigo"
+          android:textSize="20sp"
+          android:textStyle="bold" />
+
+      <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/task_date_show"
+          android:layout_width="238dp"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/task_time_show"
+          android:layout_alignParentRight="true"
+          android:layout_marginStart="6dp"
+          android:layout_marginLeft="6dp"
+          android:layout_marginTop="@dimen/mrg_10"
+          android:layout_marginEnd="@dimen/mrg_10"
+          android:layout_marginRight="@dimen/mrg_10"
+          android:layout_marginBottom="@dimen/mrg_10"
+          android:layout_toEndOf="@+id/date_show"
+          android:layout_toRightOf="@+id/date_show"
+          android:padding="@dimen/pad_10"
+          android:textColor="@color/red"
+          android:textSize="20sp"
+          android:textStyle="bold"
+          tools:text="9/13/2020" />
+
+      <com.google.android.material.button.MaterialButton
+          style="@style/MaterialAlertDialog.MaterialComponents.Title.Icon.CenterStacked"
+          android:id="@+id/dialog_close_btn"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/task_date_show"
+          android:layout_alignParentRight="true"
+          android:layout_margin="@dimen/mrg_10"
+          android:text="Close"
+          app:icon="@drawable/ic_close" />
+
+      <com.google.android.material.button.MaterialButton
+          style="@style/MaterialAlertDialog.MaterialComponents.Title.Icon.CenterStacked"
+          android:id="@+id/dialog_delete_btn"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/task_date_show"
+          android:layout_alignParentLeft="true"
+          android:layout_margin="@dimen/mrg_10"
+          android:text="Delete" />
+  </RelativeLayout>
+
+</ScrollView>
