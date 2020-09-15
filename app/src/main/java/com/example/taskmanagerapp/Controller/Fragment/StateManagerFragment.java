@@ -33,7 +33,7 @@ public abstract class StateManagerFragment extends Fragment {
     private UserRepository mUserRepository =
             UserRepository.getInstance();
     private User mUser=new User();
-    private TasksRepository mTasksRepository=mUser.getTasksRepository(); ;
+    private TasksRepository mTasksRepository=mUser.getTasksRepository();
     private StateAdapter mStateAdapter;
     private StateView mStateView;
 
@@ -70,8 +70,8 @@ public abstract class StateManagerFragment extends Fragment {
             Intent data, List<Task> taskList, TaskState taskState) {
         Task task = (Task) data.getSerializableExtra(
                 AddTaskDialogFragment.EXTRA_NEW_TASK);
-        taskList.add(task);
         task.setTaskState(taskState);
+        taskList.add(task);
     }
 
     public void manageDialogFragment(Fragment fragment,
@@ -93,7 +93,7 @@ public abstract class StateManagerFragment extends Fragment {
     public abstract void setListener(StateView stateView);
 
     public TasksRepository getTasksRepository() {
-        return mTasksRepository;
+        return mUser.getTasksRepository();
     }
 
     public StateView getStateView() {
@@ -103,4 +103,6 @@ public abstract class StateManagerFragment extends Fragment {
     public void setUser(UUID uuid) {
         mUser= mUserRepository.get(uuid);
     }
+
+
 }

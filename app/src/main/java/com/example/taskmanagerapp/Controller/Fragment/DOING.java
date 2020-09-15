@@ -18,7 +18,7 @@ public class DOING extends StateManagerFragment {
     public static final String ARG_USER_ID = "User Id";
     private static final int REQUEST_CODE_ADD_TASK = 0;
     private static final String FRAGMENT_ADD_TASK_DIALOG = "Adding new task";
-
+    private UUID mUUID;
     public DOING() {
         // Required empty public constructor
     }
@@ -42,8 +42,9 @@ public class DOING extends StateManagerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setUser((UUID) getArguments().
-                getSerializable(ARG_USER_ID));
+        mUUID=(UUID) getArguments().
+                getSerializable(ARG_USER_ID);
+        setUser(mUUID);
     }
 
     @Override
@@ -76,7 +77,7 @@ public class DOING extends StateManagerFragment {
                 @Override
                 public void onClick(View v) {
                     manageDialogFragment(DOING.this
-                            ,AddTaskDialogFragment.newInstance(),
+                            ,AddTaskDialogFragment.newInstance(mUUID),
                             REQUEST_CODE_ADD_TASK
                             ,FRAGMENT_ADD_TASK_DIALOG);
                 }

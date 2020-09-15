@@ -18,6 +18,7 @@ public class TODO extends StateManagerFragment {
     public static final String ARG_USER_ID = "User Id";
     public static final int REQUEST_CODE_ADD_TASK = 0;
     public static final String FRAGMENT_ADD_TASK_DIALOG = "Add Task Dialog";
+    private UUID mUUID;
 
     public TODO() {
         // Required empty public constructor
@@ -33,10 +34,10 @@ public class TODO extends StateManagerFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
+        mUUID=(UUID) getArguments().
+                getSerializable(ARG_USER_ID);
         super.onCreate(savedInstanceState);
-        setUser((UUID) getArguments().
-                getSerializable(ARG_USER_ID));
+        setUser(mUUID);
     }
 
     @Override
@@ -74,7 +75,7 @@ public class TODO extends StateManagerFragment {
             @Override
             public void onClick(View v) {
                 manageDialogFragment(TODO.this,
-                        AddTaskDialogFragment.newInstance(),
+                        AddTaskDialogFragment.newInstance(mUUID),
                           REQUEST_CODE_ADD_TASK,
                         FRAGMENT_ADD_TASK_DIALOG);
             }
