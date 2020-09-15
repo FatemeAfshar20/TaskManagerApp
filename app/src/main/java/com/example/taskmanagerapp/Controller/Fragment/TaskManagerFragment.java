@@ -32,6 +32,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,12 +40,11 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class TaskManagerFragment extends Fragment{
-
+    public static final String ARG_USER_ID = "User Id";
     private ViewPager2 mViewPager2;
     private List<Fragment> mFragments=new ArrayList<>();
     private TaskAdapter mTaskAdapter;
-    private User mUser=
-            UserRepository.getInstance().getUserList().get(0);
+    private User mUser= new User();
     private TasksRepository mTasksRepository=
             mUser.getTasksRepository();
 
@@ -53,9 +53,10 @@ public class TaskManagerFragment extends Fragment{
     }
 
 
-    public static TaskManagerFragment newInstance() {
+    public static TaskManagerFragment newInstance(UUID uuid) {
         TaskManagerFragment fragment = new TaskManagerFragment();
         Bundle args = new Bundle();
+        args.putSerializable(ARG_USER_ID,uuid);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,9 +64,12 @@ public class TaskManagerFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mFragments.add(0, TODO.newInstance());
-        mFragments.add(1, DOING.newInstance());
-        mFragments.add(2, DONE.newInstance());
+        UUID uuid= (UUID)
+                getArguments().getSerializable(ARG_USER_ID);
+        mUser=UserRepository.getInstance().get(uuid);
+        mFragments.add(0, TODO.newInstance(uuid));
+        mFragments.add(1, DOING.newInstance(uuid));
+        mFragments.add(2, DONE.newInstance(uuid));
         setHasOptionsMenu(true);
 
         if(mTaskAdapter!=null)

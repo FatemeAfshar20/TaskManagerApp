@@ -22,8 +22,6 @@ public class LoginActivity extends SingleFragment {
 
     @Override
     public Fragment getFragment() {
-        return LoginFragment.newInstance((UUID)
-                getIntent()
-                        .getSerializableExtra(LoginActivity.EXTRA_USER_ID));
+        return LoginFragment.newInstance();
     }
 }

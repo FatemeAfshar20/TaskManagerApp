@@ -25,11 +25,11 @@ import java.util.Date;
 
 public class EditDialogFragment extends DialogFragment {
     public static final String ARG_OLD_USER = "Old User";
-    private Task mTask=new Task();
+    private Task mTask = new Task();
     private Task mOldTask;
     private User mUser =
             UserRepository.getInstance().getUserList().get(0);
-    private TasksRepository mTasksRepository=
+    private TasksRepository mTasksRepository =
             mUser.getTasksRepository();
 
     public EditDialogFragment() {
@@ -39,7 +39,7 @@ public class EditDialogFragment extends DialogFragment {
     public static EditDialogFragment newInstance(Task task) {
         EditDialogFragment fragment = new EditDialogFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_OLD_USER,task);
+        args.putSerializable(ARG_OLD_USER, task);
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,7 +47,7 @@ public class EditDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mOldTask= (Task) getArguments().get(ARG_OLD_USER);
+        mOldTask = (Task) getArguments().get(ARG_OLD_USER);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class EditDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 userChangingTask(dialogView);
 
-                mTasksRepository.updateTask(mOldTask,mTask);
+                mTasksRepository.update(mOldTask, mTask);
                 dismiss();
             }
         });
@@ -84,17 +84,32 @@ public class EditDialogFragment extends DialogFragment {
     private void userChangingTask(DialogView dialogView) {
         if (dialogView.getEditTitle() != null)
             mTask.setTaskTitle(dialogView.getEditTitle());
+        else
+            mTask.setTaskTitle(mOldTask.getTaskTitle());
+
         if (dialogView.getEditContent() != null)
             mTask.setTaskContent(dialogView.getEditContent());
+        else
+            mTask.setTaskContent(mOldTask.getTaskContent());
+
         if (dialogView.getTimePicker() != null)
             mTask.setTaskTime(getNewTime(dialogView.
                     getTimePicker()));
+        else
+            mTask.setTaskTime(mOldTask.getTaskTime());
+
         if (dialogView.getDatePicker() != null)
             mTask.setTaskDate(
                     getNewDate(dialogView.getDatePicker()));
-        if(dialogView.getEditState() != null)
-            mTask.setTaskState(getNewState(
-                    dialogView.getEditState()));
+        else
+            mTask.setTaskDate(mOldTask.getTaskDate());
+
+        if (dialogView.isTodo())
+            mTask.setTaskState(TaskState.TODO);
+       else if (dialogView.isDoing())
+            mTask.setTaskState(TaskState.DOING);
+       else if (dialogView.isDone())
+            mTask.setTaskState(TaskState.DONE);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -120,11 +135,11 @@ public class EditDialogFragment extends DialogFragment {
         return calendar.getTime();
     }
 
-    private TaskState getNewState(String str){
-        switch (str.toLowerCase()){
+    private TaskState getNewState(String str) {
+        switch (str.toLowerCase()) {
             case "todo":
                 return TaskState.TODO;
-            case  "doing":
+            case "doing":
                 return TaskState.DOING;
             case "done":
                 return TaskState.DONE;

@@ -38,11 +38,15 @@ public class LoginView {
         return mButtonSign;
     }
 
-    public EditText getUsername() {
-        return mUsername;
+    public String getUsername() {
+        return mUsername.getText().toString();
     }
 
-    public EditText getPassword() {
+    public String getPasswordText() {
+        return mPassword.getText().toString();
+    }
+
+ public EditText getPassword() {
         return mPassword;
     }
 

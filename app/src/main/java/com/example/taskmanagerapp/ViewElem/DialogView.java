@@ -5,19 +5,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.RadioButton;
 import android.widget.TimePicker;
 
 import com.example.taskmanagerapp.R;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.radiobutton.MaterialRadioButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
 public class DialogView {
     private View mView;
-    private TextInputEditText mEditTitle,mEditContent,
-    mEditState;
+    private TextInputEditText mEditTitle,mEditContent;
     private MaterialButton mButtonOK,
             mButtonCancel,mButtonClose,mButtonDelete;
+    private MaterialRadioButton mTodo,mDoing,mDone;
 
     private DatePicker mDatePicker;
     private TimePicker mTimePicker;
@@ -43,11 +45,14 @@ public class DialogView {
     public void findElemEditDialog(){
         mEditTitle=mView.findViewById(R.id.edit_title);
         mEditContent=mView.findViewById(R.id.edit_content);
-        mEditState=mView.findViewById(R.id.edit_state);
         mButtonOK=mView.findViewById(R.id.dialog_ok_btn);
         mButtonCancel=mView.findViewById(R.id.dialog_cancel_btn);
         mDatePicker=mView.findViewById(R.id.date_picker);
         mTimePicker=mView.findViewById(R.id.time_picker);
+
+        mTodo=mView.findViewById(R.id.todo);
+        mDoing=mView.findViewById(R.id.doing);
+        mDone=mView.findViewById(R.id.done);
     }
 
     public void findElemAddDialog(){
@@ -73,48 +78,24 @@ public class DialogView {
         return mButtonClose;
     }
 
-    public void setButtonClose(MaterialButton buttonClose) {
-        mButtonClose = buttonClose;
-    }
-
     public MaterialButton getButtonDelete() {
         return mButtonDelete;
-    }
-
-    public String getShowTitle() {
-        return mShowTitle.getText().toString();
     }
 
     public void setShowTitle(String showTitle) {
         mShowTitle.setText(showTitle);
     }
 
-    public String getShowContent() {
-        return mShowContent.getText().toString();
-    }
-
     public void setShowContent(String showContent) {
         mShowContent.setText(showContent);
-    }
-
-    public String getShowTime() {
-        return mShowTitle.getText().toString();
     }
 
     public void setShowTime(String showTime) {
         mShowTime.setText(showTime);
     }
 
-    public String getShowDate() {
-        return mShowDate.getText().toString();
-    }
-
     public void setShowDate(String showDate) {
         mShowDate.setText(showDate);
-    }
-
-    public String getShowState() {
-        return mShowState.getText().toString();
     }
 
     public void setShowState(String showState) {
@@ -127,10 +108,6 @@ public class DialogView {
 
     public String getEditContent() {
         return mEditContent.getText().toString();
-    }
-
-    public String getEditState() {
-        return mEditState.getText().toString();
     }
 
     public MaterialButton getButtonOK() {
@@ -149,4 +126,15 @@ public class DialogView {
         return mTimePicker;
     }
 
+    public boolean isTodo() {
+        return mTodo.isChecked();
+    }
+
+    public boolean isDoing() {
+        return mDoing.isChecked();
+    }
+
+    public boolean isDone() {
+        return mDone.isChecked();
+    }
 }

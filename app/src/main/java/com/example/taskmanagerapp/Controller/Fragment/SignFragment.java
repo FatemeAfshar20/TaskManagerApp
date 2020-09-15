@@ -1,7 +1,9 @@
 package com.example.taskmanagerapp.Controller.Fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -47,11 +49,12 @@ public class SignFragment extends Fragment {
     private void setListener(final LoginView loginView){
 
         loginView.getButtonSign().setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
                 if(isTrueFormatInput(loginView)){
-                    mUser.setUserName(loginView.getUsername().getText().toString());
-                    mUser.setPassword(loginView.getPassword().getText().toString());
+                    mUser.setUserName(loginView.getUsername());
+                    mUser.setPassword(loginView.getPasswordText());
 
                     // checking isAdmin or no and setting result
                     if(loginView.getAdminPassword().getText().
@@ -74,8 +77,8 @@ public class SignFragment extends Fragment {
     }
 
     private boolean isTrueFormatInput(LoginView loginView) {
-        if(loginView.getUsername().getText().toString().equals("") || loginView.getPassword().getText().toString().equals("")
-        || !isNumeric(loginView.getPassword().getText().toString()))
+        if(loginView.getUsername().equals("") || loginView.getPasswordText().equals("")
+        || !isNumeric(loginView.getPasswordText()))
             return false;
         else
             return true;

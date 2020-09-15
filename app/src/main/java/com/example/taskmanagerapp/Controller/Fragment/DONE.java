@@ -12,7 +12,10 @@ import androidx.annotation.Nullable;
 import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.ViewElem.StateView;
 
+import java.util.UUID;
+
 public class DONE extends StateManagerFragment {
+    public static final String ARG_USER_ID = "User Id";
     private static final int REQUEST_CODE_ADD_TASK = 0;
     private static final String FRAGMENT_ADD_TASK_DIALOG = "Adding task";
 
@@ -20,9 +23,10 @@ public class DONE extends StateManagerFragment {
         // Required empty public constructor
     }
 
-    public static DONE newInstance() {
+    public static DONE newInstance(UUID uuid) {
         DONE fragment = new DONE();
         Bundle args = new Bundle();
+        args.putSerializable(ARG_USER_ID,uuid);
         fragment.setArguments(args);
         return fragment;
     }
@@ -30,6 +34,8 @@ public class DONE extends StateManagerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setUser((UUID) getArguments().
+                getSerializable(ARG_USER_ID));
     }
 
     @Override

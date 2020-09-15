@@ -65,7 +65,7 @@ public class ShowTaskDialogFragment extends DialogFragment {
         dialogView.getButtonDelete().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUser.getTasksRepository().removeTask(mTask);
+                mUser.getTasksRepository().delete(mTask);
                 dismiss();
             }
         });

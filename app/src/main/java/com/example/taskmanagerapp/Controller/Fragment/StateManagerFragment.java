@@ -1,10 +1,12 @@
 package com.example.taskmanagerapp.Controller.Fragment;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +21,7 @@ import com.example.taskmanagerapp.Repository.UserRepository;
 import com.example.taskmanagerapp.ViewElem.StateView;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * this class is for MANAGING All State Fragment
@@ -27,13 +30,17 @@ import java.util.List;
 public abstract class StateManagerFragment extends Fragment {
     public static final String FRAGMENT_ADD_TASK_DIALOG = "Add Task Dialog";
     public static final int REQUEST_CODE_ADD_TASK = 0;
-    private User mUser =
-            UserRepository.getInstance().getUserList().get(0);
-    private TasksRepository mTasksRepository =
-            mUser.getTasksRepository();
+    private UserRepository mUserRepository =
+            UserRepository.getInstance();
+    private User mUser=new User();
+    private TasksRepository mTasksRepository=mUser.getTasksRepository(); ;
     private StateAdapter mStateAdapter;
     private StateView mStateView;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     /**
      * use this method in onResumed method,
@@ -47,7 +54,6 @@ public abstract class StateManagerFragment extends Fragment {
             mStateView.getImgEmpty().setVisibility(View.VISIBLE);
         else
             mStateView.getImgEmpty().setVisibility(View.GONE);
-
         if (mStateAdapter != null)
             mStateAdapter.notifyDataSetChanged();
     }
@@ -94,7 +100,7 @@ public abstract class StateManagerFragment extends Fragment {
         return mStateView;
     }
 
-    public User getUser() {
-        return mUser;
+    public void setUser(UUID uuid) {
+        mUser= mUserRepository.get(uuid);
     }
 }

@@ -14,11 +14,10 @@ import java.util.UUID;
 public class UserRepository implements IRepository<User>, Serializable {
 
     private static UserRepository sInstance;
-    private User mUser=new User("kamran","111111");
     private List<User> mUserList=new ArrayList<>();
 
     private UserRepository() {
-        getUserList();
+
     }
 
     public static UserRepository getInstance() {
@@ -34,25 +33,50 @@ public class UserRepository implements IRepository<User>, Serializable {
             mUserList.add(user);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void delete(User user) {
-
+        for (int i = 0; i < mUserList.size(); i++) {
+            if(mUserList.get(i).equals(user))
+                mUserList.remove(mUserList.get(i));
+        }
     }
 
     @Override
-    public void update(User user) {
-
+    public void update(User oldUser, User newUser) {
+        oldUser.setUserName(newUser.getUserName());
+        oldUser.setPassword(newUser.getPassword());
+        oldUser.setAdmin(newUser.isAdmin());
+        oldUser.setTasksRepository(newUser.getTasksRepository());
     }
+
 
     @Override
     public User get(UUID uuid) {
         for (int i = 0; i <mUserList.size() ; i++) {
             if(mUserList.get(i).getUUID().equals(uuid)) {
-                mUserList.get(i).getTasksRepository();
                 return mUserList.get(i);
             }
         }
         return null;
+    }
+
+
+    public User get(String userName) {
+        for (int i = 0; i <mUserList.size() ; i++) {
+            if(mUserList.get(i).getUserName().equals(userName)) {
+                return mUserList.get(i);
+            }
+        }
+        return null;
+    }
+
+    public boolean userExist(String username){
+        for (int i = 0; i < mUserList.size(); i++) {
+            if(mUserList.get(i).getUserName().equals(username))
+                return true;
+        }
+        return false;
     }
 
     public List<User> getUserList() {

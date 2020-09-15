@@ -1,7 +1,6 @@
 package com.example.taskmanagerapp.Adapter;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 
 import com.example.taskmanagerapp.Repository.UserRepository;
+import com.github.clans.fab.FloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.DateFormat;
@@ -125,7 +125,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
             mButtonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mUser.getTasksRepository().removeTask(mTask);
+                    mUser.getTasksRepository().delete(mTask);
                 }
             });
         }

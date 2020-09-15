@@ -1,7 +1,7 @@
 package com.example.taskmanagerapp.Repository;
 
-import com.example.taskmanagerapp.Controller.Fragment.TODO;
 import com.example.taskmanagerapp.Model.Task.Task;
+import com.example.taskmanagerapp.Model.Task.TaskState;
 
 
 import java.util.ArrayList;
@@ -10,42 +10,29 @@ import java.util.UUID;
 
 public class TasksRepository implements IRepository<Task> {
 
-    private Task mTask;
     private List<Task> mStateTODOList = new ArrayList<>();
     private List<Task> mStateDOINGList = new ArrayList<>();
     private List<Task> mStateDONEList = new ArrayList<>();
 
-
-    public void updateTask(Task oldTask, Task newTask) {
-        updateList(oldTask, newTask);
-        oldTask.setTaskTitle(newTask.getTaskTitle());
-        oldTask.setTaskContent(newTask.getTaskContent());
-        oldTask.setTaskState(newTask.getTaskState());
-        oldTask.setTaskDate(newTask.getTaskDate());
-        oldTask.setTaskTime(newTask.getTaskTime());
-
-    }
-
-    private void updateList(Task oldTask, Task newTask) {
-        switch (newTask.getTaskState()) {
+    @Override
+    public void insert(Task task) {
+        switch (task.getTaskState()) {
             case TODO:
-                mStateTODOList.add(newTask);
-                removeTask(oldTask);
-                break;
-            case DONE:
-                mStateDONEList.add(newTask);
-                removeTask(oldTask);
-                break;
+                mStateTODOList.add(task);
+                return;
             case DOING:
-                mStateDOINGList.add(newTask);
-                removeTask(oldTask);
-                break;
+                mStateDOINGList.add(task);
+                return;
+            case DONE:
+                mStateDONEList.add(task);
+                return;
             default:
                 break;
         }
     }
 
-    public void removeTask(Task task) {
+    @Override
+    public void delete(Task task) {
         switch (task.getTaskState()) {
             case TODO:
                 mStateTODOList.remove(task);
@@ -61,19 +48,87 @@ public class TasksRepository implements IRepository<Task> {
         }
     }
 
+    @Override
+    public void update(Task oldTask, Task newTask) {
+        updateList(oldTask, newTask);
+        oldTask.setTaskTitle(newTask.getTaskTitle());
+        oldTask.setTaskContent(newTask.getTaskContent());
+        oldTask.setTaskState(newTask.getTaskState());
+        oldTask.setTaskDate(newTask.getTaskDate());
+        oldTask.setTaskTime(newTask.getTaskTime());
+    }
+
+    @Override
+    public Task get(UUID uuid) {
+        return null;
+    }
+    private void updateList(Task oldTask, Task newTask) {
+        switch (newTask.getTaskState()) {
+            case TODO:
+                mStateTODOList.add(newTask);
+                delete(oldTask);
+                break;
+            case DONE:
+                mStateDONEList.add(newTask);
+                delete(oldTask);
+                break;
+            case DOING:
+                mStateDOINGList.add(newTask);
+                delete(oldTask);
+                break;
+            default:
+                break;
+        }
+    }
+
     public void deleteAll() {
-        if (mStateTODOList.size() != 0)
-            for (int i = 0; i < mStateTODOList.size(); i++) {
-                removeTask(mStateTODOList.get(i));
-            }
-        if (mStateDOINGList.size() != 0)
-            for (int i = 0; i < mStateDOINGList.size(); i++) {
-                removeTask(mStateDOINGList.get(i));
-            }
-        if (mStateDONEList.size() != 0)
-            for (int i = 0; i < mStateDONEList.size(); i++) {
-                removeTask(mStateDONEList.get(i));
-            }
+        if (mStateTODOList.size() != 0 &&
+                mStateDONEList.size() != 0 &&
+                mStateDOINGList.size() != 0) {
+            mStateTODOList.clear();
+            mStateDONEList.clear();
+            mStateDOINGList.clear();
+        }
+    }
+
+    private TaskState returnState(Task task) {
+        switch (task.getTaskState()) {
+            case TODO:
+                return TaskState.TODO;
+            case DOING:
+                return TaskState.DOING;
+            case DONE:
+                return TaskState.DONE;
+            default:
+                return null;
+        }
+    }
+
+
+    public Task get(TaskState taskState, UUID uuid) {
+        switch (taskState) {
+            case TODO:
+                for (Task task : mStateTODOList) {
+                    if (task.getUUID().equals(uuid))
+                        return task;
+                }
+                break;
+            case DOING:
+                for (Task task : mStateDOINGList) {
+                    if (task.getUUID().equals(uuid))
+                        return task;
+                }
+                break;
+            case DONE:
+                for (Task task : mStateDONEList) {
+                    if (task.getUUID().equals(uuid))
+                        return task;
+                }
+                break;
+            default:
+                break;
+        }
+        return null;
     }
 
     public List<Task> getTODOTaskList() {
@@ -87,25 +142,4 @@ public class TasksRepository implements IRepository<Task> {
     public List<Task> getDOINGTaskList() {
         return mStateDOINGList;
     }
-
-    @Override
-    public void insert(Task task) {
-
-    }
-
-    @Override
-    public void delete(Task task) {
-
-    }
-
-    @Override
-    public void update(Task task) {
-
-    }
-
-    @Override
-    public Task get(UUID uuid) {
-        return null;
-    }
-
 }

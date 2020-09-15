@@ -9,7 +9,6 @@
     tools:context=".Controller.Fragment.DONE">
 
     <de.hdodenhof.circleimageview.CircleImageView
-
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/task_img"
         android:layout_width="70dp"
@@ -19,25 +18,25 @@
         app:civ_border_color="#FF000000"
         app:civ_border_width="2dp" />
 
+
     <androidx.appcompat.widget.AppCompatImageButton
-    android:id="@+id/btn_edit"
-    android:layout_width="50dp"
-    android:layout_height="50dp"
-    android:layout_below="@+id/task_title"
-    android:layout_marginLeft="@dimen/mrg_10"
-    android:layout_toStartOf="@+id/btn_show"
-    android:layout_toLeftOf="@+id/btn_show"
-    android:background="#FFFFFF"
-    android:src="@drawable/ic_edit"
-    app:civ_border_color="#FF000000"
-    app:civ_border_width="2dp" />
+        android:id="@+id/btn_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/task_title"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="2dp"
+        android:background="#FFFFFF"
+        android:src="@drawable/ic_edit"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp" />
+
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/btn_delete"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/task_title"
-        android:layout_marginLeft="@dimen/mrg_10"
         android:layout_toStartOf="@+id/btn_edit"
         android:layout_toLeftOf="@+id/btn_edit"
         android:background="#FFFFFF"
@@ -45,15 +44,18 @@
         app:civ_border_color="#FF000000"
         app:civ_border_width="2dp" />
 
-
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/btn_show"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/task_title"
-        android:layout_alignParentRight="true"
         android:layout_marginLeft="@dimen/mrg_10"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginRight="3dp"
         android:layout_marginBottom="@dimen/mrg_10"
+        android:layout_toStartOf="@+id/btn_delete"
+        android:layout_toLeftOf="@+id/btn_delete"
         android:background="#FFFFFF"
         android:src="@drawable/ic_eye"
         app:civ_border_color="#FF000000"
@@ -71,12 +73,13 @@
         android:textColor="@color/dark_orange"
         android:textSize="20sp"
         android:textStyle="bold"
-        tools:text="Task Title" />
+        tools:text="Task Title"
+        />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/task_content"
-        android:layout_width="220dp"
-        android:layout_height="40dp"
+        android:layout_width="193dp"
+        android:layout_height="88dp"
         android:layout_margin="@dimen/mrg_5"
         android:layout_toStartOf="@+id/task_title"
         android:layout_toLeftOf="@+id/task_title"
@@ -92,10 +95,10 @@
         android:id="@+id/task_txt_date"
         android:layout_width="140dp"
         android:layout_height="26dp"
-        android:layout_below="@+id/btn_edit"
+        android:layout_below="@+id/task_img"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="@dimen/mrg_10"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="18dp"
         android:textColor="@color/light_orange"
         android:textSize="18sp"
         tools:text="Date : 99/6/20" />
@@ -106,10 +109,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/btn_show"
         android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/mrg_10"
+        android:layout_marginTop="18dp"
         android:textColor="@color/beauty_yellow"
         android:textSize="18sp"
-        tools:text="Time :  12:17:30 PM" />
+        tools:text="Date : 99/6/20" />
 
 
 </RelativeLayout>

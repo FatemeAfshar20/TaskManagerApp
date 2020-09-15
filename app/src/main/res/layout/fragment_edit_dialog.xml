@@ -106,23 +106,43 @@
             android:textSize="20sp"
             android:padding="@dimen/pad_10"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_state"
-            android:layout_width="match_parent"
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/todo"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_margin="@dimen/mrg_5"
-            android:layout_below="@id/new_state"
-            android:background="@drawable/orange_border"
-            android:hint="new edit text"
-            android:padding="@dimen/pad_10"
-            android:textSize="20sp" />
+            android:layout_below="@+id/new_state"
+            android:layout_marginTop="@dimen/mrg_10"
+            android:text="TODO" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/doing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/new_state"
+            android:layout_marginStart="9dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop="@dimen/mrg_10"
+            android:layout_toEndOf="@+id/todo"
+            android:layout_toRightOf="@+id/todo"
+            android:text="DOING" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/new_state"
+            android:layout_marginStart="9dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop="@dimen/mrg_10"
+            android:layout_toEndOf="@+id/doing"
+            android:layout_toRightOf="@+id/doing"
+            android:text="DONE" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/dialog_ok_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/edit_state"
+            android:layout_below="@+id/doing"
             android:layout_alignParentRight="true"
             android:layout_margin="@dimen/mrg_10"
             android:text="OK"
@@ -133,7 +153,7 @@
             android:id="@+id/dialog_cancel_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/edit_state"
+            android:layout_below="@+id/doing"
             android:layout_margin="@dimen/mrg_10"
             android:text="Cancel"
             app:icon="@drawable/ic_close"

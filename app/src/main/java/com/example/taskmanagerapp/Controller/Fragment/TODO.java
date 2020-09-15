@@ -12,7 +12,10 @@ import androidx.annotation.Nullable;
 import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.ViewElem.StateView;
 
+import java.util.UUID;
+
 public class TODO extends StateManagerFragment {
+    public static final String ARG_USER_ID = "User Id";
     public static final int REQUEST_CODE_ADD_TASK = 0;
     public static final String FRAGMENT_ADD_TASK_DIALOG = "Add Task Dialog";
 
@@ -20,9 +23,10 @@ public class TODO extends StateManagerFragment {
         // Required empty public constructor
     }
 
-    public static TODO newInstance() {
+    public static TODO newInstance(UUID uuid) {
         TODO fragment = new TODO();
         Bundle args = new Bundle();
+        args.putSerializable(ARG_USER_ID,uuid);
         fragment.setArguments(args);
         return fragment;
     }
@@ -31,7 +35,8 @@ public class TODO extends StateManagerFragment {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
+        setUser((UUID) getArguments().
+                getSerializable(ARG_USER_ID));
     }
 
     @Override
