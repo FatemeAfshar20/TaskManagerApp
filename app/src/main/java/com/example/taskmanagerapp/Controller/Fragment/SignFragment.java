@@ -68,6 +68,7 @@ public class SignFragment extends Fragment {
 
                         User.addInRepository(mUser);
                         LoginActivity.start(getContext(), mUser.getUUID());
+                        getActivity().finish();
                     } else
                         LoginView.returnToast(getContext(), R.string.input_check);
                 } else

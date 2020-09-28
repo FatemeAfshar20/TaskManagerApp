@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menu_logout"
-    android:title="Logout"
+    android:title="@string/menu_text_logout"
         />
 
-    <item android:id="@+id/menu_delete"
-    android:title="Delete All Tasks"/>
+    <item
+        android:id="@+id/menu_delete"
+        android:title="@string/menu_text_delete_all" />
+
 </menu>

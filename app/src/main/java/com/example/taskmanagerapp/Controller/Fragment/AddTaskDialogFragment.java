@@ -29,8 +29,9 @@ import java.util.UUID;
 public class AddTaskDialogFragment extends DialogFragment {
     public static final String EXTRA_NEW_TASK = "com.example.taskmanagerapp.New Task";
     public static final String ARG_USER_ID = "User Id";
-    private User mUser=new User();
+    private User mUser = new User();
     private Task mTask;
+
     public AddTaskDialogFragment() {
         // Required empty public constructor
     }
@@ -39,7 +40,7 @@ public class AddTaskDialogFragment extends DialogFragment {
     public static AddTaskDialogFragment newInstance(UUID uuid) {
         AddTaskDialogFragment fragment = new AddTaskDialogFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_USER_ID,uuid);
+        args.putSerializable(ARG_USER_ID, uuid);
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,9 +48,9 @@ public class AddTaskDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UUID uuid= (UUID)
+        UUID uuid = (UUID)
                 getArguments().getSerializable(ARG_USER_ID);
-        mUser=UserRepository.getInstance().get(uuid);
+        mUser = UserRepository.getInstance().get(uuid);
     }
 
     @Override
@@ -61,13 +62,13 @@ public class AddTaskDialogFragment extends DialogFragment {
         return dialogView.getView();
     }
 
-    private void setListener(DialogView dialogView){
+    private void setListener(DialogView dialogView) {
         dialogView.getButtonOK().setOnClickListener(new View.OnClickListener() {
 
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
-               mTask=returnNewTask(dialogView);
+                mTask = returnNewTask(dialogView);
                 sendData();
                 dismiss();
             }
@@ -82,22 +83,37 @@ public class AddTaskDialogFragment extends DialogFragment {
     }
 
     private void sendData() {
-        Fragment fragment=getTargetFragment();
-        Intent data=new Intent();
-        data.putExtra(EXTRA_NEW_TASK,mTask);
+        Fragment fragment = getTargetFragment();
+        Intent data = new Intent();
+        data.putExtra(EXTRA_NEW_TASK, mTask);
         fragment.onActivityResult(
-                getTargetRequestCode(), Activity.RESULT_OK,data);
+                getTargetRequestCode(), Activity.RESULT_OK, data);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private Task returnNewTask(DialogView dialogView) {
-        Task newTask=new Task();
-        newTask.setTaskTitle(dialogView.getEditTitle());
-        newTask.setTaskContent(dialogView.getEditContent());
+        Task newTask = new Task();
+        if (!dialogView.getEditTitle().equals(""))
+            newTask.setTaskTitle(dialogView.getEditTitle());
+        else
+            newTask.setTaskTitle("");
+
+        if (!dialogView.getEditContent().equals(""))
+            newTask.setTaskContent(dialogView.getEditContent());
+        else
+            newTask.setTaskContent("");
         //this is  default
         newTask.setTaskState(TaskState.TODO);
-        newTask.setTaskDate(getDate(dialogView.getDatePicker()));
-        newTask.setTaskTime(getTime(dialogView.getTimePicker()));
+
+        if (dialogView.getDatePicker() != null)
+            newTask.setTaskDate(getDate(dialogView.getDatePicker()));
+        else
+            newTask.setTaskDate(new Date());
+
+        if (dialogView.getTimePicker() != null)
+            newTask.setTaskTime(getTime(dialogView.getTimePicker()));
+        else
+            newTask.setTaskTime(new Date());
 
         return newTask;
     }

@@ -66,6 +66,7 @@ public class TODO extends StateManagerFragment {
         if (requestCode == REQUEST_CODE_ADD_TASK) {
             manageReceiveDataFromAddDialog(data,
                     getTasksRepository().getTODOTaskList(),TaskState.TODO);
+           // updateUI(getTasksRepository().getTODOTaskList());
         }
     }
 

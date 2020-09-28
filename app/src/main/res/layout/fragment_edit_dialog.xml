@@ -92,26 +92,32 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
-            android:id="@+id/todo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/mrg_10"
-            android:text="@string/todo" />
+<RadioGroup
+    android:id="@+id/radio_state_group"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+    <com.google.android.material.radiobutton.MaterialRadioButton
+        android:id="@+id/todo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mrg_10"
+        android:text="@string/todo" />
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
-            android:id="@+id/doing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/mrg_10"
-            android:text="@string/doing" />
+    <com.google.android.material.radiobutton.MaterialRadioButton
+        android:id="@+id/doing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/mrg_10"
+        android:text="@string/doing" />
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
-            android:id="@+id/done"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/mrg_10"
-            android:text="@string/done" />
+    <com.google.android.material.radiobutton.MaterialRadioButton
+        android:id="@+id/done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/mrg_10"
+        android:text="@string/done" />
+</RadioGroup>
 
         <LinearLayout
             android:layout_width="match_parent"

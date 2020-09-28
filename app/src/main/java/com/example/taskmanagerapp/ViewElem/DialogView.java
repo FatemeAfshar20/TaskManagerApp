@@ -137,4 +137,12 @@ public class DialogView {
     public boolean isDone() {
         return mDone.isChecked();
     }
+
+    public void setDatePicker(DatePicker datePicker) {
+        mDatePicker = datePicker;
+    }
+
+    public void setTimePicker(TimePicker timePicker) {
+        mTimePicker = timePicker;
+    }
 }

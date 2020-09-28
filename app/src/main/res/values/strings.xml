@@ -26,6 +26,6 @@
     <string name="task_content">Task Content :</string>
     <string name="task_exist_date">Task Exist Date :</string>
     <string name="task_exist_time">Task Exist Time :</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
+    <string name="menu_text_delete_all">Delete All</string>
+    <string name="menu_text_logout">Logout</string>
 </resources>

@@ -1,25 +1,24 @@
 package com.example.taskmanagerapp.Controller.Fragment;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.taskmanagerapp.Controller.Activity.LoginActivity;
 import com.example.taskmanagerapp.Model.User.User;
@@ -30,8 +29,8 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -47,6 +46,7 @@ public class TaskManagerFragment extends Fragment{
     private User mUser= new User();
     private TasksRepository mTasksRepository=
             mUser.getTasksRepository();
+    private Toolbar mToolbar;
 
     public TaskManagerFragment() {
         // Required empty public constructor
@@ -72,6 +72,9 @@ public class TaskManagerFragment extends Fragment{
         mFragments.add(2, DONE.newInstance(uuid));
         setHasOptionsMenu(true);
 
+/*        ActionBar actionBar= Objects.requireNonNull(getActivity()).getActionBar();
+        actionBar.setTitle(mUser.getUserName());*/
+
         if(mTaskAdapter!=null)
             mTaskAdapter.notifyDataSetChanged();
     }
@@ -80,7 +83,12 @@ public class TaskManagerFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_task_maneger, container, false);
+        View view=inflater.inflate(
+                R.layout.fragment_task_maneger,
+                container,
+                false);
+
+        return view;
     }
 
     @Override
@@ -100,13 +108,11 @@ public class TaskManagerFragment extends Fragment{
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu, menu);
-        super.onCreateOptionsMenu(menu,inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
             case R.id.menu_logout:
                 Intent intent=new Intent(getContext(),LoginActivity.class);
                 startActivity(intent);

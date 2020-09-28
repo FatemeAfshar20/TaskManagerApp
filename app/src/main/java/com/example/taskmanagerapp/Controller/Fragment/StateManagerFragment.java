@@ -33,7 +33,6 @@ public abstract class StateManagerFragment extends Fragment {
     private UserRepository mUserRepository =
             UserRepository.getInstance();
     private User mUser=new User();
-    private TasksRepository mTasksRepository=mUser.getTasksRepository();
     private StateAdapter mStateAdapter;
     private StateView mStateView;
 
@@ -50,13 +49,11 @@ public abstract class StateManagerFragment extends Fragment {
      * @param taskList
      */
     public void manageOnResumed(List<Task> taskList) {
-        if (taskList.size() == 0)
-            mStateView.getImgEmpty().setVisibility(View.VISIBLE);
-        else
-            mStateView.getImgEmpty().setVisibility(View.GONE);
+        manageEmptyImage(taskList);
         if (mStateAdapter != null)
             mStateAdapter.notifyDataSetChanged();
     }
+
 
     public void manageRecyclerView(List<Task> taskList) {
         mStateAdapter = new
@@ -72,14 +69,18 @@ public abstract class StateManagerFragment extends Fragment {
                 AddTaskDialogFragment.EXTRA_NEW_TASK);
         task.setTaskState(taskState);
         taskList.add(task);
+
+        updateUI(taskList);
     }
 
     public void manageDialogFragment(Fragment fragment,
                                      DialogFragment dialogFragment,
                                      int requestCode, String tag) {
+        // relation parent-child
         dialogFragment.setTargetFragment(
                 fragment, requestCode);
 
+        // show dialog-fragment
         dialogFragment.show(
                 getActivity().getSupportFragmentManager(),
                 tag);
@@ -104,5 +105,22 @@ public abstract class StateManagerFragment extends Fragment {
         mUser= mUserRepository.get(uuid);
     }
 
+    public void updateUI(List<Task> taskList) {
+
+        if (mStateAdapter == null) {
+            mStateAdapter = new StateAdapter(taskList,getContext(),
+                    getFragmentManager());
+            mStateView.getRecyclerView().setAdapter(mStateAdapter);
+        } else {
+            manageEmptyImage(taskList);
+            mStateAdapter.notifyDataSetChanged();
+        }
+    }
+    private void manageEmptyImage(List<Task> taskList) {
+        if (taskList.size() == 0)
+            mStateView.getImgEmpty().setVisibility(View.VISIBLE);
+        else
+            mStateView.getImgEmpty().setVisibility(View.GONE);
+    }
 
 }

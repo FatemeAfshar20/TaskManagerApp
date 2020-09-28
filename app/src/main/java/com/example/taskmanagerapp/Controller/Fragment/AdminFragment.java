@@ -35,6 +35,7 @@ public class AdminFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private UserRepository mUserRepository=UserRepository.getInstance();
+    private AdminAdapter mAdminAdapter;
 
     public AdminFragment() {
         // Required empty public constructor
@@ -59,10 +60,16 @@ public class AdminFragment extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_admin, container, false);
         findElem(view);
-        AdminAdapter adminAdapter=new AdminAdapter(mUserRepository.getUserList(),getContext());
+        mAdminAdapter=new AdminAdapter(mUserRepository.getUserList(),getContext());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(adminAdapter);
+        mRecyclerView.setAdapter(mAdminAdapter);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUi();
     }
 
     @Override
@@ -93,6 +100,7 @@ public class AdminFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mUserRepository.deleteAll();
+                        updateUi();
                     }
                 })
                 .setNegativeButton("Cancel",null);
@@ -103,5 +111,10 @@ public class AdminFragment extends Fragment {
 
     private void findElem(View view){
         mRecyclerView=view.findViewById(R.id.recycler_view_admin);
+    }
+
+    private void updateUi(){
+        if(mAdminAdapter!=null)
+            mAdminAdapter.notifyDataSetChanged();
     }
 }

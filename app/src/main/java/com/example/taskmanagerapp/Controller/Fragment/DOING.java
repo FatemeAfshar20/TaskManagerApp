@@ -16,9 +16,10 @@ import java.util.UUID;
 
 public class DOING extends StateManagerFragment {
     public static final String ARG_USER_ID = "User Id";
-    private static final int REQUEST_CODE_ADD_TASK = 0;
-    private static final String FRAGMENT_ADD_TASK_DIALOG = "Adding new task";
+    public static final int REQUEST_CODE_ADD_TASK = 0;
+    public static final String FRAGMENT_ADD_TASK_DIALOG = "Add Task Dialog";
     private UUID mUUID;
+
     public DOING() {
         // Required empty public constructor
     }
@@ -32,29 +33,27 @@ public class DOING extends StateManagerFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-    manageOnResumed(
-            getTasksRepository().getDOINGTaskList());
+    public void onCreate(Bundle savedInstanceState) {
+        mUUID=(UUID) getArguments().
+                getSerializable(ARG_USER_ID);
+        super.onCreate(savedInstanceState);
+        setUser(mUUID);
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mUUID=(UUID) getArguments().
-                getSerializable(ARG_USER_ID);
-        setUser(mUUID);
+    public void onResume() {
+        super.onResume();
+        manageOnResumed(getTasksRepository()
+                .getDOINGTaskList());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        manageView(inflater, container);
+        manageView(inflater,container);
         setListener(getStateView());
-        manageRecyclerView(
-                getTasksRepository().getDOINGTaskList());
+        manageRecyclerView(getTasksRepository()
+                .getDOINGTaskList());
         return getStateView().getView();
     }
 
@@ -66,21 +65,21 @@ public class DOING extends StateManagerFragment {
             return;
         if (requestCode == REQUEST_CODE_ADD_TASK) {
             manageReceiveDataFromAddDialog(data,
-                    getTasksRepository().getDOINGTaskList(),
-                    TaskState.DOING);
+                    getTasksRepository().getDOINGTaskList(),TaskState.DOING);
+            updateUI(getTasksRepository().getDOINGTaskList());
         }
     }
 
     @Override
     public void setListener(StateView stateView) {
-            stateView.getButtonAddTask().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    manageDialogFragment(DOING.this
-                            ,AddTaskDialogFragment.newInstance(mUUID),
-                            REQUEST_CODE_ADD_TASK
-                            ,FRAGMENT_ADD_TASK_DIALOG);
-                }
-            });
+        stateView.getButtonAddTask().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                manageDialogFragment(DOING.this,
+                        AddTaskDialogFragment.newInstance(mUUID),
+                        REQUEST_CODE_ADD_TASK,
+                        FRAGMENT_ADD_TASK_DIALOG);
+            }
+        });
     }
 }

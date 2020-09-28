@@ -4,16 +4,12 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.taskmanagerapp.Model.Task.Task;
-import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.Repository.TasksRepository;
 import com.example.taskmanagerapp.Repository.UserRepository;
 
 import java.io.Serializable;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
