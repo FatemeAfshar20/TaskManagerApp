@@ -59,9 +59,25 @@ public class TasksRepository implements IRepository<Task> {
     }
 
     @Override
+    public void update(Task task) {
+
+    }
+
+    @Override
     public Task get(UUID uuid) {
         return null;
     }
+
+    @Override
+    public Task get(Task task) {
+        return null;
+    }
+
+    @Override
+    public List<Task> getLists() {
+        return null;
+    }
+
     private void updateList(Task oldTask, Task newTask) {
         switch (newTask.getTaskState()) {
             case TODO:

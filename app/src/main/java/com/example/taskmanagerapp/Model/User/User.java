@@ -34,7 +34,19 @@ public class User implements Serializable {
         mPassword = password;
     }
 
+    public User(UUID uuid) {
+        mUUID=uuid;
+    }
+
     public User() {
+    }
+
+    public User(UUID uuid, String userName, String password, boolean isAdmin, Date membership) {
+        this(uuid);
+        mUserName = userName;
+        mPassword = password;
+        this.isAdmin = isAdmin;
+        mMembership = membership;
     }
 
     public UUID getUUID() {

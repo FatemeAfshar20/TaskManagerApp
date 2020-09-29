@@ -40,7 +40,7 @@ public class TaskManagerDBHelper extends SQLiteOpenHelper {
         queryUser.append(TaskColumns.CONTENT+"TEXT NOT NULL, ");
         queryUser.append(TaskColumns.DATE+"TEXT, ");
         queryUser.append(TaskColumns.TIME+"TEXT, ");
-        queryUser.append(TaskColumns.STATE+"TEXT, ");
+        queryUser.append(TaskColumns.STATE+"TEXT ");
         queryUser.append(" ); ");
 
         db.execSQL(queryTask.toString());

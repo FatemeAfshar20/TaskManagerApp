@@ -57,6 +57,11 @@ public class UserRepository implements IRepository<User>, Serializable {
         oldUser.setTasksRepository(newUser.getTasksRepository());
     }
 
+    @Override
+    public void update(User user) {
+
+    }
+
 
     @Override
     public User get(UUID uuid) {
@@ -65,6 +70,16 @@ public class UserRepository implements IRepository<User>, Serializable {
                 return mUserList.get(i);
             }
         }
+        return null;
+    }
+
+    @Override
+    public User get(User user) {
+        return null;
+    }
+
+    @Override
+    public List<User> getLists() {
         return null;
     }
 
