@@ -29,7 +29,7 @@ public class UserDBRepository implements IRepository<User> {
         return sInstance;
     }
 
-    public UserDBRepository(Context context) {
+    private UserDBRepository(Context context) {
         TaskManagerDBHelper dbHelper =
                 new TaskManagerDBHelper(context);
         mDatabase = dbHelper.getWritableDatabase();
@@ -186,5 +186,33 @@ public class UserDBRepository implements IRepository<User> {
         boolean isAdmin = cursor.getInt(cursor.getColumnIndex(UserColumns.ISADMIN)) == 1;
 
         return new User(uuid, username, password, isAdmin, membership);
+    }
+
+    public boolean userExist(String username) {
+        String[] columns = new String[]{
+                UserColumns.USERNAME
+        };
+
+        String whereClause = UserColumns.USERNAME + " =? ";
+        String[] whereArgs = new String[]{username};
+
+        Cursor cursor = mDatabase.query(mTaleName,
+                columns,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                null);
+
+        if (cursor == null || cursor.getCount() == 0)
+            return false;
+
+        try {
+            cursor.moveToFirst();
+        }finally {
+            cursor.close();
+        }
+
+        return true;
     }
 }

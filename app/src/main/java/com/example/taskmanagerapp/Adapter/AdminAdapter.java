@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.taskmanagerapp.Controller.Activity.TaskManagerActivity;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
+import com.example.taskmanagerapp.Repository.IRepository;
 import com.example.taskmanagerapp.Repository.TasksRepository;
+import com.example.taskmanagerapp.Repository.UserDBRepository;
 import com.example.taskmanagerapp.Repository.UserRepository;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -23,10 +25,11 @@ import java.util.List;
 public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
    private List<User> mUserList;
    private Context mContext;
-
+    private IRepository<User> mUserRepository;
     public AdminAdapter(List<User> userList, Context context) {
         mUserList = userList;
         mContext = context;
+        mUserRepository= UserDBRepository.getInstance(mContext);
     }
 
     @NonNull
@@ -92,7 +95,7 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
                 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                 @Override
                 public void onClick(View v) {
-                    UserRepository.getInstance().delete(mUser);
+                    mUserRepository.delete(mUser);
                 }
             });
         }
