@@ -2,6 +2,7 @@ package com.example.taskmanagerapp.Databese;
 
 public final class TaskManagerSchema {
     public static final String NAME="task_manager.db";
+    public static final int VERSION=1;
 
     public static final class User{
         public static final String NAME="userTable";
@@ -12,6 +13,7 @@ public final class TaskManagerSchema {
             public static final String USERNAME="username";
             public static final String PASSWORD="password";
             public static final String MEMBERSHIP="membership";
+            public static final String ISADMIN="isAdmin";
             public static final String TASK="task";
         }
     }
