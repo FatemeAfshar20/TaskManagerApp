@@ -34,6 +34,7 @@ public class TaskDBRepository implements IRepository<Task> {
     }
 
     private TaskDBRepository(Context context) {
+        context=context.getApplicationContext();
         TaskManagerDBHelper dbHelper =
                 new TaskManagerDBHelper(context);
 

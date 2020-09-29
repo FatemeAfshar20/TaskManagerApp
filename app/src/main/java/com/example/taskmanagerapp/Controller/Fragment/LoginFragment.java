@@ -2,25 +2,20 @@ package com.example.taskmanagerapp.Controller.Fragment;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
 import com.example.taskmanagerapp.Controller.Activity.AdminActivity;
-import com.example.taskmanagerapp.Controller.Activity.LoginActivity;
 import com.example.taskmanagerapp.Controller.Activity.SignActivity;
 import com.example.taskmanagerapp.Controller.Activity.TaskManagerActivity;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
-import com.example.taskmanagerapp.Repository.UserRepository;
+import com.example.taskmanagerapp.Repository.UserDBRepository;
 import com.example.taskmanagerapp.ViewElem.LoginView;
-
-import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,8 +24,7 @@ import java.util.UUID;
  */
 public class LoginFragment extends Fragment {
 
-    public UserRepository mUserRepository = UserRepository.getInstance();
-    private UUID mUserId;
+    public UserDBRepository mUserRepository ;
     private LoginView mLoginView;
     private User mUser;
 
@@ -48,6 +42,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mUserRepository= UserDBRepository.getInstance(getActivity());
     }
 
     @Override
@@ -86,12 +81,6 @@ public class LoginFragment extends Fragment {
 
     }
 
-    private User getInputUser(LoginView loginView) {
-
-        return new User(loginView.getUsername(),
-                loginView.getPasswordText());
-    }
-
     private boolean isCorrectPass(String userPassword, String loginPassword) {
         if (loginPassword.equals(userPassword))
             return true;
@@ -99,8 +88,8 @@ public class LoginFragment extends Fragment {
     }
 
     private boolean checkUserInfo() {
-        if (mUserRepository.userExist(mLoginView.getUsername())) {
-            mUser = mUserRepository.get(mLoginView.getUsername());
+        if (mUserRepository.userExist(mLoginView.getUsername())!=null) {
+            mUser=mUserRepository.userExist(mLoginView.getUsername());
             if (isCorrectPass(mUser.getPassword(),
                     mLoginView.getPasswordText()))
                 return true;

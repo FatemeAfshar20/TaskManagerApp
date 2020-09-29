@@ -2,26 +2,24 @@ package com.example.taskmanagerapp.Controller.Fragment;
 
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
 
 import com.example.taskmanagerapp.Controller.Activity.LoginActivity;
 import com.example.taskmanagerapp.Model.User.Admin;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
-import com.example.taskmanagerapp.Repository.UserRepository;
+import com.example.taskmanagerapp.Repository.UserDBRepository;
 import com.example.taskmanagerapp.ViewElem.LoginView;
 
 public class SignFragment extends Fragment {
 
     private User mUser = new User();
-    private UserRepository mUserRepository =
-            UserRepository.getInstance();
+    private UserDBRepository mUserRepository;
 
     public SignFragment() {
         // Required empty public constructor
@@ -37,6 +35,8 @@ public class SignFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mUserRepository=
+                UserDBRepository.getInstance(getActivity());
     }
 
     @Override
@@ -55,8 +55,8 @@ public class SignFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                if (!mUserRepository.
-                        userExist(loginView.getUsername())) {
+                if (mUserRepository.
+                        userExist(loginView.getUsername())==null) {
                     if (isTrueFormatInput(loginView)) {
                         mUser.setUserName(loginView.getUsername());
                         mUser.setPassword(loginView.getPasswordText());
@@ -66,7 +66,7 @@ public class SignFragment extends Fragment {
                                 .equals(Admin.getAdminPass()))
                             mUser.setAdmin(true);
 
-                        User.addInRepository(mUser);
+                        mUserRepository.insert(mUser);
                         LoginActivity.start(getContext(), mUser.getUUID());
                         getActivity().finish();
                     } else

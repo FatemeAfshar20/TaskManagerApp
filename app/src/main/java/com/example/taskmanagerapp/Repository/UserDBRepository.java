@@ -30,6 +30,7 @@ public class UserDBRepository implements IRepository<User> {
     }
 
     private UserDBRepository(Context context) {
+        context=context.getApplicationContext();
         TaskManagerDBHelper dbHelper =
                 new TaskManagerDBHelper(context);
         mDatabase = dbHelper.getWritableDatabase();
@@ -175,19 +176,44 @@ public class UserDBRepository implements IRepository<User> {
     }
 
     @NotNull
+    private User extractCursor(String username, Cursor cursor) {
+        UUID uuid = UUID.fromString(
+                cursor.getString(
+                        cursor.getColumnIndex(UserColumns.UUID)));
+        String password = cursor.getString(
+                cursor.getColumnIndex(UserColumns.PASSWORD));
+        Date membership = new Date(cursor.
+                getColumnIndex(UserColumns.PASSWORD));
+        boolean isAdmin = cursor.getInt(cursor.
+                getColumnIndex(UserColumns.ISADMIN)) == 1;
+
+        return new User(uuid, username,
+                password, isAdmin, membership);
+    }
+
+    @NotNull
     private User extractCursor(Cursor cursor) {
         UUID uuid = UUID.fromString(
                 cursor.getString(
                         cursor.getColumnIndex(UserColumns.UUID)));
         String username = cursor.getString(
                 cursor.getColumnIndex(UserColumns.USERNAME));
-        String password = cursor.getString(cursor.getColumnIndex(UserColumns.PASSWORD));
-        Date membership = new Date(cursor.getColumnIndex(UserColumns.PASSWORD));
-        boolean isAdmin = cursor.getInt(cursor.getColumnIndex(UserColumns.ISADMIN)) == 1;
+        String password = cursor.getString(cursor.
+                getColumnIndex(UserColumns.PASSWORD));
+        Date membership = new Date(cursor.
+                getColumnIndex(UserColumns.PASSWORD));
+        boolean isAdmin = cursor.getInt(cursor.
+                getColumnIndex(UserColumns.ISADMIN)) == 1;
 
-        return new User(uuid, username, password, isAdmin, membership);
+        return new User(uuid, username,
+                password, isAdmin, membership);
     }
 
+    public SQLiteDatabase getDatabase() {
+        return mDatabase;
+    }
+
+/*
     public boolean userExist(String username) {
         String[] columns = new String[]{
                 UserColumns.USERNAME
@@ -209,10 +235,38 @@ public class UserDBRepository implements IRepository<User> {
 
         try {
             cursor.moveToFirst();
+            return true;
         }finally {
             cursor.close();
         }
 
-        return true;
+    }*/
+
+    public User userExist(String username) {
+/*        String[] columns = new String[]{
+                UserColumns.USERNAME
+        };*/
+
+        String whereClause = UserColumns.USERNAME +" =?";
+        String[] whereArgs = new String[]{username};
+
+        Cursor cursor = mDatabase.query(mTaleName,
+                null,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                null);
+
+        if (cursor == null || cursor.getCount() == 0)
+            return null;
+
+        try {
+            cursor.moveToFirst();
+
+            return extractCursor(username,cursor);
+        }finally {
+            cursor.close();
+        }
     }
 }

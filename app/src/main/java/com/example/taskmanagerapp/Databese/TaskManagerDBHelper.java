@@ -20,12 +20,12 @@ public class TaskManagerDBHelper extends SQLiteOpenHelper {
         //---- create user table
         StringBuilder queryUser=new StringBuilder();
         queryUser.append("CREATE TABLE "+TaskManagerSchema.User.NAME+" ( ");
-        queryUser.append(UserColumns.ID+"INTEGER PRIMARY KEY NOT NULL , ");
-        queryUser.append(UserColumns.UUID+"TEXT NOT NULL , ");
-        queryUser.append(UserColumns.USERNAME+"TEXT NOT NULL UNIQUE, ");
-        queryUser.append(UserColumns.PASSWORD+"TEXT NOT NULL, ");
-        queryUser.append(UserColumns.MEMBERSHIP+"TEXT, ");
-        queryUser.append(UserColumns.ISADMIN+"INTEGER, ");
+        queryUser.append(UserColumns.ID+" INTEGER PRIMARY KEY NOT NULL , ");
+        queryUser.append(UserColumns.UUID+" TEXT NOT NULL , ");
+        queryUser.append(UserColumns.USERNAME+" TEXT NOT NULL, ");
+        queryUser.append(UserColumns.PASSWORD+" TEXT NOT NULL, ");
+        queryUser.append(UserColumns.MEMBERSHIP+" TEXT, ");
+        queryUser.append(UserColumns.ISADMIN+" INTEGER, ");
         queryUser.append(UserColumns.TASK+"  ");
         queryUser.append(" ); ");
 
@@ -34,13 +34,13 @@ public class TaskManagerDBHelper extends SQLiteOpenHelper {
         //---- create task table
         StringBuilder queryTask=new StringBuilder();
         queryTask.append("CREATE TABLE "+TaskManagerSchema.Task.NAME+" ( ");
-        queryTask.append(TaskColumns.ID+"INTEGER PRIMARY KEY NOT NULL , ");
-        queryTask.append(TaskColumns.UUID+"TEXT NOT NULL , ");
-        queryTask.append(TaskColumns.TITLE+"TEXT NOT NULL UNIQUE, ");
-        queryTask.append(TaskColumns.CONTENT+"TEXT NOT NULL, ");
-        queryTask.append(TaskColumns.DATE+"TEXT, ");
-        queryTask.append(TaskColumns.TIME+"TEXT, ");
-        queryTask.append(TaskColumns.STATE+"TEXT ");
+        queryTask.append(TaskColumns.ID+" INTEGER PRIMARY KEY NOT NULL , ");
+        queryTask.append(TaskColumns.UUID+" TEXT NOT NULL , ");
+        queryTask.append(TaskColumns.TITLE+" TEXT NOT NULL UNIQUE, ");
+        queryTask.append(TaskColumns.CONTENT+" TEXT NOT NULL, ");
+        queryTask.append(TaskColumns.DATE+" TEXT, ");
+        queryTask.append(TaskColumns.TIME+" TEXT, ");
+        queryTask.append(TaskColumns.STATE+" TEXT ");
         queryTask.append(" ); ");
 
         db.execSQL(queryTask.toString());

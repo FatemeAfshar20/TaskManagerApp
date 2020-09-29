@@ -84,11 +84,6 @@ public class User implements Serializable {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static void addInRepository(User user){
-        UserRepository.getInstance().insert(user);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
