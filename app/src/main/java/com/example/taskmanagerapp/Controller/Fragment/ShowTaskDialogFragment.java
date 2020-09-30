@@ -21,8 +21,6 @@ public class ShowTaskDialogFragment extends DialogFragment {
     public static final String ARG_TASK_FOR_SHOW = "Task for show";
     private Task mTask=new Task();
     private DialogView mDialogView;
-    private User mUser=
-            UserRepository.getInstance().getUserList().get(0);
 
     public ShowTaskDialogFragment() {
         // Required empty public constructor
@@ -65,7 +63,6 @@ public class ShowTaskDialogFragment extends DialogFragment {
         dialogView.getButtonDelete().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUser.getTasksRepository().delete(mTask);
                 dismiss();
             }
         });

@@ -16,8 +16,8 @@ import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 
+import com.example.taskmanagerapp.Repository.UserDBRepository;
 import com.example.taskmanagerapp.Repository.UserRepository;
-import com.github.clans.fab.FloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.DateFormat;
@@ -43,7 +43,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
                         FragmentManager fragmentManager) {
         mUserTasks = userTasks;
         mContext = context;
-        mFragmentManager=fragmentManager;
+        mFragmentManager = fragmentManager;
     }
 
     @NonNull
@@ -65,15 +65,12 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
     }
 
     public class Holder extends RecyclerView.ViewHolder {
-        private User mUser=
-                UserRepository.getInstance().getUserList().get(0);
         private DateFormat mDateFormat =
                 DateFormat.getDateInstance(DateFormat.SHORT);
         private DateFormat mTimeFormat =
                 DateFormat.getTimeInstance(DateFormat.SHORT);
 
-        private AppCompatImageButton mButtonEdit
-                ,mButtonShow,mButtonDelete;
+        private AppCompatImageButton mButtonEdit, mButtonShow, mButtonDelete;
         private CircleImageView mTaskImage;
         private Task mTask;
         private MaterialTextView mTaskTitle, mTaskContent,
@@ -93,15 +90,15 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
             mTaskInitDate = view.findViewById(R.id.task_txt_date);
             mTaskInitTime = view.findViewById(R.id.task_txt_time);
             mButtonEdit = view.findViewById(R.id.btn_edit);
-            mButtonShow=view.findViewById(R.id.btn_show);
-            mButtonDelete=view.findViewById(R.id.btn_delete);
+            mButtonShow = view.findViewById(R.id.btn_show);
+            mButtonDelete = view.findViewById(R.id.btn_delete);
         }
 
-        private void setListener(){
+        private void setListener() {
             mButtonEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    EditDialogFragment editDialogFragment=
+                    EditDialogFragment editDialogFragment =
                             EditDialogFragment.newInstance(mTask);
 
 
@@ -113,7 +110,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
             mButtonShow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ShowTaskDialogFragment showTaskDialogFragment=
+                    ShowTaskDialogFragment showTaskDialogFragment =
                             ShowTaskDialogFragment.newInstance(mTask);
 
 
@@ -125,7 +122,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
             mButtonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mUser.getTasksRepository().delete(mTask);
+                    //   mUser.getTaskDBRepository().delete(mTask);
                 }
             });
         }

@@ -67,7 +67,6 @@ public class LoginFragment extends Fragment {
                         AdminActivity.start(getContext());
                     else
                         TaskManagerActivity.start(getContext(), mUser.getUUID());
-                getActivity().finish();
             }
         });
 

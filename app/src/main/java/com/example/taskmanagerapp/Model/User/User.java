@@ -4,8 +4,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.taskmanagerapp.Repository.TasksRepository;
-import com.example.taskmanagerapp.Repository.UserRepository;
+import com.example.taskmanagerapp.Repository.TaskDBRepository;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -19,14 +18,14 @@ public class User implements Serializable {
     private String mPassword;
     private boolean isAdmin;
     private Date mMembership= new Date();
-    private TasksRepository mTasksRepository=new TasksRepository();
+    private TaskDBRepository mTasksRepository;
 
-    public TasksRepository getTasksRepository() {
+    public TaskDBRepository getTaskDBRepository() {
         return mTasksRepository;
     }
 
-    public void setTasksRepository(TasksRepository tasksRepository) {
-        mTasksRepository = tasksRepository;
+    public void setTasksRepository(TaskDBRepository taskDBRepository) {
+        mTasksRepository = taskDBRepository;
     }
 
     public User(String userName, String password) {
@@ -41,12 +40,13 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(UUID uuid, String userName, String password, boolean isAdmin, Date membership) {
+    public User(UUID uuid, String userName, String password, boolean isAdmin, Date membership, TaskDBRepository dbRepository) {
         this(uuid);
         mUserName = userName;
         mPassword = password;
         this.isAdmin = isAdmin;
         mMembership = membership;
+        mTasksRepository=dbRepository;
     }
 
     public UUID getUUID() {

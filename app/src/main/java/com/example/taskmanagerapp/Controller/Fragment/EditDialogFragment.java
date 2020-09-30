@@ -1,11 +1,14 @@
 package com.example.taskmanagerapp.Controller.Fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +20,7 @@ import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
-import com.example.taskmanagerapp.Repository.TasksRepository;
+import com.example.taskmanagerapp.Repository.TaskDBRepository;
 import com.example.taskmanagerapp.Repository.UserRepository;
 import com.example.taskmanagerapp.ViewElem.DialogView;
 
@@ -28,13 +31,11 @@ public class EditDialogFragment extends DialogFragment {
     public static final String ARG_OLD_USER = "Old User";
     public static final String BUNDLE_DATE_SELECTED = "Date user Selected";
     public static final String BUNDLE_TIME_SELECTED = "Time user Selected";
-    private Task mTask = new Task();
+    private static final String EXTRA_NEW_TASK = "com.example.taskmanagerapp.New task";
     private Task mOldTask;
-    private User mUser =
-            UserRepository.getInstance().getUserList().get(0);
-    private TasksRepository mTasksRepository =
-            mUser.getTasksRepository();
     private DialogView mDialogView;
+
+    private TaskDBRepository mTaskDBRepository;
     public EditDialogFragment() {
         // Required empty public constructor
     }
@@ -53,7 +54,7 @@ public class EditDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         mOldTask = (Task) getArguments().get(ARG_OLD_USER);
         saveInstance(savedInstanceState);
-        setRetainInstance(true);
+        mTaskDBRepository=TaskDBRepository.getInstance(getContext());
     }
 
     @Override
@@ -84,8 +85,7 @@ public class EditDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 userChangingTask(mDialogView);
-
-                mTasksRepository.update(mOldTask, mTask);
+                mTaskDBRepository.update(mOldTask);
                 dismiss();
             }
         });
@@ -98,36 +98,37 @@ public class EditDialogFragment extends DialogFragment {
         });
     }
 
+    // ----- send data for Parent Fragment ---
+/*    private void sendData() {
+        Fragment fragment = getTargetFragment();
+        Intent data = new Intent();
+        data.putExtra(EXTRA_NEW_TASK, mTask);
+        fragment.onActivityResult(
+                getTargetRequestCode(), Activity.RESULT_OK, data);
+    }*/
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void userChangingTask(DialogView dialogView) {
         if (!dialogView.getEditTitle().equals(""))
-            mTask.setTaskTitle(dialogView.getEditTitle());
-        else
-            mTask.setTaskTitle(mOldTask.getTaskTitle());
+            mOldTask.setTaskTitle(dialogView.getEditTitle());
 
         if (!dialogView.getEditContent().equals(""))
-            mTask.setTaskContent(dialogView.getEditContent());
-        else
-            mTask.setTaskContent(mOldTask.getTaskContent());
+            mOldTask.setTaskContent(dialogView.getEditContent());
 
         if (dialogView.getTimePicker() != null)
-            mTask.setTaskTime(getNewTime(dialogView.
+            mOldTask.setTaskTime(getNewTime(dialogView.
                     getTimePicker()));
-        else
-            mTask.setTaskTime(mOldTask.getTaskTime());
 
         if (dialogView.getDatePicker() != null)
-            mTask.setTaskDate(
+            mOldTask.setTaskDate(
                     getNewDate(dialogView.getDatePicker()));
-        else
-            mTask.setTaskDate(mOldTask.getTaskDate());
 
         if (dialogView.isTodo())
-            mTask.setTaskState(TaskState.TODO);
+            mOldTask.setTaskState(TaskState.TODO);
        else if (dialogView.isDoing())
-            mTask.setTaskState(TaskState.DOING);
+            mOldTask.setTaskState(TaskState.DOING);
        else if (dialogView.isDone())
-            mTask.setTaskState(TaskState.DONE);
+            mOldTask.setTaskState(TaskState.DONE);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

@@ -1,6 +1,5 @@
 package com.example.taskmanagerapp.Controller.Fragment;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,14 +22,12 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.taskmanagerapp.Controller.Activity.LoginActivity;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
-import com.example.taskmanagerapp.Repository.TasksRepository;
 import com.example.taskmanagerapp.Repository.UserRepository;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -44,8 +41,6 @@ public class TaskManagerFragment extends Fragment{
     private List<Fragment> mFragments=new ArrayList<>();
     private TaskAdapter mTaskAdapter;
     private User mUser= new User();
-    private TasksRepository mTasksRepository=
-            mUser.getTasksRepository();
     private Toolbar mToolbar;
 
     public TaskManagerFragment() {
@@ -130,7 +125,6 @@ public class TaskManagerFragment extends Fragment{
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mTasksRepository.deleteAll();
                     }
                 })
                 .setNegativeButton("Cancel",null);

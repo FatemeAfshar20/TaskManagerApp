@@ -54,7 +54,7 @@ public class UserRepository implements IRepository<User>, Serializable {
         oldUser.setUserName(newUser.getUserName());
         oldUser.setPassword(newUser.getPassword());
         oldUser.setAdmin(newUser.isAdmin());
-        oldUser.setTasksRepository(newUser.getTasksRepository());
+        oldUser.setTasksRepository(newUser.getTaskDBRepository());
     }
 
     @Override

@@ -15,9 +15,8 @@ import com.example.taskmanagerapp.Controller.Activity.TaskManagerActivity;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.IRepository;
-import com.example.taskmanagerapp.Repository.TasksRepository;
+import com.example.taskmanagerapp.Repository.TaskDBRepository;
 import com.example.taskmanagerapp.Repository.UserDBRepository;
-import com.example.taskmanagerapp.Repository.UserRepository;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
@@ -74,10 +73,8 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
 
         public void bind(User user){
             mUser=user;
-            TasksRepository tasksRepository=user.getTasksRepository();
-            int numOfTask=tasksRepository.getTODOTaskList().size()+
-                    tasksRepository.getDONETaskList().size()+
-                    tasksRepository.getDOINGTaskList().size();
+            TaskDBRepository tasksRepository=user.getTaskDBRepository();
+            int numOfTask=tasksRepository.getTODOList().size();
             mUsername.setText(user.getUserName());
             mNumOfTask.setText("Number Of Task : "+numOfTask);
             mDateMemberShip.setText(user.getMembership());

@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.ViewElem.StateView;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class DONE extends StateManagerFragment {
@@ -43,7 +44,7 @@ public class DONE extends StateManagerFragment {
     public void onResume() {
         super.onResume();
         manageOnResumed(
-                getTasksRepository().getDONETaskList());
+                new ArrayList<>());
     }
 
     @Override
@@ -52,7 +53,7 @@ public class DONE extends StateManagerFragment {
         manageView(inflater, container);
         setListener(getStateView());
         manageRecyclerView(
-                getTasksRepository().getDONETaskList());
+                new ArrayList<>());
         return getStateView().getView();
     }
 
@@ -64,7 +65,7 @@ public class DONE extends StateManagerFragment {
             return;
         if (requestCode == REQUEST_CODE_ADD_TASK) {
             manageReceiveDataFromAddDialog(data,
-                    getTasksRepository().getDONETaskList(),
+                    new ArrayList<>(),
                     TaskState.DONE);
         }
     }
@@ -75,7 +76,7 @@ public class DONE extends StateManagerFragment {
             @Override
             public void onClick(View v) {
                 manageDialogFragment(DONE.this
-                        ,AddTaskDialogFragment.newInstance(mUUID),
+                        ,AddTaskDialogFragment.newInstance(),
                         REQUEST_CODE_ADD_TASK
                         ,FRAGMENT_ADD_TASK_DIALOG);
             }

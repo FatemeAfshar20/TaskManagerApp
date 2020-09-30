@@ -26,21 +26,25 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * this class is for building task and send data for
+ * Host fragment(TODOFragment,DOINGFragment,DONEFragment)
+ *
+ * and this class need a viewClass for example(ViewElem/DialogView.class)
+ */
+
 public class AddTaskDialogFragment extends DialogFragment {
     public static final String EXTRA_NEW_TASK = "com.example.taskmanagerapp.New Task";
-    public static final String ARG_USER_ID = "User Id";
-    private User mUser = new User();
     private Task mTask;
 
     public AddTaskDialogFragment() {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static AddTaskDialogFragment newInstance(UUID uuid) {
+
+    public static AddTaskDialogFragment newInstance() {
         AddTaskDialogFragment fragment = new AddTaskDialogFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_USER_ID, uuid);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,9 +52,6 @@ public class AddTaskDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UUID uuid = (UUID)
-                getArguments().getSerializable(ARG_USER_ID);
-        mUser = UserRepository.getInstance().get(uuid);
     }
 
     @Override
