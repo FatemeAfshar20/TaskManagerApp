@@ -14,7 +14,6 @@ public final class TaskManagerSchema {
             public static final String PASSWORD="password";
             public static final String MEMBERSHIP="membership";
             public static final String ISADMIN="isAdmin";
-            public static final String TASK="task";
         }
     }
 
@@ -29,6 +28,7 @@ public final class TaskManagerSchema {
             public static final String DATE="date";
             public static final String TIME="time";
             public static final String STATE="state";
+            public static final String USERID="userId";
         }
 
     }

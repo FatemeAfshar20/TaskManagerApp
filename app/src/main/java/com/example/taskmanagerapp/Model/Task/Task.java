@@ -11,9 +11,11 @@ public class Task implements Serializable {
     private Date mTaskDate;
     private Date mTaskTime;
     private TaskState mTaskState;
+    private UUID mUserId;
 
-    public Task(UUID uuid,String taskTitle, String taskContent, Date taskDate, Date taskTime, TaskState taskState) {
+    public Task(UUID uuid,UUID userId,String taskTitle, String taskContent, Date taskDate, Date taskTime, TaskState taskState) {
         this(uuid);
+        mUserId=userId;
         mTaskTitle = taskTitle;
         mTaskContent = taskContent;
         mTaskDate = taskDate;
@@ -26,6 +28,15 @@ public class Task implements Serializable {
     }
     public Task() {
     }
+
+    public UUID getUserId() {
+        return mUserId;
+    }
+
+    public void setUserId(UUID userId) {
+        mUserId = userId;
+    }
+
     public UUID getUUID() {
         return mUUID;
     }

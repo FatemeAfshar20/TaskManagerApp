@@ -77,7 +77,6 @@ public class UserDBRepository implements IRepository<User> {
                 UserColumns.USERNAME,
                 UserColumns.PASSWORD,
                 UserColumns.MEMBERSHIP,
-                UserColumns.TASK,
                 UserColumns.ISADMIN
         };
 
@@ -269,4 +268,5 @@ public class UserDBRepository implements IRepository<User> {
             cursor.close();
         }
     }
+
 }

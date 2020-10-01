@@ -1,17 +1,15 @@
 package com.example.taskmanagerapp.Controller.Fragment;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.DialogFragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.DialogFragment;
+
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
-import com.example.taskmanagerapp.Repository.UserRepository;
 import com.example.taskmanagerapp.ViewElem.DialogView;
 
 import java.text.DateFormat;
@@ -63,6 +61,7 @@ public class ShowTaskDialogFragment extends DialogFragment {
         dialogView.getButtonDelete().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*      mUser.getTasksRepository().delete(mTask);*/
                 dismiss();
             }
         });

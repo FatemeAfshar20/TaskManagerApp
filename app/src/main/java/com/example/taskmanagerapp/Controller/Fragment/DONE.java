@@ -10,16 +10,18 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 
 import com.example.taskmanagerapp.Model.Task.TaskState;
+import com.example.taskmanagerapp.Repository.TaskDBRepository;
 import com.example.taskmanagerapp.ViewElem.StateView;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class DONE extends StateManagerFragment {
     public static final String ARG_USER_ID = "User Id";
-    private static final int REQUEST_CODE_ADD_TASK = 0;
-    private static final String FRAGMENT_ADD_TASK_DIALOG = "Adding task";
+    public static final int REQUEST_CODE_ADD_TASK = 0;
+    public static final String FRAGMENT_ADD_TASK_DIALOG = "Add Task Dialog";
     private UUID mUUID;
+    private TaskDBRepository mTaskDBRepository;
+
     public DONE() {
         // Required empty public constructor
     }
@@ -34,26 +36,27 @@ public class DONE extends StateManagerFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         mUUID=(UUID) getArguments().
                 getSerializable(ARG_USER_ID);
+        super.onCreate(savedInstanceState);
         setUser(mUUID);
+        mTaskDBRepository=TaskDBRepository.getInstance(getContext()
+                ,mUUID);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        manageOnResumed(
-                new ArrayList<>());
+        manageOnResumed(mTaskDBRepository
+                .getDONETasks());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        manageView(inflater, container);
+        manageView(inflater,container);
         setListener(getStateView());
-        manageRecyclerView(
-                new ArrayList<>());
+        manageRecyclerView(mTaskDBRepository.getDONETasks());
         return getStateView().getView();
     }
 
@@ -65,8 +68,8 @@ public class DONE extends StateManagerFragment {
             return;
         if (requestCode == REQUEST_CODE_ADD_TASK) {
             manageReceiveDataFromAddDialog(data,
-                    new ArrayList<>(),
-                    TaskState.DONE);
+                    mTaskDBRepository.getDONETasks(),TaskState.DONE);
+            // updateUI(getTasksRepository().getDONETaskList());
         }
     }
 
@@ -75,10 +78,10 @@ public class DONE extends StateManagerFragment {
         stateView.getButtonAddTask().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                manageDialogFragment(DONE.this
-                        ,AddTaskDialogFragment.newInstance(),
-                        REQUEST_CODE_ADD_TASK
-                        ,FRAGMENT_ADD_TASK_DIALOG);
+                manageDialogFragment(DONE.this,
+                        AddTaskDialogFragment.newInstance(mUUID),
+                        REQUEST_CODE_ADD_TASK,
+                        FRAGMENT_ADD_TASK_DIALOG);
             }
         });
     }

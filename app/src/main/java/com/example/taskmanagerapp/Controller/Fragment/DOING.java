@@ -9,10 +9,11 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
+import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.Task.TaskState;
+import com.example.taskmanagerapp.Repository.TaskDBRepository;
 import com.example.taskmanagerapp.ViewElem.StateView;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class DOING extends StateManagerFragment {
@@ -20,6 +21,7 @@ public class DOING extends StateManagerFragment {
     public static final int REQUEST_CODE_ADD_TASK = 0;
     public static final String FRAGMENT_ADD_TASK_DIALOG = "Add Task Dialog";
     private UUID mUUID;
+    private TaskDBRepository mTaskDBRepository;
 
     public DOING() {
         // Required empty public constructor
@@ -39,12 +41,15 @@ public class DOING extends StateManagerFragment {
                 getSerializable(ARG_USER_ID);
         super.onCreate(savedInstanceState);
         setUser(mUUID);
+        mTaskDBRepository=TaskDBRepository.getInstance(
+                getContext(),mUUID
+        );
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        manageOnResumed(new ArrayList<>());
+        manageOnResumed(mTaskDBRepository.getDOINGTasks());
     }
 
     @Override
@@ -52,7 +57,7 @@ public class DOING extends StateManagerFragment {
                              Bundle savedInstanceState) {
         manageView(inflater,container);
         setListener(getStateView());
-        manageRecyclerView(new ArrayList<>());
+        manageRecyclerView(mTaskDBRepository.getDOINGTasks());
         return getStateView().getView();
     }
 
@@ -64,8 +69,8 @@ public class DOING extends StateManagerFragment {
             return;
         if (requestCode == REQUEST_CODE_ADD_TASK) {
             manageReceiveDataFromAddDialog(data,
-                    new ArrayList<>(),TaskState.DOING);
-            updateUI(new ArrayList<>());
+                    mTaskDBRepository.getDOINGTasks(),TaskState.DOING);
+            //updateUI(getTasksRepository().getDOINGTaskList());
         }
     }
 
@@ -75,7 +80,7 @@ public class DOING extends StateManagerFragment {
             @Override
             public void onClick(View v) {
                 manageDialogFragment(DOING.this,
-                        AddTaskDialogFragment.newInstance(),
+                        AddTaskDialogFragment.newInstance(mUUID),
                         REQUEST_CODE_ADD_TASK,
                         FRAGMENT_ADD_TASK_DIALOG);
             }

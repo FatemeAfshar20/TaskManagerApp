@@ -1,49 +1,48 @@
 package com.example.taskmanagerapp.Controller.Fragment;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.DialogFragment;
+
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.TaskDBRepository;
-import com.example.taskmanagerapp.Repository.UserRepository;
+import com.example.taskmanagerapp.Repository.UserDBRepository;
 import com.example.taskmanagerapp.ViewElem.DialogView;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 public class EditDialogFragment extends DialogFragment {
-    public static final String ARG_OLD_USER = "Old User";
+    public static final String ARG_OLD_TASK = "Old Task";
+    public static final String ARG_USER = "user";
     public static final String BUNDLE_DATE_SELECTED = "Date user Selected";
     public static final String BUNDLE_TIME_SELECTED = "Time user Selected";
-    private static final String EXTRA_NEW_TASK = "com.example.taskmanagerapp.New task";
+    private Task mTask = new Task();
     private Task mOldTask;
-    private DialogView mDialogView;
-
+    private User mUser ;
     private TaskDBRepository mTaskDBRepository;
+    private DialogView mDialogView;
     public EditDialogFragment() {
         // Required empty public constructor
     }
 
-    public static EditDialogFragment newInstance(Task task) {
+    public static EditDialogFragment newInstance(Task task, UUID uuid) {
         EditDialogFragment fragment = new EditDialogFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_OLD_USER, task);
+        args.putSerializable(ARG_OLD_TASK, task);
+        args.putSerializable(ARG_USER, uuid);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,9 +51,11 @@ public class EditDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mOldTask = (Task) getArguments().get(ARG_OLD_USER);
+        mOldTask = (Task) getArguments().get(ARG_OLD_TASK);
+        mUser = UserDBRepository.getInstance(getContext()).get((UUID) getArguments().get(ARG_USER));
         saveInstance(savedInstanceState);
-        mTaskDBRepository=TaskDBRepository.getInstance(getContext());
+        mTaskDBRepository=TaskDBRepository.getInstance(
+                getContext(),mUser.getUUID());
     }
 
     @Override
@@ -85,6 +86,7 @@ public class EditDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 userChangingTask(mDialogView);
+
                 mTaskDBRepository.update(mOldTask);
                 dismiss();
             }
@@ -97,15 +99,6 @@ public class EditDialogFragment extends DialogFragment {
             }
         });
     }
-
-    // ----- send data for Parent Fragment ---
-/*    private void sendData() {
-        Fragment fragment = getTargetFragment();
-        Intent data = new Intent();
-        data.putExtra(EXTRA_NEW_TASK, mTask);
-        fragment.onActivityResult(
-                getTargetRequestCode(), Activity.RESULT_OK, data);
-    }*/
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void userChangingTask(DialogView dialogView) {
@@ -125,10 +118,12 @@ public class EditDialogFragment extends DialogFragment {
 
         if (dialogView.isTodo())
             mOldTask.setTaskState(TaskState.TODO);
-       else if (dialogView.isDoing())
+        else if (dialogView.isDoing())
             mOldTask.setTaskState(TaskState.DOING);
-       else if (dialogView.isDone())
+        else if (dialogView.isDone())
             mOldTask.setTaskState(TaskState.DONE);
+
+      //  mOldTask.setUserId(mUser.getUUID());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

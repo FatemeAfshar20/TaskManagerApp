@@ -25,8 +25,7 @@ public class TaskManagerDBHelper extends SQLiteOpenHelper {
         queryUser.append(UserColumns.USERNAME+" TEXT NOT NULL, ");
         queryUser.append(UserColumns.PASSWORD+" TEXT NOT NULL, ");
         queryUser.append(UserColumns.MEMBERSHIP+" TEXT, ");
-        queryUser.append(UserColumns.ISADMIN+" INTEGER, ");
-        queryUser.append(UserColumns.TASK+"  ");
+        queryUser.append(UserColumns.ISADMIN+" INTEGER ");
         queryUser.append(" ); ");
 
         db.execSQL(queryUser.toString());
@@ -36,11 +35,12 @@ public class TaskManagerDBHelper extends SQLiteOpenHelper {
         queryTask.append("CREATE TABLE "+TaskManagerSchema.Task.NAME+" ( ");
         queryTask.append(TaskColumns.ID+" INTEGER PRIMARY KEY NOT NULL , ");
         queryTask.append(TaskColumns.UUID+" TEXT NOT NULL , ");
-        queryTask.append(TaskColumns.TITLE+" TEXT NOT NULL UNIQUE, ");
-        queryTask.append(TaskColumns.CONTENT+" TEXT NOT NULL, ");
+        queryTask.append(TaskColumns.TITLE+" TEXT, ");
+        queryTask.append(TaskColumns.CONTENT+" TEXT, ");
         queryTask.append(TaskColumns.DATE+" TEXT, ");
         queryTask.append(TaskColumns.TIME+" TEXT, ");
-        queryTask.append(TaskColumns.STATE+" TEXT ");
+        queryTask.append(TaskColumns.STATE+" TEXT, ");
+        queryTask.append(TaskColumns.USERID+" TEXT NOT NULL");
         queryTask.append(" ); ");
 
         db.execSQL(queryTask.toString());

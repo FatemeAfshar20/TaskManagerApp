@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 
 import com.example.taskmanagerapp.Model.Task.TaskState;
+import com.example.taskmanagerapp.Repository.TaskDBRepository;
 import com.example.taskmanagerapp.ViewElem.StateView;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class TODO extends StateManagerFragment {
@@ -20,6 +20,7 @@ public class TODO extends StateManagerFragment {
     public static final int REQUEST_CODE_ADD_TASK = 0;
     public static final String FRAGMENT_ADD_TASK_DIALOG = "Add Task Dialog";
     private UUID mUUID;
+    private TaskDBRepository mTaskDBRepository;
 
     public TODO() {
         // Required empty public constructor
@@ -39,12 +40,15 @@ public class TODO extends StateManagerFragment {
                 getSerializable(ARG_USER_ID);
         super.onCreate(savedInstanceState);
         setUser(mUUID);
+        mTaskDBRepository=TaskDBRepository.getInstance(getContext()
+                ,mUUID);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        manageOnResumed(getUserRepository().get(mUUID).getTaskDBRepository().getTODOList());
+        manageOnResumed(mTaskDBRepository
+                .getTODOTasks());
     }
 
     @Override
@@ -52,7 +56,7 @@ public class TODO extends StateManagerFragment {
                              Bundle savedInstanceState) {
         manageView(inflater,container);
         setListener(getStateView());
-        manageRecyclerView(getUserRepository().get(mUUID).getTaskDBRepository().getTODOList());
+        manageRecyclerView(mTaskDBRepository.getTODOTasks());
         return getStateView().getView();
     }
 
@@ -64,8 +68,8 @@ public class TODO extends StateManagerFragment {
             return;
         if (requestCode == REQUEST_CODE_ADD_TASK) {
             manageReceiveDataFromAddDialog(data,
-                    getUserRepository().get(mUUID).getTaskDBRepository().getTODOList(),TaskState.TODO);
-           updateUI(getUserRepository().get(mUUID).getTaskDBRepository().getTODOList());
+                    mTaskDBRepository.getTODOTasks(),TaskState.TODO);
+            // updateUI(getTasksRepository().getTODOTaskList());
         }
     }
 
@@ -75,8 +79,8 @@ public class TODO extends StateManagerFragment {
             @Override
             public void onClick(View v) {
                 manageDialogFragment(TODO.this,
-                        AddTaskDialogFragment.newInstance(),
-                          REQUEST_CODE_ADD_TASK,
+                        AddTaskDialogFragment.newInstance(mUUID),
+                        REQUEST_CODE_ADD_TASK,
                         FRAGMENT_ADD_TASK_DIALOG);
             }
         });

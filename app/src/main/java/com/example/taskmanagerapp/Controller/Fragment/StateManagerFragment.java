@@ -16,9 +16,7 @@ import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
-import com.example.taskmanagerapp.Repository.TaskDBRepository;
 import com.example.taskmanagerapp.Repository.UserDBRepository;
-import com.example.taskmanagerapp.Repository.UserRepository;
 import com.example.taskmanagerapp.ViewElem.StateView;
 
 import java.util.List;
@@ -32,27 +30,14 @@ public abstract class StateManagerFragment extends Fragment {
     public static final String FRAGMENT_ADD_TASK_DIALOG = "Add Task Dialog";
     public static final int REQUEST_CODE_ADD_TASK = 0;
     private UserDBRepository mUserRepository;
-    private TaskDBRepository mTaskDBRepository;
     private User mUser=new User();
     private StateAdapter mStateAdapter;
     private StateView mStateView;
 
-    public UserDBRepository getUserRepository() {
-        return mUserRepository;
-    }
-
-    public void setUserRepository(UserDBRepository userRepository) {
-        mUserRepository = userRepository;
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserRepository =
-                UserDBRepository.getInstance(getContext());
-
-        mTaskDBRepository=
-                TaskDBRepository.getInstance(getContext());
+        mUserRepository=UserDBRepository.getInstance(getContext());
     }
 
     /**
@@ -66,14 +51,13 @@ public abstract class StateManagerFragment extends Fragment {
         manageEmptyImage(taskList);
         if (mStateAdapter != null)
             mStateAdapter.notifyDataSetChanged();
-        updateUI(taskList);
     }
 
 
     public void manageRecyclerView(List<Task> taskList) {
         mStateAdapter = new
                 StateAdapter(taskList
-                , getContext(), getActivity().getSupportFragmentManager());
+                , getContext(), getActivity().getSupportFragmentManager(),mUser);
         mStateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
         mStateView.getRecyclerView().setAdapter(mStateAdapter);
     }
@@ -83,7 +67,9 @@ public abstract class StateManagerFragment extends Fragment {
         Task task = (Task) data.getSerializableExtra(
                 AddTaskDialogFragment.EXTRA_NEW_TASK);
         task.setTaskState(taskState);
-        mTaskDBRepository.insert(task);
+        taskList.add(task);
+
+        updateUI(taskList);
     }
 
     public void manageDialogFragment(Fragment fragment,
@@ -118,10 +104,11 @@ public abstract class StateManagerFragment extends Fragment {
 
         if (mStateAdapter == null) {
             mStateAdapter = new StateAdapter(taskList,getContext(),
-                    getFragmentManager());
+                    getFragmentManager(),mUser);
             mStateView.getRecyclerView().setAdapter(mStateAdapter);
         } else {
             manageEmptyImage(taskList);
+            mStateAdapter.setUserTasks(taskList);
             mStateAdapter.notifyDataSetChanged();
         }
     }

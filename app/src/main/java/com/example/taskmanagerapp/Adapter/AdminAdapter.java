@@ -15,15 +15,14 @@ import com.example.taskmanagerapp.Controller.Activity.TaskManagerActivity;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.IRepository;
-import com.example.taskmanagerapp.Repository.TaskDBRepository;
 import com.example.taskmanagerapp.Repository.UserDBRepository;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
 
 public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
-   private List<User> mUserList;
-   private Context mContext;
+    private List<User> mUserList;
+    private Context mContext;
     private IRepository<User> mUserRepository;
     public AdminAdapter(List<User> userList, Context context) {
         mUserList = userList;
@@ -41,7 +40,7 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
-            holder.bind(mUserList.get(position));
+        holder.bind(mUserList.get(position));
     }
 
     @Override
@@ -51,9 +50,9 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
 
     class Holder extends RecyclerView.ViewHolder{
         private MaterialTextView mUsername,mNumOfTask,
-        mDateMemberShip;
+                mDateMemberShip;
         private AppCompatImageButton mButtonTaskShow,
-        mButtonTrashcan;
+                mButtonTrashcan;
 
         private User mUser=new User();
 
@@ -73,10 +72,12 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
 
         public void bind(User user){
             mUser=user;
-            TaskDBRepository tasksRepository=user.getTaskDBRepository();
-            int numOfTask=tasksRepository.getTODOList().size();
+            //    TasksRepository tasksRepository=user.getTasksRepository();
+/*            int numOfTask=tasksRepository.getTODOTaskList().size()+
+                    tasksRepository.getDONETaskList().size()+
+                    tasksRepository.getDOINGTaskList().size();*/
             mUsername.setText(user.getUserName());
-            mNumOfTask.setText("Number Of Task : "+numOfTask);
+            //mNumOfTask.setText("Number Of Task : "+numOfTask);
             mDateMemberShip.setText(user.getMembership());
         }
 

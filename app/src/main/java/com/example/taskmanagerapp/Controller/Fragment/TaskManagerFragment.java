@@ -22,7 +22,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.taskmanagerapp.Controller.Activity.LoginActivity;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
-import com.example.taskmanagerapp.Repository.UserRepository;
+import com.example.taskmanagerapp.Repository.TaskDBRepository;
+import com.example.taskmanagerapp.Repository.UserDBRepository;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -41,6 +42,7 @@ public class TaskManagerFragment extends Fragment{
     private List<Fragment> mFragments=new ArrayList<>();
     private TaskAdapter mTaskAdapter;
     private User mUser= new User();
+    private TaskDBRepository mTasksRepository;
     private Toolbar mToolbar;
 
     public TaskManagerFragment() {
@@ -61,7 +63,7 @@ public class TaskManagerFragment extends Fragment{
         super.onCreate(savedInstanceState);
         UUID uuid= (UUID)
                 getArguments().getSerializable(ARG_USER_ID);
-        mUser=UserRepository.getInstance().get(uuid);
+        mTasksRepository= TaskDBRepository.getInstance(getActivity(),uuid);
         mFragments.add(0, TODO.newInstance(uuid));
         mFragments.add(1, DOING.newInstance(uuid));
         mFragments.add(2, DONE.newInstance(uuid));
@@ -91,7 +93,7 @@ public class TaskManagerFragment extends Fragment{
 
         super.onViewCreated(view, savedInstanceState);
         mViewPager2=view.findViewById(R.id.view_pager2);
-/*     mViewPager2.setAdapter(new TaskAdapter(getActivity(),mFragments));*/
+        /*     mViewPager2.setAdapter(new TaskAdapter(getActivity(),mFragments));*/
         mTaskAdapter=new TaskAdapter(getActivity(),mFragments);
         mViewPager2.setAdapter(mTaskAdapter);
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
@@ -125,6 +127,7 @@ public class TaskManagerFragment extends Fragment{
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        //   mTasksRepository.deleteAll();
                     }
                 })
                 .setNegativeButton("Cancel",null);

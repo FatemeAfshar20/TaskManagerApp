@@ -13,6 +13,7 @@ import com.example.taskmanagerapp.Controller.Activity.LoginActivity;
 import com.example.taskmanagerapp.Model.User.Admin;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
+import com.example.taskmanagerapp.Repository.TaskDBRepository;
 import com.example.taskmanagerapp.Repository.UserDBRepository;
 import com.example.taskmanagerapp.ViewElem.LoginView;
 
@@ -67,6 +68,7 @@ public class SignFragment extends Fragment {
                             mUser.setAdmin(true);
 
                         mUserRepository.insert(mUser);
+                        TaskDBRepository.getInstance(getContext(),mUser.getUUID());
                         LoginActivity.start(getContext(), mUser.getUUID());
                         getActivity().finish();
                     } else

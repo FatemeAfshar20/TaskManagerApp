@@ -9,7 +9,6 @@ import com.example.taskmanagerapp.Databese.TaskManagerDBHelper;
 import com.example.taskmanagerapp.Databese.TaskManagerSchema;
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.Task.TaskState;
-import com.example.taskmanagerapp.Model.User.User;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,19 +25,32 @@ public class TaskDBRepository implements IRepository<Task> {
     private String mTableName =
             TaskManagerSchema.Task.NAME;
     private SQLiteDatabase mDatabase;
+    private List<Task> mUserTaskList=new ArrayList<>();
+    //-- Now actually I dont no need to this variable or no ---/
+    private UUID mUserId;
 
-    public static TaskDBRepository getInstance(Context context) {
+    public static TaskDBRepository getInstance(Context context,UUID uuid) {
         if (sInstance == null)
-            sInstance = new TaskDBRepository(context);
+            sInstance = new TaskDBRepository(context,uuid);
         return sInstance;
     }
 
-    private TaskDBRepository(Context context) {
+    public TaskDBRepository(Context context,UUID uuid) {
+        mUserId =uuid;
         context=context.getApplicationContext();
         TaskManagerDBHelper dbHelper =
                 new TaskManagerDBHelper(context);
 
         mDatabase = dbHelper.getWritableDatabase();
+        getUserTask(mUserId);
+    }
+
+    public List<Task> getUserTaskList() {
+        return mUserTaskList;
+    }
+
+    public void setUserTaskList(List<Task> userTaskList) {
+        mUserTaskList = userTaskList;
     }
 
     @Override
@@ -62,7 +74,7 @@ public class TaskDBRepository implements IRepository<Task> {
     }
 
     @Override
-    public void update(Task task, Task task2) {
+    public void update(Task task, Task e2) {
 
     }
 
@@ -155,9 +167,6 @@ public class TaskDBRepository implements IRepository<Task> {
             while (!cursor.isAfterLast()) {
                 cursor.moveToFirst();
                 Task task = extractCursor(cursor);
-
-
-
                 taskList.add(task);
                 cursor.moveToNext();
             }
@@ -172,6 +181,7 @@ public class TaskDBRepository implements IRepository<Task> {
     private ContentValues getContentValue(Task task) {
         ContentValues values = new ContentValues();
         values.put(TaskColumns.UUID, task.getUUID().toString());
+        values.put(TaskColumns.USERID, task.getUserId().toString());
         values.put(TaskColumns.TITLE, task.getTaskTitle());
         values.put(TaskColumns.CONTENT, task.getTaskContent());
         values.put(TaskColumns.STATE, task.getTaskState().toString());
@@ -189,9 +199,10 @@ public class TaskDBRepository implements IRepository<Task> {
         TaskState taskState = getTaskState(cursor);
         Date date = new Date(cursor.getColumnIndex(TaskColumns.DATE));
         Date time = new Date(cursor.getColumnIndex(TaskColumns.TIME));
+        UUID userId = UUID.fromString(cursor.getString(
+                cursor.getColumnIndex(TaskColumns.USERID)));
 
-
-        return new Task(uuid, taskTitle, taskContent, date, time, taskState);
+        return new Task(uuid,userId, taskTitle, taskContent, date, time, taskState);
     }
 
     @Nullable
@@ -218,6 +229,36 @@ public class TaskDBRepository implements IRepository<Task> {
         return taskState;
     }
 
+
+    public void getUserTask(UUID userUuid){
+        String whereClause = TaskColumns.USERID +" =?";
+        String[] whereArgs = new String[]{userUuid.toString()};
+
+        Cursor cursor = mDatabase.query(mTableName,
+                null,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                null);
+
+        if (cursor == null || cursor.getCount() == 0)
+            return;
+
+        try {
+            cursor.moveToFirst();
+
+            while (!cursor.isAfterLast()){
+                Task task=extractCursor(cursor);
+                mUserTaskList.add(task);
+                cursor.moveToNext();
+            }
+
+        }finally {
+            cursor.close();
+        }
+    }
+
     @NotNull
     private Task extractCursor(Cursor cursor) {
         UUID uuid = UUID.fromString(cursor.getString(
@@ -228,208 +269,40 @@ public class TaskDBRepository implements IRepository<Task> {
         TaskState taskState = getTaskState(cursor);
         Date date = new Date(cursor.getColumnIndex(TaskColumns.DATE));
         Date time = new Date(cursor.getColumnIndex(TaskColumns.TIME));
+        UUID userId = UUID.fromString(cursor.getString(
+                cursor.getColumnIndex(TaskColumns.USERID)));
 
-
-        return new Task(uuid, taskTitle, taskContent, date, time, taskState);
+        return new Task(uuid,userId, taskTitle, taskContent, date, time, taskState);
     }
 
-    /**
-     *
-     * @param selection: whereClause
-     * @param column:
-     * @return
-     */
-
-    public Task select(String selection,String column){
-        String[] columns = new String[]{
-                TaskColumns.STATE,
-        };
-
-        String selections =column + " =? ";
-        String[] selectionArgs = new String[]{
-                selection
-        };
-
-        Cursor cursor = mDatabase.query(mTableName,
-                null,
-                selections,
-                selectionArgs,
-                null,
-                null,
-                null);
-
-        if (cursor == null || cursor.getCount() == 0)
-            return new Task();
-
-        try {
-            cursor.moveToFirst();
-            return extractCursor(cursor);
-
-        } finally {
-            cursor.close();
+    public List<Task> getTODOTasks(){
+        List<Task> taskList=new ArrayList<>();
+        for (int i = 0; i < mUserTaskList.size(); i++) {
+            if(mUserTaskList.get(i).getTaskState().equals(TaskState.TODO))
+                taskList.add(mUserTaskList.get(i));
         }
+
+        return taskList;
     }
 
-    public List<Task> getTODOList(){
-        List<Task> todoList=new ArrayList<>();
-
-        for (int i = 0; i <getLists().size(); i++) {
-            todoList.add(select("TODO",TaskColumns.STATE));
+    public List<Task> getDONETasks(){
+        List<Task> taskList=new ArrayList<>();
+        for (int i = 0; i < mUserTaskList.size(); i++) {
+            if(mUserTaskList.get(i).getTaskState().equals(TaskState.DONE))
+                taskList.add(mUserTaskList.get(i));
         }
 
-        return todoList;
+        return taskList;
     }
 
-//////-------------------------------------------------------///////////////////////////
-/*    public static class TaskDBStateManager implements IRepository<Task>{
-        private List<Task> mStateTODOList = new ArrayList<>();
-        private List<Task> mStateDOINGList = new ArrayList<>();
-        private List<Task> mStateDONEList = new ArrayList<>();
-
-        @Override
-        public void insert(Task task) {
-            switch (task.getTaskState()) {
-                case TODO:
-                    mStateTODOList.add(task);
-                    return;
-                case DOING:
-                    mStateDOINGList.add(task);
-                    return;
-                case DONE:
-                    mStateDONEList.add(task);
-                    return;
-                default:
-                    break;
-            }
+    public List<Task> getDOINGTasks(){
+        List<Task> taskList=new ArrayList<>();
+        for (int i = 0; i < mUserTaskList.size(); i++) {
+            if(mUserTaskList.get(i).getTaskState().equals(TaskState.DOING))
+                taskList.add(mUserTaskList.get(i));
         }
 
-        @Override
-        public void delete(Task task) {
-            switch (task.getTaskState()) {
-                case TODO:
-                    mStateTODOList.remove(task);
-                    return;
-                case DOING:
-                    mStateDOINGList.remove(task);
-                    return;
-                case DONE:
-                    mStateDONEList.remove(task);
-                    return;
-                default:
-                    break;
+        return taskList;
+    }
 
-            }
-        }
-
-        @Override
-        public void update(Task oldTask, Task newTask) {
-            updateList(oldTask, newTask);
-            oldTask.setTaskTitle(newTask.getTaskTitle());
-            oldTask.setTaskContent(newTask.getTaskContent());
-            oldTask.setTaskState(newTask.getTaskState());
-            oldTask.setTaskDate(newTask.getTaskDate());
-            oldTask.setTaskTime(newTask.getTaskTime());
-        }
-
-        @Override
-        public void update(Task task) {
-
-        }
-
-        @Override
-        public Task get(UUID uuid) {
-            return null;
-        }
-
-        @Override
-        public Task get(Task task) {
-            return null;
-        }
-
-        @Override
-        public List<Task> getLists() {
-            return null;
-        }
-
-        private void updateList(Task oldTask, Task newTask) {
-            switch (newTask.getTaskState()) {
-                case TODO:
-                    mStateTODOList.add(newTask);
-                    delete(oldTask);
-                    break;
-                case DONE:
-                    mStateDONEList.add(newTask);
-                    delete(oldTask);
-                    break;
-                case DOING:
-                    mStateDOINGList.add(newTask);
-                    delete(oldTask);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        public void deleteAll() {
-            if (mStateTODOList.size() != 0 &&
-                    mStateDONEList.size() != 0 &&
-                    mStateDOINGList.size() != 0) {
-                mStateTODOList.clear();
-                mStateDONEList.clear();
-                mStateDOINGList.clear();
-            }
-        }
-
-        private TaskState returnState(Task task) {
-            switch (task.getTaskState()) {
-                case TODO:
-                    return TaskState.TODO;
-                case DOING:
-                    return TaskState.DOING;
-                case DONE:
-                    return TaskState.DONE;
-                default:
-                    return null;
-            }
-        }
-
-
-        public Task get(TaskState taskState, UUID uuid) {
-            switch (taskState) {
-                case TODO:
-                    for (Task task : mStateTODOList) {
-                        if (task.getUUID().equals(uuid))
-                            return task;
-                    }
-                    break;
-                case DOING:
-                    for (Task task : mStateDOINGList) {
-                        if (task.getUUID().equals(uuid))
-                            return task;
-                    }
-                    break;
-                case DONE:
-                    for (Task task : mStateDONEList) {
-                        if (task.getUUID().equals(uuid))
-                            return task;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            return null;
-        }
-
-        public List<Task> getTODOTaskList() {
-            return mStateTODOList;
-        }
-
-        public List<Task> getDONETaskList() {
-            return mStateDONEList;
-        }
-
-        public List<Task> getDOINGTaskList() {
-            return mStateDOINGList;
-        }
-    }*/
 }

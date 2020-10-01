@@ -4,47 +4,44 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
-import com.example.taskmanagerapp.Repository.UserRepository;
+import com.example.taskmanagerapp.Repository.TaskDBRepository;
+import com.example.taskmanagerapp.Repository.UserDBRepository;
 import com.example.taskmanagerapp.ViewElem.DialogView;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
-/**
- * this class is for building task and send data for
- * Host fragment(TODOFragment,DOINGFragment,DONEFragment)
- *
- * and this class need a viewClass for example(ViewElem/DialogView.class)
- */
-
 public class AddTaskDialogFragment extends DialogFragment {
     public static final String EXTRA_NEW_TASK = "com.example.taskmanagerapp.New Task";
+    public static final String ARG_USER_ID = "User Id";
+    private User mUser = new User();
+    private TaskDBRepository mTaskDBRepository;
     private Task mTask;
 
     public AddTaskDialogFragment() {
         // Required empty public constructor
     }
 
-
-    public static AddTaskDialogFragment newInstance() {
+    // TODO: Rename and change types and number of parameters
+    public static AddTaskDialogFragment newInstance(UUID uuid) {
         AddTaskDialogFragment fragment = new AddTaskDialogFragment();
         Bundle args = new Bundle();
+        args.putSerializable(ARG_USER_ID, uuid);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,6 +49,12 @@ public class AddTaskDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UUID uuid = (UUID)
+                getArguments().getSerializable(ARG_USER_ID);
+        mUser = UserDBRepository.getInstance(getContext()).get(uuid);
+        mTaskDBRepository=
+                TaskDBRepository.getInstance(
+                        getContext(),mUser.getUUID());
     }
 
     @Override
@@ -70,6 +73,8 @@ public class AddTaskDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 mTask = returnNewTask(dialogView);
+                mTask.setUserId(mUser.getUUID());
+                mTaskDBRepository.insert(mTask);
                 sendData();
                 dismiss();
             }
@@ -116,6 +121,7 @@ public class AddTaskDialogFragment extends DialogFragment {
         else
             newTask.setTaskTime(new Date());
 
+        newTask.setUserId(mUser.getUUID());
         return newTask;
     }
 

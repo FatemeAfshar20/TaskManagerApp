@@ -11,9 +11,14 @@ import androidx.fragment.app.Fragment;
 
 import com.example.taskmanagerapp.Controller.Fragment.TaskManagerFragment;
 import com.example.taskmanagerapp.Controller.SingleFragment;
-import com.example.taskmanagerapp.Repository.UserRepository;
+
 
 import java.util.UUID;
+
+/**
+ * for start this Activity you should pass uuid,
+ * from uuid we can find , which user did login
+ */
 
 public class TaskManagerActivity extends SingleFragment {
     private UUID mUUID;
@@ -34,9 +39,9 @@ public class TaskManagerActivity extends SingleFragment {
         return TaskManagerFragment.newInstance(mUUID);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+/*    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void setActionBar(@Nullable Toolbar toolbar) {
         super.setActionBar(toolbar);
-    }
+    }*/
 }

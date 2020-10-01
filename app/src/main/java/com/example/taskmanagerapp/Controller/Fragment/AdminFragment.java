@@ -5,13 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,10 +12,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.taskmanagerapp.Adapter.AdminAdapter;
 import com.example.taskmanagerapp.Controller.Activity.LoginActivity;
 import com.example.taskmanagerapp.R;
-import com.example.taskmanagerapp.Repository.UserRepository;
+import com.example.taskmanagerapp.Repository.UserDBRepository;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 public class AdminFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private UserRepository mUserRepository=UserRepository.getInstance();
+    private UserDBRepository mUserRepository;
     private AdminAdapter mAdminAdapter;
 
     public AdminFragment() {
@@ -52,6 +50,7 @@ public class AdminFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mUserRepository= UserDBRepository.getInstance(getContext());
     }
 
     @Override
@@ -60,7 +59,7 @@ public class AdminFragment extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_admin, container, false);
         findElem(view);
-        mAdminAdapter=new AdminAdapter(mUserRepository.getUserList(),getContext());
+        mAdminAdapter=new AdminAdapter(mUserRepository.getLists(),getContext());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdminAdapter);
         return view;
@@ -99,7 +98,7 @@ public class AdminFragment extends Fragment {
                     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mUserRepository.deleteAll();
+                        //   mUserRepository.deleteAll();
                         updateUi();
                     }
                 })
