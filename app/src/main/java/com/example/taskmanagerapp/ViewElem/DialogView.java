@@ -71,7 +71,7 @@ public class DialogView {
         mShowDate=mView.findViewById(R.id.task_date_show);
         mShowState=mView.findViewById(R.id.task_state_show);
         mButtonClose=mView.findViewById(R.id.dialog_close_btn);
-        mButtonDelete=mView.findViewById(R.id.dialog_delete_btn);
+      //  mButtonDelete=mView.findViewById(R.id.dialog_delete_btn);
     }
 
     public MaterialButton getButtonClose() {

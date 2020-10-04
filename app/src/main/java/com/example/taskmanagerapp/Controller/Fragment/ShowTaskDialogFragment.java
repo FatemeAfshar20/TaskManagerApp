@@ -58,13 +58,13 @@ public class ShowTaskDialogFragment extends DialogFragment {
             }
         });
 
-        dialogView.getButtonDelete().setOnClickListener(new View.OnClickListener() {
+/*        dialogView.getButtonDelete().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*      mUser.getTasksRepository().delete(mTask);*/
+                *//*      mUser.getTasksRepository().delete(mTask);*//*
                 dismiss();
             }
-        });
+        });*/
     }
 
     private void initView(Task task){

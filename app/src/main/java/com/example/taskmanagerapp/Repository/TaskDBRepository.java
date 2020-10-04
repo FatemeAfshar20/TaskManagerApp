@@ -259,6 +259,27 @@ public class TaskDBRepository implements IRepository<Task> {
         }
     }
 
+    public Cursor getWordMatches(String query, String[] columns) {
+        String selection = mTableName + " MATCH ?";
+        String[] selectionArgs = new String[] {query+"*"};
+
+        return query(selection, selectionArgs, columns);
+    }
+
+    private Cursor query(String selection, String[] selectionArgs, String[] columns) {
+
+        Cursor cursor = mDatabase.query(mTableName,
+                columns, selection, selectionArgs, null, null, null);
+
+        if (cursor == null) {
+            return null;
+        } else if (!cursor.moveToFirst()) {
+            cursor.close();
+            return null;
+        }
+        return cursor;
+    }
+
     @NotNull
     private Task extractCursor(Cursor cursor) {
         UUID uuid = UUID.fromString(cursor.getString(

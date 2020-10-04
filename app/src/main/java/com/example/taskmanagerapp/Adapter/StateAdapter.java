@@ -12,9 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskmanagerapp.Controller.Fragment.EditDialogFragment;
 import com.example.taskmanagerapp.Controller.Fragment.ShowTaskDialogFragment;
+import com.example.taskmanagerapp.Controller.Fragment.TODO;
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
+import com.example.taskmanagerapp.Repository.TaskDBRepository;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.DateFormat;
@@ -73,6 +75,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
     }
 
     public class Holder extends RecyclerView.ViewHolder {
+        public static final int REQUEST_CODE = 1;
         private DateFormat mDateFormat =
                 DateFormat.getDateInstance(DateFormat.SHORT);
         private DateFormat mTimeFormat =
@@ -84,6 +87,8 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
         private Task mTask;
         private MaterialTextView mTaskTitle, mTaskContent,
                 mTaskInitTime, mTaskInitDate;
+
+     //   private TODOo mTodo=new TODOo();
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -111,6 +116,8 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
                             EditDialogFragment.newInstance(mTask,mUser.getUUID());
 
 
+                   // editDialogFragment.setTargetFragment(mTodo, REQUEST_CODE);
+
                     editDialogFragment.show(mFragmentManager,
                             FRAGMENT_EDIT_DIALOG_FRAGMENT);
                 }
@@ -125,19 +132,26 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
 
                     showTaskDialogFragment.show(mFragmentManager,
                             FRAGMENT_SHOW_DIALOG_FRAGMENT);
+
                 }
             });
 
             mButtonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //   mUser.getTasksRepository().delete(mTask);
+                    TaskDBRepository.getInstance(
+                            mContext,mUser.getUUID()).delete(mTask);
                 }
             });
         }
 
+
         private void bind(Task task) {
             mTask = task;
+            updateUI(task);
+        }
+
+        private void updateUI(Task task) {
             mTaskTitle.setText(task.getTaskTitle());
             mTaskContent.setText(task.getTaskContent());
             mTaskInitDate.setText(mDateFormat.format(
@@ -147,6 +161,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
                     task.getTaskTime()
             ));
         }
+
 
 
         public AppCompatImageButton getButtonEdit() {

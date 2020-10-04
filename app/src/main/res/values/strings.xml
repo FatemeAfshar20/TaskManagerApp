@@ -28,4 +28,7 @@
     <string name="task_exist_time">Task Exist Time :</string>
     <string name="menu_text_delete_all">Delete All</string>
     <string name="menu_text_logout">Logout</string>
+    <string name="search_title">search</string>
+    <string name="search_hint">search</string>
+    <string name="app_label">search task</string>
 </resources>
