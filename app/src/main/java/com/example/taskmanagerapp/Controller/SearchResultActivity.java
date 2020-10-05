@@ -9,15 +9,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.taskmanagerapp.Databese.TaskManagerSchema;
 import com.example.taskmanagerapp.R;
-import com.example.taskmanagerapp.Repository.TaskDBRepository;
+import com.example.taskmanagerapp.Repository.TaskBDRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class SearchResultActivity extends AppCompatActivity {
-    TaskDBRepository mTaskDBRepository = new
-            TaskDBRepository(this, UUID.randomUUID());
+    TaskBDRepository mTaskDBRepository =
+            TaskBDRepository.getInstance(this);
     private List<String> mTaskTitles = new ArrayList<>();
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +64,8 @@ public class SearchResultActivity extends AppCompatActivity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            Cursor cursor = mTaskDBRepository.getWordMatches(query, null);
-            mTaskTitles = getLists(cursor);
+            //Cursor cursor = mTaskDBRepository.getWordMatches(query, null);
+         //   mTaskTitles = getLists(cursor);
         }
     }
 }

@@ -24,7 +24,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.taskmanagerapp.Controller.Activity.LoginActivity;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
-import com.example.taskmanagerapp.Repository.TaskDBRepository;
+import com.example.taskmanagerapp.Repository.TaskBDRepository;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -43,7 +43,7 @@ public class TaskManagerFragment extends Fragment{
     private List<Fragment> mFragments=new ArrayList<>();
     private TaskAdapter mTaskAdapter;
     private User mUser= new User();
-    private TaskDBRepository mTasksRepository;
+    private TaskBDRepository mTasksRepository;
     private Toolbar mToolbar;
 
     public TaskManagerFragment() {
@@ -64,17 +64,19 @@ public class TaskManagerFragment extends Fragment{
         super.onCreate(savedInstanceState);
         UUID uuid= (UUID)
                 getArguments().getSerializable(ARG_USER_ID);
-        mTasksRepository= TaskDBRepository.getInstance(getActivity(),uuid);
-        mFragments.add(0, TODO.newInstance(uuid));
-        mFragments.add(1, DOING.newInstance(uuid));
-        mFragments.add(2, DONE.newInstance(uuid));
+        mTasksRepository= TaskBDRepository.getInstance(getActivity());
+        mFragments.add(0, TODOFragment.newInstance(uuid));
+        mFragments.add(1, DOINGFragment.newInstance(uuid));
+        mFragments.add(2, DONEFragment.newInstance(uuid));
         setHasOptionsMenu(true);
 
 /*        ActionBar actionBar= Objects.requireNonNull(getActivity()).getActionBar();
         actionBar.setTitle(mUser.getUserName());*/
 
-        if(mTaskAdapter!=null)
+        if(mTaskAdapter!=null) {
+            mTaskAdapter.setFragmentList(mFragments);
             mTaskAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -103,7 +105,7 @@ public class TaskManagerFragment extends Fragment{
         ).attach();
 
     }
-/*    @Override
+  @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu, menu);
         SearchManager searchManager =
@@ -112,7 +114,7 @@ public class TaskManagerFragment extends Fragment{
                 (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getActivity().getComponentName()));
-    }*/
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -124,8 +126,12 @@ public class TaskManagerFragment extends Fragment{
             case R.id.menu_delete:
                 getDialogOk();
                 return true;
+            case  R.id.search:
+                getActivity().onSearchRequested();
+                return true;
+            default:
+                return false;
         }
-        return false;
     }
 
     private void getDialogOk() {
@@ -146,6 +152,10 @@ public class TaskManagerFragment extends Fragment{
     private class TaskAdapter extends FragmentStateAdapter {
 
         List<Fragment> mFragmentList;
+
+        public void setFragmentList(List<Fragment> fragmentList) {
+            mFragmentList = fragmentList;
+        }
 
         public List<Fragment> getFragmentList() {
             return mFragmentList;

@@ -59,7 +59,7 @@ public class AdminFragment extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_admin, container, false);
         findElem(view);
-        mAdminAdapter=new AdminAdapter(mUserRepository.getLists(),getContext());
+        mAdminAdapter=new AdminAdapter(mUserRepository.getList(),getContext());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdminAdapter);
         return view;

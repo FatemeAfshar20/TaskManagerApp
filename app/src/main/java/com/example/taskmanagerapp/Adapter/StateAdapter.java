@@ -12,11 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskmanagerapp.Controller.Fragment.EditDialogFragment;
 import com.example.taskmanagerapp.Controller.Fragment.ShowTaskDialogFragment;
-import com.example.taskmanagerapp.Controller.Fragment.TODO;
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
-import com.example.taskmanagerapp.Repository.TaskDBRepository;
+import com.example.taskmanagerapp.Repository.TaskBDRepository;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.DateFormat;
@@ -41,8 +40,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
     private User mUser;
 
     public StateAdapter(List<Task> userTasks, Context context,
-                        FragmentManager fragmentManager,User user) {
-        mUser=user;
+                        FragmentManager fragmentManager) {
         mUserTasks = userTasks;
         mContext = context;
         mFragmentManager=fragmentManager;
@@ -88,8 +86,6 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
         private MaterialTextView mTaskTitle, mTaskContent,
                 mTaskInitTime, mTaskInitDate;
 
-     //   private TODOo mTodo=new TODOo();
-
         public Holder(@NonNull View itemView) {
             super(itemView);
 
@@ -115,9 +111,6 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
                     EditDialogFragment editDialogFragment=
                             EditDialogFragment.newInstance(mTask,mUser.getUUID());
 
-
-                   // editDialogFragment.setTargetFragment(mTodo, REQUEST_CODE);
-
                     editDialogFragment.show(mFragmentManager,
                             FRAGMENT_EDIT_DIALOG_FRAGMENT);
                 }
@@ -127,7 +120,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
                 @Override
                 public void onClick(View v) {
                     ShowTaskDialogFragment showTaskDialogFragment=
-                            ShowTaskDialogFragment.newInstance(mTask);
+                            ShowTaskDialogFragment.newInstance(mTask.getUUID());
 
 
                     showTaskDialogFragment.show(mFragmentManager,
@@ -139,8 +132,8 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
             mButtonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    TaskDBRepository.getInstance(
-                            mContext,mUser.getUUID()).delete(mTask);
+                    TaskBDRepository.getInstance(
+                            mContext).delete(mTask);
                 }
             });
         }

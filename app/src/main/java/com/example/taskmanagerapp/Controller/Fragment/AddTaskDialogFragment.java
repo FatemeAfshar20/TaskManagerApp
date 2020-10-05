@@ -18,7 +18,7 @@ import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
-import com.example.taskmanagerapp.Repository.TaskDBRepository;
+import com.example.taskmanagerapp.Repository.TaskBDRepository;
 import com.example.taskmanagerapp.Repository.UserDBRepository;
 import com.example.taskmanagerapp.ViewElem.DialogView;
 
@@ -30,7 +30,7 @@ public class AddTaskDialogFragment extends DialogFragment {
     public static final String EXTRA_NEW_TASK = "com.example.taskmanagerapp.New Task";
     public static final String ARG_USER_ID = "User Id";
     private User mUser = new User();
-    private TaskDBRepository mTaskDBRepository;
+    private TaskBDRepository mTaskDBRepository;
     private Task mTask;
 
     public AddTaskDialogFragment() {
@@ -53,8 +53,8 @@ public class AddTaskDialogFragment extends DialogFragment {
                 getArguments().getSerializable(ARG_USER_ID);
         mUser = UserDBRepository.getInstance(getContext()).get(uuid);
         mTaskDBRepository=
-                TaskDBRepository.getInstance(
-                        getContext(),mUser.getUUID());
+                TaskBDRepository.getInstance(
+                        getContext());
     }
 
     @Override
@@ -73,7 +73,6 @@ public class AddTaskDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 mTask = returnNewTask(dialogView);
-                mTask.setUserId(mUser.getUUID());
                 mTaskDBRepository.insert(mTask);
                 sendData();
                 dismiss();

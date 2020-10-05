@@ -10,16 +10,16 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.example.taskmanagerapp.Controller.Activity.LoginActivity;
-import com.example.taskmanagerapp.Model.User.Admin;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
-import com.example.taskmanagerapp.Repository.TaskDBRepository;
 import com.example.taskmanagerapp.Repository.UserDBRepository;
 import com.example.taskmanagerapp.ViewElem.LoginView;
 
+import java.util.UUID;
+
 public class SignFragment extends Fragment {
 
-    private User mUser = new User();
+    private User mUser;
     private UserDBRepository mUserRepository;
 
     public SignFragment() {
@@ -38,6 +38,7 @@ public class SignFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mUserRepository=
                 UserDBRepository.getInstance(getActivity());
+        mUser = new User();
     }
 
     @Override
@@ -56,19 +57,18 @@ public class SignFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                if (mUserRepository.
-                        userExist(loginView.getUsername())==null) {
+                if (!mUserRepository.
+                        userExist(loginView.getUsername())) {
                     if (isTrueFormatInput(loginView)) {
-                        mUser.setUserName(loginView.getUsername());
+                        mUser.setUsername(loginView.getUsername());
                         mUser.setPassword(loginView.getPasswordText());
 
                         // checking isAdmin or no and setting result
                         if (loginView.getAdminPassword()
-                                .equals(Admin.getAdminPass()))
+                                .equals("@utab"))
                             mUser.setAdmin(true);
 
                         mUserRepository.insert(mUser);
-                        TaskDBRepository.getInstance(getContext(),mUser.getUUID());
                         LoginActivity.start(getContext(), mUser.getUUID());
                         getActivity().finish();
                     } else

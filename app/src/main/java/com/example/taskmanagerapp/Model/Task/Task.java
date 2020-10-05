@@ -5,40 +5,42 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Task implements Serializable {
-    private UUID mUUID=UUID.randomUUID();
+    private UUID mUUID;
     private String mTaskTitle;
     private String mTaskContent;
+    private TaskState mTaskState;
     private Date mTaskDate;
     private Date mTaskTime;
-    private TaskState mTaskState;
     private UUID mUserId;
 
-    public Task(UUID uuid,UUID userId,String taskTitle, String taskContent, Date taskDate, Date taskTime, TaskState taskState) {
-        this(uuid);
-        mUserId=userId;
+    public Task() {
+        this(UUID.randomUUID());
+    }
+
+    public Task(UUID UUID) {
+        mUUID = UUID;
+        mTaskDate = new Date();
+        mTaskTime = new Date();
+    }
+
+    public Task(UUID UUID, String taskTitle,
+                String taskContent, TaskState taskState,
+                Date taskDate, Date taskTime, UUID userId) {
+        mUUID = UUID;
         mTaskTitle = taskTitle;
         mTaskContent = taskContent;
+        mTaskState = taskState;
         mTaskDate = taskDate;
         mTaskTime = taskTime;
-        mTaskState = taskState;
-    }
-
-    public Task(UUID uuid) {
-        mUUID=uuid;
-    }
-    public Task() {
-    }
-
-    public UUID getUserId() {
-        return mUserId;
-    }
-
-    public void setUserId(UUID userId) {
         mUserId = userId;
     }
 
     public UUID getUUID() {
         return mUUID;
+    }
+
+    public void setUUID(UUID UUID) {
+        mUUID = UUID;
     }
 
     public String getTaskTitle() {
@@ -57,6 +59,14 @@ public class Task implements Serializable {
         mTaskContent = taskContent;
     }
 
+    public TaskState getTaskState() {
+        return mTaskState;
+    }
+
+    public void setTaskState(TaskState taskState) {
+        mTaskState = taskState;
+    }
+
     public Date getTaskDate() {
         return mTaskDate;
     }
@@ -73,11 +83,11 @@ public class Task implements Serializable {
         mTaskTime = taskTime;
     }
 
-    public TaskState getTaskState() {
-        return mTaskState;
+    public UUID getUserId() {
+        return mUserId;
     }
 
-    public void setTaskState(TaskState taskState) {
-        mTaskState = taskState;
+    public void setUserId(UUID userId) {
+        mUserId = userId;
     }
 }

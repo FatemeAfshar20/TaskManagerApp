@@ -17,6 +17,8 @@ import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.UserDBRepository;
 import com.example.taskmanagerapp.ViewElem.LoginView;
 
+import java.util.List;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link LoginFragment#newInstance} factory method to
@@ -87,8 +89,10 @@ public class LoginFragment extends Fragment {
     }
 
     private boolean checkUserInfo() {
-        if (mUserRepository.userExist(mLoginView.getUsername())!=null) {
-            mUser=mUserRepository.userExist(mLoginView.getUsername());
+        List<User> userList=mUserRepository.getList();
+        if (mUserRepository.userExist(mLoginView.getUsername())) {
+
+            mUser=mUserRepository.get(mLoginView.getUsername());
             if (isCorrectPass(mUser.getPassword(),
                     mLoginView.getPasswordText()))
                 return true;

@@ -1,52 +1,47 @@
 package com.example.taskmanagerapp.Model.User;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.util.Date;
-import java.util.Objects;
 import java.util.UUID;
 
 public class User implements Serializable {
     private UUID mUUID=UUID.randomUUID();
-    private String mUserName;
+    private String mUsername;
     private String mPassword;
     private boolean isAdmin;
-    private Date mMembership= new Date();
-
-    public User(String userName, String password) {
-        mUserName = userName;
-        mPassword = password;
-    }
-
-    public User(UUID uuid) {
-        mUUID=uuid;
-    }
+    private Date mMemberShip;
 
     public User() {
+        this(UUID.randomUUID());
     }
 
-    public User(UUID uuid, String userName, String password, boolean isAdmin, Date membership) {
-        this(uuid);
-        mUserName = userName;
+    public User(UUID uuid){
+        mUUID=uuid;
+        mMemberShip=new Date();
+    }
+
+    public User(UUID UUID, String username, String password, boolean isAdmin, Date memberShip) {
+        mUUID = UUID;
+        mUsername = username;
         mPassword = password;
         this.isAdmin = isAdmin;
-        mMembership = membership;
+        mMemberShip = memberShip;
     }
 
     public UUID getUUID() {
         return mUUID;
     }
 
-    public String getUserName() {
-        return mUserName;
+    public void setUUID(UUID UUID) {
+        mUUID = UUID;
     }
 
-    public void setUserName(String userName) {
-        mUserName = userName;
+    public String getUsername() {
+        return mUsername;
+    }
+
+    public void setUsername(String username) {
+        mUsername = username;
     }
 
     public String getPassword() {
@@ -57,7 +52,6 @@ public class User implements Serializable {
         mPassword = password;
     }
 
-
     public boolean isAdmin() {
         return isAdmin;
     }
@@ -66,24 +60,11 @@ public class User implements Serializable {
         isAdmin = admin;
     }
 
-    public String getMembership() {
-        return DateFormat.getDateInstance
-                (DateFormat.SHORT).format(mMembership);
+    public Date getMemberShip() {
+        return mMemberShip;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(mUserName, user.mUserName) &&
-                Objects.equals(mPassword, user.mPassword);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
-    public int hashCode() {
-        return Objects.hash(mUserName, mPassword);
+    public void setMemberShip(Date memberShip) {
+        mMemberShip = memberShip;
     }
 }

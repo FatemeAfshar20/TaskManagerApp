@@ -16,7 +16,7 @@ import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
-import com.example.taskmanagerapp.Repository.TaskDBRepository;
+import com.example.taskmanagerapp.Repository.TaskBDRepository;
 import com.example.taskmanagerapp.Repository.UserDBRepository;
 import com.example.taskmanagerapp.ViewElem.DialogView;
 
@@ -32,7 +32,7 @@ public class EditDialogFragment extends DialogFragment {
     private Task mTask = new Task();
     private Task mOldTask;
     private User mUser ;
-    private TaskDBRepository mTaskDBRepository;
+    private TaskBDRepository mTaskDBRepository;
     private DialogView mDialogView;
     public EditDialogFragment() {
         // Required empty public constructor
@@ -54,8 +54,8 @@ public class EditDialogFragment extends DialogFragment {
         mOldTask = (Task) getArguments().get(ARG_OLD_TASK);
         mUser = UserDBRepository.getInstance(getContext()).get((UUID) getArguments().get(ARG_USER));
         saveInstance(savedInstanceState);
-        mTaskDBRepository=TaskDBRepository.getInstance(
-                getContext(),mUser.getUUID());
+        mTaskDBRepository=TaskBDRepository.getInstance(
+                getContext());
     }
 
     @Override

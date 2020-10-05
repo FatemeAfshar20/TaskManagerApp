@@ -20,7 +20,7 @@ public final class TaskManagerSchema {
     public static final class Task{
         public static final String NAME="taskTable";
 
-        public static final class TaskColumns{
+        public static final class TaskColumns {
             public static final String ID="id";
             public static final String UUID="uuid";
             public static final String TITLE="title";

@@ -15,7 +15,7 @@ import com.example.taskmanagerapp.Controller.Activity.TaskManagerActivity;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.IRepository;
-import com.example.taskmanagerapp.Repository.TaskDBRepository;
+import com.example.taskmanagerapp.Repository.TaskBDRepository;
 import com.example.taskmanagerapp.Repository.UserDBRepository;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -25,17 +25,18 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
     private List<User> mUserList;
     private Context mContext;
     private IRepository<User> mUserRepository;
+
     public AdminAdapter(List<User> userList, Context context) {
         mUserList = userList;
         mContext = context;
-        mUserRepository= UserDBRepository.getInstance(mContext);
+        mUserRepository = UserDBRepository.getInstance(mContext);
     }
 
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater=LayoutInflater.from(mContext);
-        View view=layoutInflater.inflate(R.layout.item_admin_view,parent,false);
+        LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+        View view = layoutInflater.inflate(R.layout.item_admin_view, parent, false);
         return new Holder(view);
     }
 
@@ -49,13 +50,13 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
         return mUserList.size();
     }
 
-    class Holder extends RecyclerView.ViewHolder{
-        private MaterialTextView mUsername,mNumOfTask,
+    class Holder extends RecyclerView.ViewHolder {
+        private MaterialTextView mUsername, mNumOfTask,
                 mDateMemberShip;
         private AppCompatImageButton mButtonTaskShow,
                 mButtonTrashcan;
 
-        private User mUser=new User();
+        private User mUser = new User();
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -63,30 +64,30 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
             setListener();
         }
 
-        private void findElem(View view){
-            mUsername=view.findViewById(R.id.user__name);
-            mNumOfTask=view.findViewById(R.id.num_of_task_show);
-            mDateMemberShip=view.findViewById(R.id.date_membership);
-            mButtonTaskShow=view.findViewById(R.id.show_all_task);
-            mButtonTrashcan=view.findViewById(R.id.delete_task_admin);
+        private void findElem(View view) {
+            mUsername = view.findViewById(R.id.user__name);
+            mNumOfTask = view.findViewById(R.id.num_of_task_show);
+            mDateMemberShip = view.findViewById(R.id.date_membership);
+            mButtonTaskShow = view.findViewById(R.id.show_all_task);
+            mButtonTrashcan = view.findViewById(R.id.delete_task_admin);
         }
 
-        public void bind(User user){
-            mUser=user;
-          //TaskRepository tasksRepository=user.getTasksRepository();
-            TaskDBRepository taskDBRepository=
-                    TaskDBRepository.getInstance(mContext,mUser.getUUID());
-           int numOfTask=taskDBRepository.getUserTaskList().size();
+        public void bind(User user) {
+            mUser = user;
+            //TaskRepository tasksRepository=user.getTasksRepository();
+            TaskBDRepository taskDBRepository =
+                    TaskBDRepository.getInstance(mContext);
+ /*           int numOfTask = taskDBRepository.getUserTaskList().size();
             mUsername.setText(user.getUserName());
-           mNumOfTask.setText("Number Of Task : "+numOfTask);
-            mDateMemberShip.setText(user.getMembership());
+            mNumOfTask.setText("Number Of Task : " + numOfTask);*/
+            mDateMemberShip.setText(user.getMemberShip().toString());
         }
 
-        private void setListener(){
+        private void setListener() {
             mButtonTaskShow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    TaskManagerActivity.start(mContext,mUser.getUUID());
+                    TaskManagerActivity.start(mContext, mUser.getUUID());
                 }
             });
 

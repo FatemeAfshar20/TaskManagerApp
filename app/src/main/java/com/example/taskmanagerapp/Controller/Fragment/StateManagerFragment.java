@@ -50,7 +50,7 @@ public abstract class StateManagerFragment extends Fragment {
         mUserRepository=UserDBRepository.getInstance(getContext());
     }
 
-    @Override
+/*    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu, menu);
         SearchManager searchManager =
@@ -71,7 +71,7 @@ public abstract class StateManagerFragment extends Fragment {
             default:
                 return false;
         }
-    }
+    }*/
 
     /**
      * use this method in onResumed method,
@@ -90,7 +90,7 @@ public abstract class StateManagerFragment extends Fragment {
     public void manageRecyclerView(List<Task> taskList) {
         mStateAdapter = new
                 StateAdapter(taskList
-                , getContext(), getActivity().getSupportFragmentManager(),mUser);
+                , getContext(), getActivity().getSupportFragmentManager());
         mStateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
         mStateView.getRecyclerView().setAdapter(mStateAdapter);
     }
@@ -101,8 +101,6 @@ public abstract class StateManagerFragment extends Fragment {
                 AddTaskDialogFragment.EXTRA_NEW_TASK);
         task.setTaskState(taskState);
         taskList.add(task);
-
-        updateUI(taskList);
     }
 
     public void manageDialogFragment(Fragment fragment,
@@ -137,7 +135,7 @@ public abstract class StateManagerFragment extends Fragment {
 
         if (mStateAdapter == null) {
             mStateAdapter = new StateAdapter(taskList,getContext(),
-                    getFragmentManager(),mUser);
+                    getFragmentManager());
             mStateView.getRecyclerView().setAdapter(mStateAdapter);
         } else {
             manageEmptyImage(taskList);

@@ -10,24 +10,27 @@ import androidx.fragment.app.DialogFragment;
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
+import com.example.taskmanagerapp.Repository.TaskBDRepository;
 import com.example.taskmanagerapp.ViewElem.DialogView;
 
 import java.text.DateFormat;
+import java.util.UUID;
 
 
 public class ShowTaskDialogFragment extends DialogFragment {
     public static final String ARG_TASK_FOR_SHOW = "Task for show";
-    private Task mTask=new Task();
+    private Task mTask;
+    private UUID mTaskId;
     private DialogView mDialogView;
 
     public ShowTaskDialogFragment() {
         // Required empty public constructor
     }
 
-    public static ShowTaskDialogFragment newInstance(Task task) {
+    public static ShowTaskDialogFragment newInstance(UUID taskId) {
         ShowTaskDialogFragment fragment = new ShowTaskDialogFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_TASK_FOR_SHOW,task);
+        args.putSerializable(ARG_TASK_FOR_SHOW,taskId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -35,8 +38,11 @@ public class ShowTaskDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTask= (Task) getArguments().
+        mTaskId= (UUID) getArguments().
                 getSerializable(ARG_TASK_FOR_SHOW);
+
+        mTask= TaskBDRepository.
+                getInstance(getContext()).get(mTaskId);
     }
 
     @Override
@@ -57,14 +63,6 @@ public class ShowTaskDialogFragment extends DialogFragment {
                 dismiss();
             }
         });
-
-/*        dialogView.getButtonDelete().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                *//*      mUser.getTasksRepository().delete(mTask);*//*
-                dismiss();
-            }
-        });*/
     }
 
     private void initView(Task task){

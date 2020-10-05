@@ -3,7 +3,6 @@ package com.example.taskmanagerapp.Databese;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.icu.lang.UCharacter;
 
 import static com.example.taskmanagerapp.Databese.TaskManagerSchema.User.UserColumns;
 import static com.example.taskmanagerapp.Databese.TaskManagerSchema.Task.TaskColumns;

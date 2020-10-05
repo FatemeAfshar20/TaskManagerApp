@@ -4,24 +4,34 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.ListView;
 
 import com.example.taskmanagerapp.Databese.TaskManagerDBHelper;
 import com.example.taskmanagerapp.Databese.TaskManagerSchema;
+import com.example.taskmanagerapp.Databese.TaskManagerSchema.User.UserColumns;
+import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.User.User;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.example.taskmanagerapp.Databese.TaskManagerSchema.User.UserColumns;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 public class UserDBRepository implements IRepository<User> {
     private static UserDBRepository sInstance;
     private SQLiteDatabase mDatabase;
-    private String mTaleName = TaskManagerSchema.User.NAME;
+    private String mTableName= TaskManagerSchema.User
+            .NAME;
+    private Context mContext;
+
+    public UserDBRepository(Context context) {
+        mContext = context.getApplicationContext();
+        TaskManagerDBHelper taskManagerDBHelper =
+                new TaskManagerDBHelper(mContext);
+
+        mDatabase = taskManagerDBHelper.getWritableDatabase();
+    }
 
     public static UserDBRepository getInstance(Context context) {
         if (sInstance == null)
@@ -29,35 +39,80 @@ public class UserDBRepository implements IRepository<User> {
         return sInstance;
     }
 
-    private UserDBRepository(Context context) {
-        context=context.getApplicationContext();
-        TaskManagerDBHelper dbHelper =
-                new TaskManagerDBHelper(context);
-        mDatabase = dbHelper.getWritableDatabase();
+    @Override
+    public List<User> getList() {
+        List<User> userList = new ArrayList<>();
+
+        UserCursorWrapper cursorWrapper =
+                queryUserCursor(null, null);
+
+        if (cursorWrapper.getCount() == 0)
+            return userList;
+        try {
+            cursorWrapper.moveToFirst();
+
+            while (!cursorWrapper.isAfterLast()) {
+                User user = cursorWrapper.getUser();
+                userList.add(user);
+                cursorWrapper.moveToNext();
+            }
+            return userList;
+        } finally {
+            cursorWrapper.close();
+        }
+    }
+
+    @Override
+    public User get(UUID uuid) {
+        String whereClause = UserColumns.UUID + " =? ";
+        String[] whereArgs = new String[]{uuid.toString()};
+        UserCursorWrapper cursorWrapper =
+                queryUserCursor(whereClause, whereArgs);
+
+        if (cursorWrapper.getCount() == 0)
+            return new User();
+        try {
+            cursorWrapper.moveToFirst();
+            User user = cursorWrapper.getUser();
+            return user;
+        } finally {
+            cursorWrapper.close();
+        }
+    }
+
+    public User get(String username) {
+        String whereClause = UserColumns.USERNAME + " =? ";
+        String[] whereArgs = new String[]{username};
+        UserCursorWrapper cursorWrapper =
+                queryUserCursor(whereClause, whereArgs);
+
+        if (cursorWrapper.getCount() == 0)
+            return new User();
+        try {
+            cursorWrapper.moveToFirst();
+            User user = cursorWrapper.getUser();
+            return user;
+        } finally {
+            cursorWrapper.close();
+        }
+    }
+
+    @Override
+    public void delete(User user) {
+        String whereClause = UserColumns.UUID + " =? ";
+        String[] whereArgs = new String[]{user.getUUID().toString()};
+
+        mDatabase.delete(mTableName, whereClause, whereArgs);
     }
 
     @Override
     public void insert(User user) {
-        ContentValues values = getContentValues(user);
-        mDatabase.insert(mTaleName,
-                null,
-                values);
-    }
-
-
-    @Override
-    public void delete(User user) {
-        String whereClause = UserColumns.UUID + " =?";
+        String whereClause = UserColumns.UUID + " =? ";
         String[] whereArgs = new String[]{user.getUUID().toString()};
 
-        mDatabase.delete(mTaleName,
-                whereClause,
-                whereArgs);
-    }
-
-    @Override
-    public void update(User user, User e2) {
-
+        mDatabase.insert(mTableName,
+                null,
+                getUserContentValues(user));
     }
 
     @Override
@@ -65,208 +120,52 @@ public class UserDBRepository implements IRepository<User> {
         String whereClause = UserColumns.UUID + " =? ";
         String[] whereArgs = new String[]{user.getUUID().toString()};
 
-        mDatabase.update(mTaleName,
-                getContentValues(user),
-                whereClause,
-                whereArgs);
+        mDatabase.update(mTableName,getUserContentValues(user),
+                whereClause,whereArgs);
     }
 
-    @Override
-    public User get(UUID uuid) {
-        String[] columns = new String[]{
-                UserColumns.USERNAME,
-                UserColumns.PASSWORD,
-                UserColumns.MEMBERSHIP,
-                UserColumns.ISADMIN
-        };
-
-        String whereClause = UserColumns.UUID + " =? ";
-        String[] whereArgs = new String[]{uuid.toString()};
-
-        Cursor cursor = mDatabase.query(mTaleName,
-                columns,
-                whereClause,
-                whereArgs,
-                null,
-                null,
-                null);
-
-        if (cursor == null || cursor.getCount() == 0)
-            return new User(uuid);
-
-        try {
-            cursor.moveToFirst();
-            return extractCursor(uuid, cursor);
-
-        } finally {
-            cursor.close();
-        }
-    }
-
-    @Override
-    public User get(User user) {
-        Cursor cursor = mDatabase.query(mTaleName,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
-
-        if (cursor == null || cursor.getCount() == 0)
-            return new User();
-
-        try {
-            cursor.moveToFirst();
-            return extractCursor(cursor);
-        } finally {
-            cursor.getCount();
-        }
-    }
-
-    @Override
-    public List<User> getLists() {
-        List<User> userList = new ArrayList<>();
-        Cursor cursor = mDatabase.query(mTaleName,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
-
-        if (cursor == null || cursor.getCount() == 0)
-            return new ArrayList<>();
-
-        try {
-            cursor.moveToFirst();
-
-            while (!cursor.isAfterLast()) {
-                User user = extractCursor(cursor);
-                userList.add(user);
-                cursor.moveToNext();
-            }
-
-            return userList;
-        } finally {
-            cursor.close();
-        }
-    }
-
-    private ContentValues getContentValues(User user) {
-        ContentValues values = new ContentValues();
-        values.put(UserColumns.UUID, user.getUUID().toString());
-        values.put(UserColumns.USERNAME, user.getUserName());
-        values.put(UserColumns.PASSWORD, user.getPassword());
-        values.put(UserColumns.ISADMIN, user.isAdmin() ? 1 : 0);
-        values.put(UserColumns.MEMBERSHIP, user.getMembership());
-        return values;
-    }
-
-    @NotNull
-    private User extractCursor(UUID uuid, Cursor cursor) {
-        String username = cursor.getString(
-                cursor.getColumnIndex(UserColumns.USERNAME));
-        String password = cursor.getString(cursor.getColumnIndex(UserColumns.PASSWORD));
-        Date membership = new Date(cursor.getColumnIndex(UserColumns.PASSWORD));
-        boolean isAdmin = cursor.getInt(cursor.getColumnIndex(UserColumns.ISADMIN)) == 1;
-
-        return new User(uuid, username, password, isAdmin, membership);
-    }
-
-    @NotNull
-    private User extractCursor(String username, Cursor cursor) {
-        UUID uuid = UUID.fromString(
-                cursor.getString(
-                        cursor.getColumnIndex(UserColumns.UUID)));
-        String password = cursor.getString(
-                cursor.getColumnIndex(UserColumns.PASSWORD));
-        Date membership = new Date(cursor.
-                getColumnIndex(UserColumns.PASSWORD));
-        boolean isAdmin = cursor.getInt(cursor.
-                getColumnIndex(UserColumns.ISADMIN)) == 1;
-
-        return new User(uuid, username,
-                password, isAdmin, membership);
-    }
-
-    @NotNull
-    private User extractCursor(Cursor cursor) {
-        UUID uuid = UUID.fromString(
-                cursor.getString(
-                        cursor.getColumnIndex(UserColumns.UUID)));
-        String username = cursor.getString(
-                cursor.getColumnIndex(UserColumns.USERNAME));
-        String password = cursor.getString(cursor.
-                getColumnIndex(UserColumns.PASSWORD));
-        Date membership = new Date(cursor.
-                getColumnIndex(UserColumns.PASSWORD));
-        boolean isAdmin = cursor.getInt(cursor.
-                getColumnIndex(UserColumns.ISADMIN)) == 1;
-
-        return new User(uuid, username,
-                password, isAdmin, membership);
-    }
-
-    public SQLiteDatabase getDatabase() {
-        return mDatabase;
-    }
-
-/*
-    public boolean userExist(String username) {
-        String[] columns = new String[]{
-                UserColumns.USERNAME
-        };
-
+    public boolean userExist(String username){
         String whereClause = UserColumns.USERNAME + " =? ";
         String[] whereArgs = new String[]{username};
+        UserCursorWrapper cursorWrapper =
+                queryUserCursor(whereClause, whereArgs);
 
-        Cursor cursor = mDatabase.query(mTaleName,
-                columns,
-                whereClause,
-                whereArgs,
-                null,
-                null,
-                null);
-
-        if (cursor == null || cursor.getCount() == 0)
+        if (cursorWrapper.getCount() == 0)
             return false;
-
         try {
-            cursor.moveToFirst();
-            return true;
-        }finally {
-            cursor.close();
-        }
-
-    }*/
-
-    public User userExist(String username) {
-/*        String[] columns = new String[]{
-                UserColumns.USERNAME
-        };*/
-
-        String whereClause = UserColumns.USERNAME +" =?";
-        String[] whereArgs = new String[]{username};
-
-        Cursor cursor = mDatabase.query(mTaleName,
-                null,
-                whereClause,
-                whereArgs,
-                null,
-                null,
-                null);
-
-        if (cursor == null || cursor.getCount() == 0)
-            return null;
-
-        try {
-            cursor.moveToFirst();
-
-            return extractCursor(username,cursor);
-        }finally {
-            cursor.close();
+            cursorWrapper.moveToFirst();
+            User user = cursorWrapper.getUser();
+            return user.getUsername().equals("") ? false:true;
+        } finally {
+            cursorWrapper.close();
         }
     }
 
+    @NotNull
+    private ContentValues getUserContentValues(User user) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(UserColumns.UUID, user.getUUID().toString());
+        contentValues.put(UserColumns.USERNAME, user.getUsername());
+        contentValues.put(UserColumns.PASSWORD, user.getPassword());
+        contentValues.put(UserColumns.MEMBERSHIP, user.getMemberShip().toString());
+        contentValues.put(UserColumns.ISADMIN, user.isAdmin() ? 1 : 0);
+        return contentValues;
+    }
+
+
+    private UserCursorWrapper queryUserCursor
+            (String where, String[] whereArgs) {
+        Cursor cursor = mDatabase.query(
+                mTableName,
+                null,
+                where,
+                whereArgs,
+                null,
+                null,
+                null);
+
+        UserCursorWrapper userCursorWrapper =
+                new UserCursorWrapper(cursor);
+        return userCursorWrapper;
+    }
 }
