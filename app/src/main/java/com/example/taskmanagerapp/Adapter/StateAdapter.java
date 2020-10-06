@@ -109,7 +109,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
                 @Override
                 public void onClick(View v) {
                     EditDialogFragment editDialogFragment=
-                            EditDialogFragment.newInstance(mTask,mUser.getUUID());
+                            EditDialogFragment.newInstance(mTask);
 
                     editDialogFragment.show(mFragmentManager,
                             FRAGMENT_EDIT_DIALOG_FRAGMENT);

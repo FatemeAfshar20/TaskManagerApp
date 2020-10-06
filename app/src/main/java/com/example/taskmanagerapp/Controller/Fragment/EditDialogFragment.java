@@ -38,11 +38,10 @@ public class EditDialogFragment extends DialogFragment {
         // Required empty public constructor
     }
 
-    public static EditDialogFragment newInstance(Task task, UUID uuid) {
+    public static EditDialogFragment newInstance(Task task) {
         EditDialogFragment fragment = new EditDialogFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_OLD_TASK, task);
-        args.putSerializable(ARG_USER, uuid);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,7 +51,6 @@ public class EditDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mOldTask = (Task) getArguments().get(ARG_OLD_TASK);
-        mUser = UserDBRepository.getInstance(getContext()).get((UUID) getArguments().get(ARG_USER));
         saveInstance(savedInstanceState);
         mTaskDBRepository=TaskBDRepository.getInstance(
                 getContext());

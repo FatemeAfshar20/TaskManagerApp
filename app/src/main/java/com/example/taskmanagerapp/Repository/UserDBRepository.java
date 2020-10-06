@@ -6,7 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.ListView;
 
+import androidx.room.Room;
+
+import com.example.taskmanagerapp.Databese.DAO.UserTableDAO;
 import com.example.taskmanagerapp.Databese.TaskManagerDBHelper;
+import com.example.taskmanagerapp.Databese.TaskManagerDatabase;
 import com.example.taskmanagerapp.Databese.TaskManagerSchema;
 import com.example.taskmanagerapp.Databese.TaskManagerSchema.User.UserColumns;
 import com.example.taskmanagerapp.Model.Task.Task;
@@ -21,16 +25,23 @@ import java.util.UUID;
 public class UserDBRepository implements IRepository<User> {
     private static UserDBRepository sInstance;
     private SQLiteDatabase mDatabase;
-    private String mTableName= TaskManagerSchema.User
+    private String mTableName = TaskManagerSchema.User
             .NAME;
+    private UserTableDAO mDAO;
     private Context mContext;
 
     public UserDBRepository(Context context) {
         mContext = context.getApplicationContext();
-        TaskManagerDBHelper taskManagerDBHelper =
+/*        TaskManagerDBHelper taskManagerDBHelper =
                 new TaskManagerDBHelper(mContext);
 
-        mDatabase = taskManagerDBHelper.getWritableDatabase();
+        mDatabase = taskManagerDBHelper.getWritableDatabase();*/
+
+        TaskManagerDatabase database = Room.databaseBuilder(mContext,
+                TaskManagerDatabase.class, TaskManagerSchema.NAME).
+                allowMainThreadQueries().build();
+
+        mDAO = database.getUserDao();
     }
 
     public static UserDBRepository getInstance(Context context) {
@@ -41,7 +52,8 @@ public class UserDBRepository implements IRepository<User> {
 
     @Override
     public List<User> getList() {
-        List<User> userList = new ArrayList<>();
+        return mDAO.getList();
+/*        List<User> userList = new ArrayList<>();
 
         UserCursorWrapper cursorWrapper =
                 queryUserCursor(null, null);
@@ -59,12 +71,13 @@ public class UserDBRepository implements IRepository<User> {
             return userList;
         } finally {
             cursorWrapper.close();
-        }
+        }*/
     }
 
     @Override
     public User get(UUID uuid) {
-        String whereClause = UserColumns.UUID + " =? ";
+        return mDAO.get(uuid);
+/*        String whereClause = UserColumns.UUID + " =? ";
         String[] whereArgs = new String[]{uuid.toString()};
         UserCursorWrapper cursorWrapper =
                 queryUserCursor(whereClause, whereArgs);
@@ -77,11 +90,12 @@ public class UserDBRepository implements IRepository<User> {
             return user;
         } finally {
             cursorWrapper.close();
-        }
+        }*/
     }
 
     public User get(String username) {
-        String whereClause = UserColumns.USERNAME + " =? ";
+        return mDAO.get(username);
+/*        String whereClause = UserColumns.USERNAME + " =? ";
         String[] whereArgs = new String[]{username};
         UserCursorWrapper cursorWrapper =
                 queryUserCursor(whereClause, whereArgs);
@@ -94,38 +108,45 @@ public class UserDBRepository implements IRepository<User> {
             return user;
         } finally {
             cursorWrapper.close();
-        }
+        }*/
     }
 
     @Override
     public void delete(User user) {
-        String whereClause = UserColumns.UUID + " =? ";
+        mDAO.delete(user);
+/*        String whereClause = UserColumns.UUID + " =? ";
         String[] whereArgs = new String[]{user.getUUID().toString()};
 
-        mDatabase.delete(mTableName, whereClause, whereArgs);
+        mDatabase.delete(mTableName, whereClause, whereArgs);*/
     }
 
     @Override
     public void insert(User user) {
-        String whereClause = UserColumns.UUID + " =? ";
+        mDAO.insert(user);
+/*        String whereClause = UserColumns.UUID + " =? ";
         String[] whereArgs = new String[]{user.getUUID().toString()};
 
         mDatabase.insert(mTableName,
                 null,
-                getUserContentValues(user));
+                getUserContentValues(user));*/
     }
 
     @Override
     public void update(User user) {
-        String whereClause = UserColumns.UUID + " =? ";
+        mDAO.update(user);
+/*        String whereClause = UserColumns.UUID + " =? ";
         String[] whereArgs = new String[]{user.getUUID().toString()};
 
         mDatabase.update(mTableName,getUserContentValues(user),
-                whereClause,whereArgs);
+                whereClause,whereArgs);*/
     }
 
-    public boolean userExist(String username){
-        String whereClause = UserColumns.USERNAME + " =? ";
+    public boolean userExist(String username) {
+        if (get(username) != null)
+            return true;
+        return false;
+
+/*        String whereClause = UserColumns.USERNAME + " =? ";
         String[] whereArgs = new String[]{username};
         UserCursorWrapper cursorWrapper =
                 queryUserCursor(whereClause, whereArgs);
@@ -138,7 +159,7 @@ public class UserDBRepository implements IRepository<User> {
             return user.getUsername().equals("") ? false:true;
         } finally {
             cursorWrapper.close();
-        }
+        }*/
     }
 
     @NotNull

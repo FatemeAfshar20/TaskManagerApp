@@ -5,7 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+
+import com.example.taskmanagerapp.Databese.DAO.TaskTableDAO;
 import com.example.taskmanagerapp.Databese.TaskManagerDBHelper;
+import com.example.taskmanagerapp.Databese.TaskManagerDatabase;
 import com.example.taskmanagerapp.Databese.TaskManagerSchema;
 import com.example.taskmanagerapp.Databese.TaskManagerSchema.Task.TaskColumns;
 import com.example.taskmanagerapp.Model.Task.Task;
@@ -19,27 +24,36 @@ import java.util.UUID;
 
 public class TaskBDRepository implements IRepository<Task> {
     private static TaskBDRepository sInstance;
-    private String mTableName=TaskManagerSchema.Task.NAME;
+    private String mTableName = TaskManagerSchema.Task.NAME;
     private SQLiteDatabase mDatabase;
+    private TaskTableDAO mDAO;
     private Context mContext;
 
     private TaskBDRepository(Context context) {
-        mContext=context.getApplicationContext();
-        TaskManagerDBHelper taskManagerDBHelper=
+        mContext = context.getApplicationContext();
+        TaskManagerDBHelper taskManagerDBHelper =
                 new TaskManagerDBHelper(mContext);
 
-        mDatabase=taskManagerDBHelper.getWritableDatabase();
+        mDatabase = taskManagerDBHelper.getWritableDatabase();
+        TaskManagerDatabase database = Room.databaseBuilder(mContext,
+                TaskManagerDatabase.class, TaskManagerSchema.NAME).
+                allowMainThreadQueries()
+                .build();
+
+        mDAO = database.getTaskDao();
+
     }
 
     public static TaskBDRepository getInstance(Context context) {
-        if(sInstance==null)
-            sInstance=new TaskBDRepository(context);
+        if (sInstance == null)
+            sInstance = new TaskBDRepository(context);
         return sInstance;
     }
 
     @Override
     public List<Task> getList() {
-        List<Task> taskList=new ArrayList<>();
+        return mDAO.getList();
+       /* List<Task> taskList=new ArrayList<>();
         TaskCursorWrapper cursorWrapper=
                 queryTaskCursor(null,null);
 
@@ -56,12 +70,13 @@ public class TaskBDRepository implements IRepository<Task> {
             return taskList;
         }finally {
             cursorWrapper.close();
-        }
+        }*/
     }
 
     @Override
     public Task get(UUID uuid) {
-        String whereClause=TaskColumns.UUID+" =? ";
+        return mDAO.get(uuid);
+        /*String whereClause=TaskColumns.UUID+" =? ";
         String[] whereArgs=new String[]{uuid.toString()};
 
         TaskCursorWrapper cursorWrapper=
@@ -76,131 +91,145 @@ public class TaskBDRepository implements IRepository<Task> {
             return task;
         }finally {
             cursorWrapper.close();
-        }
+        }*/
     }
 
     @Override
     public void delete(Task task) {
-        String whereClause=TaskColumns.UUID+" =? ";
+        mDAO.delete(task);
+/*        String whereClause=TaskColumns.UUID+" =? ";
         String[] whereArgs=new String[]{task.getUUID().toString()};
-        mDatabase.delete(mTableName,whereClause,whereArgs);
+        mDatabase.delete(mTableName,whereClause,whereArgs)*/
+        ;
+    }
+
+    public void deleteAll(UUID userId) {
+        String whereClause = TaskColumns.USERID + " =? ";
+        String[] whereArgs = new String[]{userId.toString()};
+        mDatabase.delete(mTableName, whereClause, whereArgs);
     }
 
     @Override
     public void insert(Task task) {
-        mDatabase.insert(mTableName,
+        mDAO.insert(task);
+/*        mDatabase.insert(mTableName,
                 null,
-                getTaskContentValues(task));
+                getTaskContentValues(task));*/
     }
 
     @Override
     public void update(Task task) {
-        ContentValues contentValues = getTaskContentValues(task);
+        mDAO.update(task);
+/*        ContentValues contentValues = getTaskContentValues(task);
         String whereClause=TaskColumns.UUID+" =? ";
         String[] whereArgs=new String[]{task.getUUID().toString()};
-        mDatabase.update(mTableName,contentValues,whereClause,whereArgs);
+        mDatabase.update(mTableName,contentValues,whereClause,whereArgs);*/
     }
 
-    public List<Task> getUserTask(UUID uuid){
-        List<Task> userTaskList=new ArrayList<>();
-        String whereClause=TaskColumns.USERID+" =? ";
-        String[] whereArgs=new String[]{uuid.toString()};
+    public List<Task> getUserTask(UUID uuid) {
+        return getUserTask(uuid);
+      /*  List<Task> userTaskList = new ArrayList<>();
+        String whereClause = TaskColumns.USERID + " =? ";
+        String[] whereArgs = new String[]{uuid.toString()};
 
-        TaskCursorWrapper cursorWrapper=
-                queryTaskCursor(whereClause,whereArgs);
+        TaskCursorWrapper cursorWrapper =
+                queryTaskCursor(whereClause, whereArgs);
 
-        if(cursorWrapper.getCount() == 0)
+        if (cursorWrapper.getCount() == 0)
             return userTaskList;
         try {
             cursorWrapper.moveToFirst();
 
-            while (!cursorWrapper.isAfterLast()){
-                Task task=cursorWrapper.getTask();
+            while (!cursorWrapper.isAfterLast()) {
+                Task task = cursorWrapper.getTask();
                 userTaskList.add(task);
                 cursorWrapper.moveToNext();
             }
             return userTaskList;
-        }finally {
+        } finally {
             cursorWrapper.close();
-        }
+        }*/
     }
 
-    public List<Task> getDOINGLists(UUID userUUID){
-        List<Task> userTaskList=new ArrayList<>();
-        String whereClause=TaskColumns.USERID+" =? and "
-                +TaskColumns.STATE+" =? ";
-        String[] whereArgs=new String[]{userUUID.toString(),
+    public List<Task> getDOINGLists(UUID userUUID) {
+       return mDAO.getStateTaskLists(userUUID,TaskState.DOING);
+      /*  List<Task> userTaskList = new ArrayList<>();
+        String whereClause = TaskColumns.USERID + " =? and "
+                + TaskColumns.STATE + " =? ";
+        String[] whereArgs = new String[]{userUUID.toString(),
                 TaskState.DOING.toString()};
 
-        TaskCursorWrapper cursorWrapper=
-                queryTaskCursor(whereClause,whereArgs);
+        TaskCursorWrapper cursorWrapper =
+                queryTaskCursor(whereClause, whereArgs);
 
-        if(cursorWrapper.getCount() == 0)
+        if (cursorWrapper.getCount() == 0)
             return userTaskList;
         try {
             cursorWrapper.moveToFirst();
 
-            while (!cursorWrapper.isAfterLast()){
-                Task task=cursorWrapper.getTask();
+            while (!cursorWrapper.isAfterLast()) {
+                Task task = cursorWrapper.getTask();
                 userTaskList.add(task);
                 cursorWrapper.moveToNext();
             }
             return userTaskList;
-        }finally {
+        } finally {
             cursorWrapper.close();
-        }
+        }*/
     }
 
-    public List<Task> getDONELists(UUID userUUID){
-        List<Task> userTaskList=new ArrayList<>();
-        String whereClause=TaskColumns.USERID+" =? and "
-                +TaskColumns.STATE+" =? ";
-        String[] whereArgs=new String[]{userUUID.toString(),
+    public List<Task> getDONELists(UUID userUUID) {
+        return  mDAO.getStateTaskLists(userUUID,TaskState.DONE);
+      /*  List<Task> userTaskList = new ArrayList<>();
+        String whereClause = TaskColumns.USERID + " =? and "
+                + TaskColumns.STATE + " =? ";
+        String[] whereArgs = new String[]{userUUID.toString(),
                 TaskState.DONE.toString()};
 
-        TaskCursorWrapper cursorWrapper=
-                queryTaskCursor(whereClause,whereArgs);
+        TaskCursorWrapper cursorWrapper =
+                queryTaskCursor(whereClause, whereArgs);
 
-        if(cursorWrapper.getCount() == 0)
+        if (cursorWrapper.getCount() == 0)
             return userTaskList;
         try {
             cursorWrapper.moveToFirst();
 
-            while (!cursorWrapper.isAfterLast()){
-                Task task=cursorWrapper.getTask();
+            while (!cursorWrapper.isAfterLast()) {
+                Task task = cursorWrapper.getTask();
                 userTaskList.add(task);
                 cursorWrapper.moveToNext();
             }
             return userTaskList;
-        }finally {
+        } finally {
             cursorWrapper.close();
-        }
+        }*/
     }
 
-    public List<Task> getTODOLists(UUID userUUID){
-        List<Task> userTaskList=new ArrayList<>();
-        String whereClause=TaskColumns.USERID+" =? and "
-                +TaskColumns.STATE+" =? ";
-        String[] whereArgs=new String[]{userUUID.toString(),
+    public List<Task> getTODOLists(UUID userUUID) {
+        return  mDAO.getStateTaskLists(userUUID,TaskState.TODO);
+     /*   List<Task> userTaskList = new ArrayList<>();
+        String whereClause = TaskColumns.USERID + " =? and "
+                + TaskColumns.STATE + " =? ";
+        String[] whereArgs = new String[]{userUUID.toString(),
                 TaskState.TODO.toString()};
 
-        TaskCursorWrapper cursorWrapper=
-                queryTaskCursor(whereClause,whereArgs);
+        TaskCursorWrapper cursorWrapper =
+                queryTaskCursor(whereClause, whereArgs);
 
-        if(cursorWrapper.getCount() == 0)
+        if (cursorWrapper.getCount() == 0)
             return userTaskList;
         try {
             cursorWrapper.moveToFirst();
 
-            while (!cursorWrapper.isAfterLast()){
-                Task task=cursorWrapper.getTask();
+            while (!cursorWrapper.isAfterLast()) {
+                Task task = cursorWrapper.getTask();
                 userTaskList.add(task);
                 cursorWrapper.moveToNext();
             }
             return userTaskList;
-        }finally {
+        } finally {
             cursorWrapper.close();
-        }
+        }*/
     }
 
 

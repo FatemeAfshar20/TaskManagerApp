@@ -1,14 +1,27 @@
 package com.example.taskmanagerapp.Model.User;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import com.example.taskmanagerapp.Databese.TaskManagerSchema.User.UserColumns;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
-
+@Entity
 public class User implements Serializable {
-    private UUID mUUID=UUID.randomUUID();
+    @PrimaryKey(autoGenerate = true)
+    private long mId;
+    @ColumnInfo(name = UserColumns.UUID)
+    private UUID mUUID;
+    @ColumnInfo(name = UserColumns.USERNAME)
     private String mUsername;
+    @ColumnInfo(name = UserColumns.PASSWORD)
     private String mPassword;
+    @ColumnInfo(name = UserColumns.ISADMIN)
     private boolean isAdmin;
+    @ColumnInfo(name = UserColumns.MEMBERSHIP)
     private Date mMemberShip;
 
     public User() {
@@ -66,5 +79,13 @@ public class User implements Serializable {
 
     public void setMemberShip(Date memberShip) {
         mMemberShip = memberShip;
+    }
+
+    public long getId() {
+        return mId;
+    }
+
+    public void setId(long id) {
+        mId = id;
     }
 }
