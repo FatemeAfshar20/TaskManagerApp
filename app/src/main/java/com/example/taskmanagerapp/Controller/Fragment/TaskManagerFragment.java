@@ -2,9 +2,11 @@ package com.example.taskmanagerapp.Controller.Fragment;
 
 import android.app.AlertDialog;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,14 +39,15 @@ import java.util.UUID;
  * Use the {@link TaskManagerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TaskManagerFragment extends Fragment{
+public class TaskManagerFragment extends Fragment {
     public static final String ARG_USER_ID = "User Id";
     private ViewPager2 mViewPager2;
-    private List<Fragment> mFragments=new ArrayList<>();
+    private List<Fragment> mFragments = new ArrayList<>();
     private TaskAdapter mTaskAdapter;
-    private User mUser= new User();
+    private User mUser = new User();
     private TaskBDRepository mTasksRepository;
     private Toolbar mToolbar;
+    private Callbacks mCallbacks;
 
     public TaskManagerFragment() {
         // Required empty public constructor
@@ -54,7 +57,7 @@ public class TaskManagerFragment extends Fragment{
     public static TaskManagerFragment newInstance(UUID uuid) {
         TaskManagerFragment fragment = new TaskManagerFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_USER_ID,uuid);
+        args.putSerializable(ARG_USER_ID, uuid);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,9 +65,9 @@ public class TaskManagerFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UUID uuid= (UUID)
+        UUID uuid = (UUID)
                 getArguments().getSerializable(ARG_USER_ID);
-        mTasksRepository= TaskBDRepository.getInstance(getActivity());
+        mTasksRepository = TaskBDRepository.getInstance(getActivity());
         mFragments.add(0, TODOFragment.newInstance(uuid));
         mFragments.add(1, DOINGFragment.newInstance(uuid));
         mFragments.add(2, DONEFragment.newInstance(uuid));
@@ -73,7 +76,7 @@ public class TaskManagerFragment extends Fragment{
 /*        ActionBar actionBar= Objects.requireNonNull(getActivity()).getActionBar();
         actionBar.setTitle(mUser.getUserName());*/
 
-        if(mTaskAdapter!=null) {
+        if (mTaskAdapter != null) {
             mTaskAdapter.setFragmentList(mFragments);
             mTaskAdapter.notifyDataSetChanged();
         }
@@ -83,7 +86,7 @@ public class TaskManagerFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(
+        View view = inflater.inflate(
                 R.layout.fragment_task_maneger,
                 container,
                 false);
@@ -92,12 +95,23 @@ public class TaskManagerFragment extends Fragment{
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if (context instanceof Callbacks)
+            mCallbacks = (Callbacks) context;
+        else
+            throw new ClassCastException(context.toString()
+                    + " must implement Callbacks");
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-        mViewPager2=view.findViewById(R.id.view_pager2);
+        mViewPager2 = view.findViewById(R.id.view_pager2);
         /*     mViewPager2.setAdapter(new TaskAdapter(getActivity(),mFragments));*/
-        mTaskAdapter=new TaskAdapter(getActivity(),mFragments);
+        mTaskAdapter = new TaskAdapter(getActivity(), mFragments);
         mViewPager2.setAdapter(mTaskAdapter);
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         new TabLayoutMediator(tabLayout, mViewPager2,
@@ -105,7 +119,8 @@ public class TaskManagerFragment extends Fragment{
         ).attach();
 
     }
-  @Override
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu, menu);
         SearchManager searchManager =
@@ -120,13 +135,13 @@ public class TaskManagerFragment extends Fragment{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_logout:
-                Intent intent=new Intent(getContext(),LoginActivity.class);
+                Intent intent = new Intent(getContext(), LoginActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.menu_delete:
                 getDialogOk();
                 return true;
-            case  R.id.search:
+            case R.id.search:
                 getActivity().onSearchRequested();
                 return true;
             default:
@@ -140,10 +155,11 @@ public class TaskManagerFragment extends Fragment{
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                         mTasksRepository.deleteAll(mUser.getUUID());
+                        mTasksRepository.deleteAll(mUser.getUUID());
+                        mCallbacks.updateUI();
                     }
                 })
-                .setNegativeButton("Cancel",null);
+                .setNegativeButton("Cancel", null);
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -163,7 +179,7 @@ public class TaskManagerFragment extends Fragment{
 
         public TaskAdapter(@NonNull FragmentActivity fragmentActivity, List<Fragment> fragmentList) {
             super(fragmentActivity);
-            mFragmentList=fragmentList;
+            mFragmentList = fragmentList;
         }
 
         @NonNull
@@ -176,5 +192,9 @@ public class TaskManagerFragment extends Fragment{
         public int getItemCount() {
             return mFragmentList.size();
         }
+    }
+
+    public interface Callbacks {
+        void updateUI();
     }
 }

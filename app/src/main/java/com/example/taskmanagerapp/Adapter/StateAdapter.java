@@ -155,8 +155,6 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
             ));
         }
 
-
-
         public AppCompatImageButton getButtonEdit() {
             return mButtonEdit;
         }

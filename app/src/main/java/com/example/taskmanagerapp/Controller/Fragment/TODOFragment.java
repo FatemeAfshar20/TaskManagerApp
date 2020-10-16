@@ -91,7 +91,7 @@ public class TODOFragment extends Fragment {
         updateUI();
     }
 
-    private void updateUI() {
+    public void updateUI() {
         if (mTaskRepository.getTODOLists(mUserId).size() == 0)
             mStateView.getImgEmpty().setVisibility(View.VISIBLE);
         else

@@ -91,7 +91,7 @@ public class DOINGFragment extends Fragment {
         updateUI();
     }
 
-    private void updateUI() {
+    public void updateUI() {
         if (mTaskRepository.getDOINGLists(mUserId).size() == 0)
             mStateView.getImgEmpty().setVisibility(View.VISIBLE);
         else

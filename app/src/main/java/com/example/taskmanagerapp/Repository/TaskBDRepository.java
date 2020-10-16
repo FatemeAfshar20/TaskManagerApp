@@ -104,9 +104,10 @@ public class TaskBDRepository implements IRepository<Task> {
     }
 
     public void deleteAll(UUID userId) {
-        String whereClause = TaskColumns.USERID + " =? ";
-        String[] whereArgs = new String[]{userId.toString()};
-        mDatabase.delete(mTableName, whereClause, whereArgs);
+        for (int i = 0; i < getUserTask(userId).size(); i++) {
+            delete(getUserTask(userId).get(i));
+            i--;
+        }
     }
 
     @Override
@@ -127,7 +128,7 @@ public class TaskBDRepository implements IRepository<Task> {
     }
 
     public List<Task> getUserTask(UUID uuid) {
-        return getUserTask(uuid);
+        return mDAO.getUserTask(uuid);
       /*  List<Task> userTaskList = new ArrayList<>();
         String whereClause = TaskColumns.USERID + " =? ";
         String[] whereArgs = new String[]{uuid.toString()};
@@ -152,7 +153,7 @@ public class TaskBDRepository implements IRepository<Task> {
     }
 
     public List<Task> getDOINGLists(UUID userUUID) {
-       return mDAO.getStateTaskLists(userUUID,TaskState.DOING);
+       return mDAO.getStateTaskLists(userUUID,TaskState.DOING.toString());
       /*  List<Task> userTaskList = new ArrayList<>();
         String whereClause = TaskColumns.USERID + " =? and "
                 + TaskColumns.STATE + " =? ";
@@ -179,7 +180,7 @@ public class TaskBDRepository implements IRepository<Task> {
     }
 
     public List<Task> getDONELists(UUID userUUID) {
-        return  mDAO.getStateTaskLists(userUUID,TaskState.DONE);
+        return  mDAO.getStateTaskLists(userUUID,TaskState.DONE.toString());
       /*  List<Task> userTaskList = new ArrayList<>();
         String whereClause = TaskColumns.USERID + " =? and "
                 + TaskColumns.STATE + " =? ";
@@ -206,7 +207,7 @@ public class TaskBDRepository implements IRepository<Task> {
     }
 
     public List<Task> getTODOLists(UUID userUUID) {
-        return  mDAO.getStateTaskLists(userUUID,TaskState.TODO);
+        return  mDAO.getStateTaskLists(userUUID,TaskState.TODO.toString());
      /*   List<Task> userTaskList = new ArrayList<>();
         String whereClause = TaskColumns.USERID + " =? and "
                 + TaskColumns.STATE + " =? ";

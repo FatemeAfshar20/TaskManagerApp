@@ -120,6 +120,15 @@ public class UserDBRepository implements IRepository<User> {
         mDatabase.delete(mTableName, whereClause, whereArgs);*/
     }
 
+    public void deleteAll() {
+        for (int i = 0; i < getList().size(); i++) {
+            if (!getList().get(i).isAdmin()) {
+                delete(getList().get(i));
+                i--;
+            }
+        }
+    }
+
     @Override
     public void insert(User user) {
         mDAO.insert(user);

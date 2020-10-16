@@ -98,7 +98,7 @@ public class AdminFragment extends Fragment {
                     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //   mUserRepository.deleteAll();
+                        mUserRepository.deleteAll();
                         updateUi();
                     }
                 })
@@ -113,7 +113,9 @@ public class AdminFragment extends Fragment {
     }
 
     private void updateUi(){
-        if(mAdminAdapter!=null)
+        if(mAdminAdapter!=null) {
+            mAdminAdapter.setUserList(mUserRepository.getList());
             mAdminAdapter.notifyDataSetChanged();
+        }
     }
 }

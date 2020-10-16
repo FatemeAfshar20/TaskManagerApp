@@ -32,6 +32,14 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
         mUserRepository = UserDBRepository.getInstance(mContext);
     }
 
+    public List<User> getUserList() {
+        return mUserList;
+    }
+
+    public void setUserList(List<User> userList) {
+        mUserList = userList;
+    }
+
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -74,12 +82,12 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
 
         public void bind(User user) {
             mUser = user;
-            //TaskRepository tasksRepository=user.getTasksRepository();
             TaskBDRepository taskDBRepository =
                     TaskBDRepository.getInstance(mContext);
- /*           int numOfTask = taskDBRepository.getUserTaskList().size();
-            mUsername.setText(user.getUserName());
-            mNumOfTask.setText("Number Of Task : " + numOfTask);*/
+         int numOfTask = taskDBRepository.
+                 getUserTask(mUser.getUUID()).size();
+            mUsername.setText(user.getUsername());
+            mNumOfTask.setText("Number Of Task : " + numOfTask);
             mDateMemberShip.setText(user.getMemberShip().toString());
         }
 

@@ -2,13 +2,12 @@ package com.example.taskmanagerapp.Controller.Activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.widget.Toolbar;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.example.taskmanagerapp.Controller.Fragment.DOINGFragment;
+import com.example.taskmanagerapp.Controller.Fragment.DONEFragment;
+import com.example.taskmanagerapp.Controller.Fragment.TODOFragment;
 import com.example.taskmanagerapp.Controller.Fragment.TaskManagerFragment;
 import com.example.taskmanagerapp.Controller.SingleFragment;
 
@@ -20,8 +19,9 @@ import java.util.UUID;
  * from uuid we can find , which user did login
  */
 
-public class TaskManagerActivity extends SingleFragment {
-    private UUID mUUID;
+public class TaskManagerActivity extends SingleFragment
+implements TaskManagerFragment.Callbacks {
+    private UUID mUserId;
     public static final String EXTRA_USER_ID =
             "com.example.taskmanagerapp.User Id";
 
@@ -34,9 +34,30 @@ public class TaskManagerActivity extends SingleFragment {
     @Override
     public Fragment getFragment() {
         Intent intent=getIntent();
-        mUUID= (UUID)
+        mUserId = (UUID)
                 intent.getSerializableExtra(TaskManagerActivity.EXTRA_USER_ID);
-        return TaskManagerFragment.newInstance(mUUID);
+        return TaskManagerFragment.newInstance(mUserId);
+    }
+
+    @Override
+    public void updateUI() {
+/*        mUserId = (UUID)
+                getIntent().getSerializableExtra(
+                        TaskManagerActivity.EXTRA_USER_ID);
+        DOINGFragment doingFragment=
+                DOINGFragment.newInstance(mUserId);
+
+        doingFragment.updateUI();
+
+        DONEFragment doneFragment=
+                DONEFragment.newInstance(mUserId);
+
+        doneFragment.updateUI();
+
+        TODOFragment todoFragment=
+                TODOFragment.newInstance(mUserId);
+
+        todoFragment.updateUI();*/
     }
 
 /*    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

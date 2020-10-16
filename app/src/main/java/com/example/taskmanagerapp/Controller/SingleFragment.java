@@ -21,10 +21,11 @@ public abstract class SingleFragment extends AppCompatActivity {
         FragmentManager fragmentManager=getSupportFragmentManager();
         Fragment fragment=fragmentManager.findFragmentById(R.id.fragment_container);
 
-        if(fragment==null)
+        if(fragment==null) {
             fragmentManager.
                     beginTransaction().
-                    add(R.id.fragment_container,getFragment()).
-                   commit() ;
+                    add(R.id.fragment_container, getFragment()).
+                    commit();
+        }
     }
 }

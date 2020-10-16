@@ -23,12 +23,11 @@ public interface TaskTableDAO {
     @Query(value = "SELECT * FROM Task WHERE userId=:userId")
     List<Task> getUserTask(UUID userId);
     @Query(value = "SELECT * FROM Task WHERE userId=:userUUID and state=:taskState")
-    List<Task> getStateTaskLists(UUID userUUID, TaskState taskState);
+    List<Task> getStateTaskLists(UUID userUUID, String taskState);
     @Delete
     void delete(Task task);
     @Insert
     void insert(Task task);
     @Update
     void update(Task task);
-
 }

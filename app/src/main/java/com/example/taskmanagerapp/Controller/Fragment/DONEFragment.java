@@ -91,7 +91,7 @@ public class DONEFragment extends Fragment {
         updateUI();
     }
 
-    private void updateUI() {
+    public void updateUI() {
         if (mTaskRepository.getDONELists(mUserId).size() == 0)
             mStateView.getImgEmpty().setVisibility(View.VISIBLE);
         else
