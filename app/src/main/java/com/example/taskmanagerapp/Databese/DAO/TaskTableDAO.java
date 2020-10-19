@@ -30,4 +30,5 @@ public interface TaskTableDAO {
     void insert(Task task);
     @Update
     void update(Task task);
+
 }

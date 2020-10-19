@@ -15,7 +15,6 @@ import com.example.taskmanagerapp.Controller.Fragment.ShowTaskDialogFragment;
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
-import com.example.taskmanagerapp.Repository.TaskBDRepository;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.DateFormat;
@@ -39,11 +38,17 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
 
     private User mUser;
 
+    private  OnTaskClickedListener mCallback;
+
+    private OnUpdateUI mOnUpdateUICallback;
+
     public StateAdapter(List<Task> userTasks, Context context,
-                        FragmentManager fragmentManager) {
+                        FragmentManager fragmentManager, OnTaskClickedListener callback,OnUpdateUI onUpdateUICallback) {
         mUserTasks = userTasks;
         mContext = context;
         mFragmentManager=fragmentManager;
+        mCallback =callback;
+        mOnUpdateUICallback =onUpdateUICallback;
     }
 
     public List<Task> getUserTasks() {
@@ -125,15 +130,18 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
 
                     showTaskDialogFragment.show(mFragmentManager,
                             FRAGMENT_SHOW_DIALOG_FRAGMENT);
-
+                    mOnUpdateUICallback.updateUI();
                 }
             });
+
 
             mButtonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    TaskBDRepository.getInstance(
-                            mContext).delete(mTask);
+                    /*TaskBDRepository.getInstance(
+                            mContext).delete(mTask);*/
+                    mCallback.onTaskDeleted(mTask);
+                    mOnUpdateUICallback.updateUI();
                 }
             });
         }
@@ -153,6 +161,8 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
             mTaskInitTime.setText(mTimeFormat.format(
                     task.getTaskTime()
             ));
+
+            mCallback.onTaskUpdated(task);
         }
 
         public AppCompatImageButton getButtonEdit() {
@@ -170,5 +180,17 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
         public void setTaskImage(CircleImageView taskImage) {
             mTaskImage = taskImage;
         }
+    }
+
+
+    public interface OnTaskClickedListener{
+
+        void onTaskDeleted(Task task);
+        void onTaskUpdated(Task task);
+
+    }
+
+    public interface OnUpdateUI{
+        void updateUI();
     }
 }

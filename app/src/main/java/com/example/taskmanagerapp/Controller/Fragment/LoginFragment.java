@@ -89,7 +89,6 @@ public class LoginFragment extends Fragment {
     }
 
     private boolean checkUserInfo() {
-        List<User> userList=mUserRepository.getList();
         if (mUserRepository.userExist(mLoginView.getUsername())) {
 
             mUser=mUserRepository.get(mLoginView.getUsername());

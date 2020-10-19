@@ -1,29 +1,26 @@
 package com.example.taskmanagerapp.Controller.Fragment;
 
 import android.app.AlertDialog;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.taskmanagerapp.Controller.Activity.LoginActivity;
+import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.TaskBDRepository;
@@ -46,7 +43,8 @@ public class TaskManagerFragment extends Fragment {
     private TaskAdapter mTaskAdapter;
     private User mUser = new User();
     private TaskBDRepository mTasksRepository;
-    private Toolbar mToolbar;
+    private String[] mState ={TaskState.TODO.toString(),
+            TaskState.DOING.toString(),TaskState.DONE.toString()};
     private Callbacks mCallbacks;
 
     public TaskManagerFragment() {
@@ -67,19 +65,8 @@ public class TaskManagerFragment extends Fragment {
         super.onCreate(savedInstanceState);
         UUID uuid = (UUID)
                 getArguments().getSerializable(ARG_USER_ID);
-        mTasksRepository = TaskBDRepository.getInstance(getActivity());
-        mFragments.add(0, TODOFragment.newInstance(uuid));
-        mFragments.add(1, DOINGFragment.newInstance(uuid));
-        mFragments.add(2, DONEFragment.newInstance(uuid));
+        addFragment(uuid);
         setHasOptionsMenu(true);
-
-/*        ActionBar actionBar= Objects.requireNonNull(getActivity()).getActionBar();
-        actionBar.setTitle(mUser.getUserName());*/
-
-        if (mTaskAdapter != null) {
-            mTaskAdapter.setFragmentList(mFragments);
-            mTaskAdapter.notifyDataSetChanged();
-        }
     }
 
     @Override
@@ -109,26 +96,13 @@ public class TaskManagerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-        mViewPager2 = view.findViewById(R.id.view_pager2);
-        /*     mViewPager2.setAdapter(new TaskAdapter(getActivity(),mFragments));*/
-        mTaskAdapter = new TaskAdapter(getActivity(), mFragments);
-        mViewPager2.setAdapter(mTaskAdapter);
-        TabLayout tabLayout = view.findViewById(R.id.tab_layout);
-        new TabLayoutMediator(tabLayout, mViewPager2,
-                (tab, position) -> tab.setText(mFragments.get(position).getClass().getSimpleName())
-        ).attach();
+        setupAdapter(view);
 
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu, menu);
-        SearchManager searchManager =
-                (SearchManager) getActivity().getSystemService(getActivity().SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getActivity().getComponentName()));
     }
 
     @Override
@@ -141,9 +115,6 @@ public class TaskManagerFragment extends Fragment {
             case R.id.menu_delete:
                 getDialogOk();
                 return true;
-            case R.id.search:
-                getActivity().onSearchRequested();
-                return true;
             default:
                 return false;
         }
@@ -151,7 +122,7 @@ public class TaskManagerFragment extends Fragment {
 
     private void getDialogOk() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).
-                setMessage("Do you sure?")
+                setMessage("Are you sure?")
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -159,7 +130,7 @@ public class TaskManagerFragment extends Fragment {
                         mCallbacks.updateUI();
                     }
                 })
-                .setNegativeButton("Cancel", null);
+                .setNegativeButton(android.R.string.cancel, null);
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -168,14 +139,6 @@ public class TaskManagerFragment extends Fragment {
     private class TaskAdapter extends FragmentStateAdapter {
 
         List<Fragment> mFragmentList;
-
-        public void setFragmentList(List<Fragment> fragmentList) {
-            mFragmentList = fragmentList;
-        }
-
-        public List<Fragment> getFragmentList() {
-            return mFragmentList;
-        }
 
         public TaskAdapter(@NonNull FragmentActivity fragmentActivity, List<Fragment> fragmentList) {
             super(fragmentActivity);
@@ -197,4 +160,22 @@ public class TaskManagerFragment extends Fragment {
     public interface Callbacks {
         void updateUI();
     }
+
+    private void setupAdapter(@NonNull View view) {
+        mViewPager2 = view.findViewById(R.id.view_pager2);
+        mTaskAdapter = new TaskAdapter(getActivity(), mFragments);
+        mViewPager2.setAdapter(mTaskAdapter);
+        TabLayout tabLayout = view.findViewById(R.id.tab_layout);
+        new TabLayoutMediator(tabLayout, mViewPager2,
+                (tab, position) -> tab.setText(mState[position])
+        ).attach();
+    }
+
+    private void addFragment(UUID uuid) {
+        mTasksRepository = TaskBDRepository.getInstance(getActivity());
+        mFragments.add(0, StateFragment.newInstance(mState[0],uuid));
+        mFragments.add(1, StateFragment.newInstance(mState[1],uuid));
+        mFragments.add(2, StateFragment.newInstance(mState[2],uuid));
+    }
+
 }

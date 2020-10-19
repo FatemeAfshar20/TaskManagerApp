@@ -31,4 +31,8 @@
     <string name="search_title">search</string>
     <string name="search_hint">search</string>
     <string name="app_label">search task</string>
+    <string name="user_exist">User Already Exist</string>
+    <string name="cant_null">Username or password cant be null</string>
+    <string name="numeric_pass">Password should be number</string>
+    <string name="length_pass">"Password should be more than 8</string>
 </resources>

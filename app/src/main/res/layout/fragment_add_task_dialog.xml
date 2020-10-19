@@ -26,7 +26,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/mrg_5"
-            android:background="@drawable/orange_border"
             android:hint="@string/task_title"
             android:padding="@dimen/pad_10"
             android:textSize="20sp" />
@@ -44,9 +43,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/exist_task_content"
             android:layout_width="match_parent"
-            android:layout_height="106dp"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/mrg_5"
-            android:background="@drawable/orange_border"
             android:hint="@string/task_content"
             android:padding="@dimen/pad_10"
             android:textSize="20sp" />

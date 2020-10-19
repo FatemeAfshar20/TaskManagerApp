@@ -29,6 +29,7 @@ import java.util.UUID;
 public class AddTaskDialogFragment extends DialogFragment {
     public static final String EXTRA_NEW_TASK = "com.example.taskmanagerapp.New Task";
     public static final String ARG_USER_ID = "User Id";
+    public static final String ARGS_TASK_STATE = "task state";
     private User mUser = new User();
     private TaskBDRepository mTaskDBRepository;
     private Task mTask;
@@ -38,10 +39,12 @@ public class AddTaskDialogFragment extends DialogFragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static AddTaskDialogFragment newInstance(UUID uuid) {
+    public static AddTaskDialogFragment newInstance(UUID uuid,TaskState taskState) {
         AddTaskDialogFragment fragment = new AddTaskDialogFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER_ID, uuid);
+        args.putString(ARGS_TASK_STATE,taskState.toString()
+        );
         fragment.setArguments(args);
         return fragment;
     }
@@ -108,7 +111,7 @@ public class AddTaskDialogFragment extends DialogFragment {
         else
             newTask.setTaskContent("");
         //this is  default
-        newTask.setTaskState(TaskState.TODO);
+        newTask.setTaskState(TaskState.valueOf(getArguments().getString(ARGS_TASK_STATE)));
 
         if (dialogView.getDatePicker() != null)
             newTask.setTaskDate(getDate(dialogView.getDatePicker()));

@@ -12,7 +12,8 @@ import com.example.taskmanagerapp.Controller.SingleFragment;
 import java.util.UUID;
 
 public class LoginActivity extends SingleFragment {
-    public static final String EXTRA_USER_ID = "com.example.taskmanagerapp.User Id";
+    public static final String EXTRA_USER_ID =
+            "com.example.taskmanagerapp.User Id";
 
     public static void start(Context context, UUID userId) {
         Intent starter = new Intent(context, LoginActivity.class);

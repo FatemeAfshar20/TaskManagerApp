@@ -63,7 +63,7 @@ public class SignFragment extends Fragment {
                         mUser.setUsername(loginView.getUsername());
                         mUser.setPassword(loginView.getPasswordText());
 
-                        // checking isAdmin or no and setting result
+                        // checking isAdmin
                         if (loginView.getAdminPassword()
                                 .equals("@utab"))
                             mUser.setAdmin(true);
@@ -74,20 +74,20 @@ public class SignFragment extends Fragment {
                     } else
                         LoginView.returnToast(getContext(), R.string.input_check);
                 } else
-                    LoginView.returnToast(getContext(), "User Already Exist");
+                    LoginView.returnToast(getContext(), R.string.user_exist);
             }
         });
     }
 
     private boolean isTrueFormatInput(LoginView loginView) {
         if (loginView.getUsername().equals("") || loginView.getPasswordText().equals("")) {
-            LoginView.returnToast(getActivity(), "Username or password cant be null");
+            LoginView.returnToast(getActivity(), R.string.cant_null);
             return false;
         } else if (!isNumeric(loginView.getPasswordText())) {
-            LoginView.returnToast(getActivity(), "Password should be number");
+            LoginView.returnToast(getActivity(), R.string.numeric_pass);
             return false;
         } else if (loginView.getPasswordText().length() < 8) {
-            LoginView.returnToast(getActivity(), "Password should be more than 8");
+            LoginView.returnToast(getActivity(), R.string.length_pass);
             return false;
         } else
             return true;

@@ -4,10 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.fragment.app.Fragment;
-
-import com.example.taskmanagerapp.Controller.Fragment.DOINGFragment;
-import com.example.taskmanagerapp.Controller.Fragment.DONEFragment;
-import com.example.taskmanagerapp.Controller.Fragment.TODOFragment;
 import com.example.taskmanagerapp.Controller.Fragment.TaskManagerFragment;
 import com.example.taskmanagerapp.Controller.SingleFragment;
 
@@ -41,23 +37,9 @@ implements TaskManagerFragment.Callbacks {
 
     @Override
     public void updateUI() {
-/*        mUserId = (UUID)
+        mUserId = (UUID)
                 getIntent().getSerializableExtra(
                         TaskManagerActivity.EXTRA_USER_ID);
-        DOINGFragment doingFragment=
-                DOINGFragment.newInstance(mUserId);
-
-        doingFragment.updateUI();
-
-        DONEFragment doneFragment=
-                DONEFragment.newInstance(mUserId);
-
-        doneFragment.updateUI();
-
-        TODOFragment todoFragment=
-                TODOFragment.newInstance(mUserId);
-
-        todoFragment.updateUI();*/
     }
 
 /*    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

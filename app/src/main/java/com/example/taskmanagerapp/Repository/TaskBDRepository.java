@@ -73,6 +73,10 @@ public class TaskBDRepository implements IRepository<Task> {
         }*/
     }
 
+    public List<Task> getTaskStateList(UUID userId,String taskState){
+        return mDAO.getStateTaskLists(userId,taskState);
+    }
+
     @Override
     public Task get(UUID uuid) {
         return mDAO.get(uuid);

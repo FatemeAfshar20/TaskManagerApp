@@ -87,13 +87,13 @@ public abstract class StateManagerFragment extends Fragment {
     }
 
 
-    public void manageRecyclerView(List<Task> taskList) {
+/*    public void manageRecyclerView(List<Task> taskList) {
         mStateAdapter = new
                 StateAdapter(taskList
                 , getContext(), getActivity().getSupportFragmentManager());
         mStateView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
         mStateView.getRecyclerView().setAdapter(mStateAdapter);
-    }
+    }*/
 
     public void manageReceiveDataFromAddDialog(
             Intent data, List<Task> taskList, TaskState taskState) {
@@ -131,7 +131,7 @@ public abstract class StateManagerFragment extends Fragment {
         mUser= mUserRepository.get(uuid);
     }
 
-    public void updateUI(List<Task> taskList) {
+/*    public void updateUI(List<Task> taskList) {
 
         if (mStateAdapter == null) {
             mStateAdapter = new StateAdapter(taskList,getContext(),
@@ -142,7 +142,7 @@ public abstract class StateManagerFragment extends Fragment {
             mStateAdapter.setUserTasks(taskList);
             mStateAdapter.notifyDataSetChanged();
         }
-    }
+    }*/
     private void manageEmptyImage(List<Task> taskList) {
         if (taskList.size() == 0)
             mStateView.getImgEmpty().setVisibility(View.VISIBLE);
