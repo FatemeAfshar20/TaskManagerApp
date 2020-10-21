@@ -87,6 +87,10 @@ public class StateFragment extends Fragment {
             mStateView.getImgEmpty().setVisibility(View.VISIBLE);
         else
             mStateView.getImgEmpty().setVisibility(View.GONE);
+        updateAdapter();
+    }
+
+    private void updateAdapter() {
         if (mStateAdapter != null)
             mStateAdapter.setUserTasks(mTaskRepository.
                     getTaskStateList(mUserId,mStrTaskState));
@@ -102,7 +106,7 @@ public class StateFragment extends Fragment {
             @Override
             public void onTaskDeleted(Task task) {
                 mTaskRepository.delete(task);
-                mTaskRepository.notifyAll();
+                updateAdapter();
             }
 
             @Override
@@ -112,7 +116,7 @@ public class StateFragment extends Fragment {
         }, new StateAdapter.OnUpdateUI() {
             @Override
             public void updateUI() {
-
+                updateAdapter();
             }
         });
 
