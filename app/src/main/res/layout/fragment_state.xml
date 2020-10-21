@@ -6,7 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/img_empty"
         android:layout_width="121dp"
@@ -17,7 +16,7 @@
         android:layout_marginEnd="146dp"
         android:layout_marginRight="146dp"
         android:layout_marginBottom="171dp"
-        android:background="@drawable/background_empty"
+        android:background="@drawable/box_empty_icon"
         android:scaleType="centerCrop" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -36,6 +35,5 @@
         android:layout_margin="15dp"
         android:src="@drawable/ic_add_task"
         app:maxImageSize="60dp" />
-
 
 </RelativeLayout>

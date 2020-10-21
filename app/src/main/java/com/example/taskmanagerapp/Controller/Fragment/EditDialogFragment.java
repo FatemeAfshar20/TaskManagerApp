@@ -14,24 +14,18 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.Task.TaskState;
-import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.TaskBDRepository;
-import com.example.taskmanagerapp.Repository.UserDBRepository;
 import com.example.taskmanagerapp.ViewElem.DialogView;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.UUID;
 
 public class EditDialogFragment extends DialogFragment {
     public static final String ARG_OLD_TASK = "Old Task";
-    public static final String ARG_USER = "user";
     public static final String BUNDLE_DATE_SELECTED = "Date user Selected";
     public static final String BUNDLE_TIME_SELECTED = "Time user Selected";
-    private Task mTask = new Task();
     private Task mOldTask;
-    private User mUser ;
     private TaskBDRepository mTaskDBRepository;
     private DialogView mDialogView;
     public EditDialogFragment() {
@@ -62,6 +56,7 @@ public class EditDialogFragment extends DialogFragment {
         mDialogView = new DialogView(container, inflater, R.layout.fragment_edit_dialog);
         mDialogView.findElemEditDialog();
         setListener();
+
         return mDialogView.getView();
     }
 

@@ -118,6 +118,7 @@ public class StateFragment extends Fragment {
             public void updateUI() {
                 updateAdapter();
             }
+
         });
 
         mStateView.getRecyclerView().setLayoutManager(

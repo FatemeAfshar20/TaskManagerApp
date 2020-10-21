@@ -78,7 +78,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
     }
 
     public class Holder extends RecyclerView.ViewHolder {
-        public static final int REQUEST_CODE = 1;
+
         private DateFormat mDateFormat =
                 DateFormat.getDateInstance(DateFormat.SHORT);
         private DateFormat mTimeFormat =
@@ -86,10 +86,9 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
 
         private AppCompatImageButton mButtonEdit
                 ,mButtonShow,mButtonDelete;
-        private CircleImageView mTaskImage;
         private Task mTask;
         private MaterialTextView mTaskTitle, mTaskContent,
-                mTaskInitTime, mTaskInitDate;
+                mTaskInitTime, mTaskInitDate,mTaskImg;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -99,7 +98,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
         }
 
         public void findElem(View view) {
-            mTaskImage = view.findViewById(R.id.task_img);
+            mTaskImg = view.findViewById(R.id.task_img);
             mTaskTitle = view.findViewById(R.id.task_title);
             mTaskContent = view.findViewById(R.id.task_content);
             mTaskInitDate = view.findViewById(R.id.task_txt_date);
@@ -138,8 +137,6 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
             mButtonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*TaskBDRepository.getInstance(
-                            mContext).delete(mTask);*/
                     mCallback.onTaskDeleted(mTask);
                     mOnUpdateUICallback.updateUI();
                 }
@@ -161,25 +158,11 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
             mTaskInitTime.setText(mTimeFormat.format(
                     task.getTaskTime()
             ));
+            mTaskImg.setText(task.getTaskTitle().substring(0,1));
 
             mCallback.onTaskUpdated(task);
         }
 
-        public AppCompatImageButton getButtonEdit() {
-            return mButtonEdit;
-        }
-
-        public void setButtonEdit(AppCompatImageButton buttonEdit) {
-            mButtonEdit = buttonEdit;
-        }
-
-        public CircleImageView getTaskImage() {
-            return mTaskImage;
-        }
-
-        public void setTaskImage(CircleImageView taskImage) {
-            mTaskImage = taskImage;
-        }
     }
 
 
