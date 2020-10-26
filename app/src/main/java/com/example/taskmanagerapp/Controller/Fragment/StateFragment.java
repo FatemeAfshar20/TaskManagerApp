@@ -1,13 +1,16 @@
 package com.example.taskmanagerapp.Controller.Fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,25 +19,27 @@ import android.view.ViewGroup;
 import com.example.taskmanagerapp.Adapter.StateAdapter;
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.Task.TaskState;
-import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.TaskBDRepository;
-import com.example.taskmanagerapp.Repository.UserDBRepository;
-import com.example.taskmanagerapp.ViewElem.StateView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.UUID;
 
 public class StateFragment extends Fragment {
     private static final String ARG_STATE = "State";
     public static final String ARG_USER_LOGIN_ID = "User Login Id";
-    public static final String FRAGMENT_ADD_TASK_DIALOG = "Add Task Dialog";
     public static final int REQUEST_CODE_ADD_Task = 1;
     private UUID mUserId;
-    private StateView mStateView;
     private StateAdapter mStateAdapter;
     private TaskBDRepository mTaskRepository;
 
     private String mStrTaskState;
+
+    private RecyclerView mRecyclerView;
+    private FloatingActionButton mButtonAddTask;
+    private AppCompatImageView mImgEmpty;
+
+    private OnAddingTask mCallbacks;
 
     public StateFragment() {
         // Required empty public constructor
@@ -47,6 +52,16 @@ public class StateFragment extends Fragment {
         args.putSerializable(ARG_USER_LOGIN_ID,userLoginId);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof  OnAddingTask)
+            mCallbacks=(OnAddingTask) context;
+        else
+            throw new ClassCastException(
+                    "Must be implement OnAddingTask interface");
     }
 
     @Override
@@ -67,13 +82,21 @@ public class StateFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mStateView=new StateView(container,inflater,
-                R.layout.fragment_state);
+       View view=inflater.inflate(R.layout.fragment_state,
+               container,
+               false);
 
-        mStateView.findElem();
+        findElem(view);
         setListener();
         setupAdapter();
-        return mStateView.getView();
+        return view;
+    }
+
+    public void findElem(View view){
+        mButtonAddTask=view.findViewById(R.id.btn_add_task);
+        mRecyclerView=view.findViewById(R.id.recycler_view);
+        mImgEmpty=view.findViewById(R.id.img_empty);
+        mImgEmpty.setVisibility(View.GONE);
     }
 
     @Override
@@ -84,9 +107,9 @@ public class StateFragment extends Fragment {
 
     public void updateUI() {
         if (mTaskRepository.getTaskStateList(mUserId,mStrTaskState).size() == 0)
-            mStateView.getImgEmpty().setVisibility(View.VISIBLE);
+            mImgEmpty.setVisibility(View.VISIBLE);
         else
-            mStateView.getImgEmpty().setVisibility(View.GONE);
+            mImgEmpty.setVisibility(View.GONE);
         updateAdapter();
     }
 
@@ -102,29 +125,37 @@ public class StateFragment extends Fragment {
         mStateAdapter=new StateAdapter(
                 mTaskRepository.getTaskStateList(mUserId,mStrTaskState)
                 , getContext(), getFragmentManager(),
-                new StateAdapter.OnTaskClickedListener() {
-            @Override
-            public void onTaskDeleted(Task task) {
-                mTaskRepository.delete(task);
-                updateAdapter();
-            }
+                new StateAdapter.AdapterCallbacks() {
+                    @Override
+                    public void onTaskDeleted(Task task) {
+                        mTaskRepository.delete(task);
+                        updateAdapter();
+                    }
 
-            @Override
-            public void onTaskUpdated(Task task) {
-                mTaskRepository.update(task);
-            }
-        }, new StateAdapter.OnUpdateUI() {
-            @Override
-            public void updateUI() {
-                updateAdapter();
-            }
+                    @Override
+                    public void onTaskUpdated(Task task) {
 
-        });
+                    }
 
-        mStateView.getRecyclerView().setLayoutManager(
+                    @Override
+                    public void updateUI() {
+
+                    }
+
+                    @Override
+                    public void addBottomSheetFrag(UUID taskId) {
+                            BottomSheetFrag bottomSheetFrag=
+                                    BottomSheetFrag.newInstance(taskId,TaskState.valueOf(mStrTaskState));
+
+                        String tag = " Fragment Bottom Sheet";
+                        bottomSheetFrag.show(getActivity().getSupportFragmentManager(), tag);
+                    }
+                });
+
+        mRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext()));
 
-        mStateView.getRecyclerView().setAdapter(mStateAdapter);
+        mRecyclerView.setAdapter(mStateAdapter);
     }
 
     @Override
@@ -135,23 +166,23 @@ public class StateFragment extends Fragment {
             return;
         if(requestCode==REQUEST_CODE_ADD_Task){
             Task task = (Task) data.getSerializableExtra(
-                    AddTaskDialogFragment.EXTRA_NEW_TASK);
+                    AddTaskFragment.EXTRA_NEW_TASK);
             mTaskRepository.update(task);
             updateUI();
         }
     }
 
     private void setListener(){
-        mStateView.getButtonAddTask().setOnClickListener(new View.OnClickListener() {
+        mButtonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddTaskDialogFragment addTask=
-                        AddTaskDialogFragment.newInstance(mUserId,TaskState.valueOf(mStrTaskState));
-                addTask.setTargetFragment(
-                        StateFragment.this, REQUEST_CODE_ADD_Task);
-                addTask.show(getActivity().getSupportFragmentManager(),
-                        FRAGMENT_ADD_TASK_DIALOG);
+                mCallbacks.onClickAddTask(new Task().getUUID(),
+                        TaskState.valueOf(mStrTaskState));
             }
         });
+    }
+
+   public interface OnAddingTask{
+        void onClickAddTask(UUID taskId,TaskState taskState);
     }
 }

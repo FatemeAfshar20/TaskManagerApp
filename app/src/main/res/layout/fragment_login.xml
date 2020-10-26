@@ -59,8 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/mrg_5"
-            android:text="@string/login"
-            app:icon="@drawable/ic_login" />
+            android:text="@string/login" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_sign"
@@ -68,8 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/mrg_5"
-            android:text="@string/sign_up"
-            app:icon="@drawable/ic_sign" />
+            android:text="@string/sign_up" />
     </LinearLayout>
 
 </LinearLayout>

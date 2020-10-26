@@ -6,117 +6,67 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/mrg_5"
-    android:background="#FDFDFD"
     >
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/task_img"
-        android:layout_width="70dp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_view"
+        android:layout_width="100dp"
         android:layout_height="70dp"
-        android:layout_margin="@dimen/mrg_10"
-        app:civ_border_color="#FF000000"
-        app:civ_border_width="2dp"
-        android:text="t"
-        android:textSize="25dp"
-        android:padding="15dp"
-        android:paddingLeft="20dp"
-        android:background="@drawable/oval_stroke_solid_black"
-        android:paddingStart="27dp" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/btn_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/task_title"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="2dp"
-        android:background="#FFFFFF"
-        android:src="@drawable/ic_edit"
-        app:civ_border_color="#FF000000"
-        app:civ_border_width="2dp" />
-
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/btn_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/task_title"
-        android:layout_toStartOf="@+id/btn_edit"
-        android:layout_toLeftOf="@+id/btn_edit"
-        android:background="#FFFFFF"
-        android:src="@drawable/ic_trashcan"
-        app:civ_border_color="#FF000000"
-        app:civ_border_width="2dp" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/btn_show"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/task_title"
-        android:layout_marginLeft="@dimen/mrg_10"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="3dp"
-        android:layout_marginRight="3dp"
-        android:layout_marginBottom="@dimen/mrg_10"
-        android:layout_toStartOf="@+id/btn_delete"
-        android:layout_toLeftOf="@+id/btn_delete"
-        android:background="#FFFFFF"
-        android:src="@drawable/ic_eye"
-        app:civ_border_color="#FF000000"
-        app:civ_border_width="2dp" />
+        >
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_task"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:src="@android:drawable/presence_busy"/>
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.textview.MaterialTextView
+        style="@style/TextStyle"
         android:id="@+id/task_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/card_view"
+        android:layout_toRightOf="@+id/card_view"
+        tools:text="@string/task_title"
+        android:textColor="@color/red"
+        />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btn_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/mrg_5"
-        android:padding="@dimen/pad_5"
-        android:textColor="@color/dark_orange"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        tools:text="Task Title"
+        android:background="#00FFFFFF"
+        android:src="@drawable/ic_menu" />
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextStyle"
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/card_view"
+        android:layout_toRightOf="@+id/card_view"
+        android:layout_below="@+id/task_title"
+        tools:text="this is my task"
         />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/task_content"
-        android:layout_width="193dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/mrg_5"
-        android:layout_toStartOf="@+id/task_title"
-        android:layout_toLeftOf="@+id/task_title"
-        android:layout_toEndOf="@+id/task_img"
-        android:layout_toRightOf="@+id/task_img"
-        android:padding="@dimen/pad_5"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        android:textStyle="italic"
-        tools:text="Task Content" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/task_txt_date"
-        android:layout_width="140dp"
-        android:layout_height="26dp"
-        android:layout_below="@+id/task_img"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="18dp"
-        android:textColor="@color/light_orange"
-        android:textSize="18sp"
-        tools:text="Date : 99/6/20" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/task_txt_time"
+        android:id="@+id/task_date"
+        style="@style/TextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_show"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="18dp"
-        android:textColor="@color/beauty_yellow"
-        android:textSize="18sp"
-        tools:text="Date : 99/6/20" />
+        android:layout_below="@+id/task_title"
+        android:text="20/25/10"
+        android:textColor="@color/red"
+        />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/card_view"
+        android:background="@color/light_gray"
+        android:layout_margin="5dp"
+        />
 
 </RelativeLayout>

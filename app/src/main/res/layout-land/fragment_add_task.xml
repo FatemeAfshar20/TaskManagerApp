@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Controller.Fragment.EditDialogFragment">
+    tools:context=".Controller.Fragment.EditFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/mrg_10"
                 android:text="@string/ok"
-                app:icon="@drawable/ic_check" />
+                 />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/exist_dialog_cancel_btn"
@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/mrg_10"
                 android:text="@string/cancel"
-                app:icon="@drawable/ic_close" />
+               />
         </LinearLayout>
     </LinearLayout>
 

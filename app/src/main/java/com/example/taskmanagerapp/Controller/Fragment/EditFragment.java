@@ -10,30 +10,40 @@ import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.TaskBDRepository;
-import com.example.taskmanagerapp.ViewElem.DialogView;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.radiobutton.MaterialRadioButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Calendar;
 import java.util.Date;
 
-public class EditDialogFragment extends DialogFragment {
+public class EditFragment extends Fragment {
     public static final String ARG_OLD_TASK = "Old Task";
     public static final String BUNDLE_DATE_SELECTED = "Date user Selected";
     public static final String BUNDLE_TIME_SELECTED = "Time user Selected";
     private Task mOldTask;
     private TaskBDRepository mTaskDBRepository;
-    private DialogView mDialogView;
-    public EditDialogFragment() {
+
+    private TextInputEditText mEditTitle,mEditContent;
+    private MaterialButton mButtonOK,
+            mButtonCancel,mButtonClose;
+    private MaterialRadioButton mTodo,mDoing,mDone;
+
+    private DatePicker mDatePicker;
+    private TimePicker mTimePicker;
+
+    public EditFragment() {
         // Required empty public constructor
     }
 
-    public static EditDialogFragment newInstance(Task task) {
-        EditDialogFragment fragment = new EditDialogFragment();
+    public static EditFragment newInstance(Task task) {
+        EditFragment fragment = new EditFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_OLD_TASK, task);
         fragment.setArguments(args);
@@ -53,11 +63,24 @@ public class EditDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDialogView = new DialogView(container, inflater, R.layout.fragment_edit_dialog);
-        mDialogView.findElemEditDialog();
+        View view=inflater.inflate(R.layout.fragment_edit_dialog,
+                container,
+                false);
+        findElem(view);
         setListener();
 
-        return mDialogView.getView();
+        return view;
+    }
+
+    public void findElem(View view){
+        mEditTitle=view.findViewById(R.id.edit_title);
+        mEditContent=view.findViewById(R.id.edit_content);
+        mButtonOK=view.findViewById(R.id.dialog_ok_btn);
+        mButtonCancel=view.findViewById(R.id.dialog_cancel_btn);
+
+        mTodo=view.findViewById(R.id.todo);
+        mDoing=view.findViewById(R.id.doing);
+        mDone=view.findViewById(R.id.done);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -68,52 +91,52 @@ public class EditDialogFragment extends DialogFragment {
             TimePicker timePicker =new TimePicker(getContext());
             timePicker.setHour(calendar.get(Calendar.HOUR));
             timePicker.setMinute(calendar.get(Calendar.MINUTE));
-            mDialogView.setTimePicker(timePicker);
+            mTimePicker=timePicker;
         }
     }
 
     private void setListener() {
 
-        mDialogView.getButtonOK().setOnClickListener(new View.OnClickListener() {
+        mButtonOK.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
-                userChangingTask(mDialogView);
+                userChangingTask();
 
                 mTaskDBRepository.update(mOldTask);
-                dismiss();
             }
         });
 
-        mDialogView.getButtonCancel().setOnClickListener(new View.OnClickListener() {
+       mButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
+
+                //TODO......
+
             }
         });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void userChangingTask(DialogView dialogView) {
-        if (!dialogView.getEditTitle().equals(""))
-            mOldTask.setTaskTitle(dialogView.getEditTitle());
+    private void userChangingTask() {
+        if (getEditTitle().equals(""))
+            mOldTask.setTaskTitle(getEditTitle());
 
-        if (!dialogView.getEditContent().equals(""))
-            mOldTask.setTaskContent(dialogView.getEditContent());
+        if (!getEditContent().equals(""))
+            mOldTask.setTaskContent(getEditContent());
 
-        if (dialogView.getTimePicker() != null)
-            mOldTask.setTaskTime(getNewTime(dialogView.
-                    getTimePicker()));
+        if (getTimePicker() != null)
+            mOldTask.setTaskTime(getNewTime(getTimePicker()));
 
-        if (dialogView.getDatePicker() != null)
+        if (getDatePicker() != null)
             mOldTask.setTaskDate(
-                    getNewDate(dialogView.getDatePicker()));
+                    getNewDate(getDatePicker()));
 
-        if (dialogView.isTodo())
+        if (isTodo())
             mOldTask.setTaskState(TaskState.TODO);
-        else if (dialogView.isDoing())
+        else if (isDoing())
             mOldTask.setTaskState(TaskState.DOING);
-        else if (dialogView.isDone())
+        else if (isDone())
             mOldTask.setTaskState(TaskState.DONE);
 
       //  mOldTask.setUserId(mUser.getUUID());
@@ -146,9 +169,9 @@ public class EditDialogFragment extends DialogFragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        Date date=getNewDate(mDialogView.getDatePicker());
+        Date date=getNewDate(getDatePicker());
         outState.putSerializable(BUNDLE_DATE_SELECTED,date);
-        TimePicker time=mDialogView.getTimePicker();
+        TimePicker time=getTimePicker();
         outState.putSerializable(BUNDLE_TIME_SELECTED,
                 getCalender(time));
     }
@@ -172,5 +195,33 @@ public class EditDialogFragment extends DialogFragment {
             default:
                 return null;
         }
+    }
+
+    public String getEditTitle() {
+        return mEditTitle.getText().toString();
+    }
+
+    public String getEditContent() {
+        return mEditContent.getText().toString();
+    }
+
+    public DatePicker getDatePicker() {
+        return mDatePicker;
+    }
+
+    public TimePicker getTimePicker() {
+        return mTimePicker;
+    }
+
+    public boolean isTodo() {
+        return mTodo.isChecked();
+    }
+
+    public boolean isDoing() {
+        return mDoing.isChecked();
+    }
+
+    public boolean isDone() {
+        return mDone.isChecked();
     }
 }

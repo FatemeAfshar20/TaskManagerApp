@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f1f1f1"
-    tools:context=".Controller.Fragment.EditDialogFragment">
+    tools:context=".Controller.Fragment.EditFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -139,8 +139,6 @@
         android:layout_margin="@dimen/mrg_5"
         android:padding="@dimen/pad_5"
         android:text="Close"
-        app:icon="@drawable/ic_close"
-
         />
 
 <!--    <com.google.android.material.button.MaterialButton

@@ -38,11 +38,12 @@ import java.util.UUID;
  */
 public class TaskManagerFragment extends Fragment {
     public static final String ARG_USER_ID = "User Id";
-    private ViewPager2 mViewPager2;
     private List<Fragment> mFragments = new ArrayList<>();
-    private TaskAdapter mTaskAdapter;
+
     private User mUser = new User();
+
     private TaskBDRepository mTasksRepository;
+
     private String[] mState ={TaskState.TODO.toString(),
             TaskState.DOING.toString(),TaskState.DONE.toString()};
     private Callbacks mCallbacks;
@@ -63,9 +64,7 @@ public class TaskManagerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UUID uuid = (UUID)
-                getArguments().getSerializable(ARG_USER_ID);
-        addFragment(uuid);
+        addFragment();
         setHasOptionsMenu(true);
     }
 
@@ -157,25 +156,25 @@ public class TaskManagerFragment extends Fragment {
         }
     }
 
-    public interface Callbacks {
-        void updateUI();
-    }
-
     private void setupAdapter(@NonNull View view) {
-        mViewPager2 = view.findViewById(R.id.view_pager2);
-        mTaskAdapter = new TaskAdapter(getActivity(), mFragments);
-        mViewPager2.setAdapter(mTaskAdapter);
+        ViewPager2 viewPager2 = view.findViewById(R.id.view_pager2);
+        TaskAdapter taskAdapter = new TaskAdapter(getActivity(), mFragments);
+        viewPager2.setAdapter(taskAdapter);
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
-        new TabLayoutMediator(tabLayout, mViewPager2,
+        new TabLayoutMediator(tabLayout, viewPager2,
                 (tab, position) -> tab.setText(mState[position])
         ).attach();
     }
 
-    private void addFragment(UUID uuid) {
+    private void addFragment() {
         mTasksRepository = TaskBDRepository.getInstance(getActivity());
-        mFragments.add(0, StateFragment.newInstance(mState[0],uuid));
-        mFragments.add(1, StateFragment.newInstance(mState[1],uuid));
-        mFragments.add(2, StateFragment.newInstance(mState[2],uuid));
+        mFragments.add(0, mCallbacks.getStateFragment(mState[0]));
+        mFragments.add(1, mCallbacks.getStateFragment(mState[1]));
+        mFragments.add(2, mCallbacks.getStateFragment(mState[2]));
     }
 
+    public interface Callbacks {
+        void updateUI();
+        Fragment getStateFragment(String taskState);
+    }
 }

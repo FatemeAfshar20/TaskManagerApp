@@ -28,6 +28,8 @@ public class Task implements Serializable {
     @ColumnInfo(name = TaskColumns.USERID)
     private UUID mUserId;
 
+    private String mImgAddress;
+
     public Task() {
         this(UUID.randomUUID());
     }
@@ -112,5 +114,14 @@ public class Task implements Serializable {
 
     public void setId(long id) {
         mId = id;
+    }
+
+
+    public String getImgAddress() {
+        return mImgAddress;
+    }
+
+    public void setImgAddress(String imgAddress) {
+        mImgAddress = imgAddress;
     }
 }

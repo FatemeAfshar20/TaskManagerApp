@@ -1,10 +1,13 @@
 package com.example.taskmanagerapp.Controller.Fragment;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -15,9 +18,7 @@ import com.example.taskmanagerapp.Controller.Activity.TaskManagerActivity;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.UserDBRepository;
-import com.example.taskmanagerapp.ViewElem.LoginView;
-
-import java.util.List;
+import com.google.android.material.button.MaterialButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,8 +28,10 @@ import java.util.List;
 public class LoginFragment extends Fragment {
 
     public UserDBRepository mUserRepository ;
-    private LoginView mLoginView;
     private User mUser;
+
+    private MaterialButton mButtonLogin,mButtonSign;
+    private EditText mUsername,mPassword;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -51,16 +54,24 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mLoginView = new LoginView(container, inflater, R.layout.fragment_login);
-        mLoginView.findElemLogin();
-        setListener(mLoginView);
-        return mLoginView.getView();
+        View view = inflater.inflate(R.layout.fragment_login,
+                container,
+                false);
+        findElem(view);
+        setListener();
+        return view;
     }
 
+private void findElem(View view){
+    mButtonLogin=view.findViewById(R.id.btn_login);
+    mButtonSign=view.findViewById(R.id.btn_sign);
+    mUsername=view.findViewById(R.id.username);
+    mPassword=view.findViewById(R.id.password);
+}
 
-    private void setListener(final LoginView loginView) {
+    private void setListener() {
 
-        loginView.getButtonLogin().setOnClickListener(new View.OnClickListener() {
+        mButtonLogin.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
@@ -72,7 +83,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        loginView.getButtonSign().setOnClickListener(new View.OnClickListener() {
+        mButtonSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SignActivity.start(getContext());
@@ -89,16 +100,34 @@ public class LoginFragment extends Fragment {
     }
 
     private boolean checkUserInfo() {
-        if (mUserRepository.userExist(mLoginView.getUsername())) {
+        if (mUserRepository.userExist(getUsername())) {
 
-            mUser=mUserRepository.get(mLoginView.getUsername());
+            mUser=mUserRepository.get(getUsername());
             if (isCorrectPass(mUser.getPassword(),
-                    mLoginView.getPasswordText()))
+                   getPasswordText()))
                 return true;
             else
-                LoginView.returnToast(getContext(), R.string.invalid_input);
+               returnToast(getContext(), R.string.invalid_input);
         } else
-            LoginView.returnToast(getContext(), "At first Sign Up");
+            returnToast(getContext(), "At first Sign Up");
         return false;
+    }
+
+    public String getUsername() {
+        return mUsername.getText().toString();
+    }
+
+    public String getPasswordText() {
+        return mPassword.getText().toString();
+    }
+
+    public static void returnToast(Context context, int msgId){
+        Toast.makeText(context,msgId,Toast.LENGTH_LONG)
+                .show();;
+    }
+
+    public static void returnToast(Context context,String msg){
+        Toast.makeText(context,msg,Toast.LENGTH_LONG)
+                .show();;
     }
 }

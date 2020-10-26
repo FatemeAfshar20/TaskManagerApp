@@ -23,6 +23,7 @@
 
      <!--basic color-->
     <color name="black">#000</color>
+    <color name="so_light_gray">#F2F2F2F2</color>
     <color name="white">#fff</color>
 
 </resources>

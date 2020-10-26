@@ -55,7 +55,7 @@
         android:layout_marginTop="11dp"
         android:background="#00FFFFFF"
         android:pointerIcon="hand"
-        android:src="@drawable/ic_eye_admin" />
+        android:src="@drawable/ic_eye" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/delete_task_admin"
@@ -67,7 +67,7 @@
         android:layout_marginRight="5dp"
         android:background="#00FFFFFF"
         android:pointerIcon="hand"
-        android:src="@drawable/ic_trashcan_admin" />
+        android:src="@drawable/ic_trashcan" />
 
 
 </RelativeLayout>

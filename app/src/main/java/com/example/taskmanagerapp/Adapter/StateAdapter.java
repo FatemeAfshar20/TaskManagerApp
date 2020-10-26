@@ -7,11 +7,11 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.taskmanagerapp.Controller.Fragment.EditDialogFragment;
-import com.example.taskmanagerapp.Controller.Fragment.ShowTaskDialogFragment;
+import com.example.taskmanagerapp.Controller.Fragment.BottomSheetFrag;
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
@@ -19,8 +19,7 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.text.DateFormat;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
+import java.util.UUID;
 
 public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
     public static final String
@@ -38,17 +37,14 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
 
     private User mUser;
 
-    private  OnTaskClickedListener mCallback;
-
-    private OnUpdateUI mOnUpdateUICallback;
+    private AdapterCallbacks mCallback;
 
     public StateAdapter(List<Task> userTasks, Context context,
-                        FragmentManager fragmentManager, OnTaskClickedListener callback,OnUpdateUI onUpdateUICallback) {
+                        FragmentManager fragmentManager, AdapterCallbacks callbacks) {
         mUserTasks = userTasks;
         mContext = context;
         mFragmentManager=fragmentManager;
-        mCallback =callback;
-        mOnUpdateUICallback =onUpdateUICallback;
+        mCallback =callbacks;
     }
 
     public List<Task> getUserTasks() {
@@ -81,14 +77,12 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
 
         private DateFormat mDateFormat =
                 DateFormat.getDateInstance(DateFormat.SHORT);
-        private DateFormat mTimeFormat =
-                DateFormat.getTimeInstance(DateFormat.SHORT);
-
-        private AppCompatImageButton mButtonEdit
-                ,mButtonShow,mButtonDelete;
-        private Task mTask;
+        private AppCompatImageView mTaskImg;
+        private AppCompatImageButton mButtonMenu;
         private MaterialTextView mTaskTitle, mTaskContent,
-                mTaskInitTime, mTaskInitDate,mTaskImg;
+                mTaskInitDate;
+
+        private Task mTask;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -98,49 +92,28 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
         }
 
         public void findElem(View view) {
-            mTaskImg = view.findViewById(R.id.task_img);
+            mTaskImg = view.findViewById(R.id.img_task);
             mTaskTitle = view.findViewById(R.id.task_title);
-            mTaskContent = view.findViewById(R.id.task_content);
-            mTaskInitDate = view.findViewById(R.id.task_txt_date);
-            mTaskInitTime = view.findViewById(R.id.task_txt_time);
-            mButtonEdit = view.findViewById(R.id.btn_edit);
-            mButtonShow=view.findViewById(R.id.btn_show);
-            mButtonDelete=view.findViewById(R.id.btn_delete);
+            mTaskContent = view.findViewById(R.id.content);
+            mTaskInitDate = view.findViewById(R.id.task_date);
+            mButtonMenu=view.findViewById(R.id.btn_menu);
         }
 
         private void setListener(){
-            mButtonEdit.setOnClickListener(new View.OnClickListener() {
+            mButtonMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    EditDialogFragment editDialogFragment=
-                            EditDialogFragment.newInstance(mTask);
-
-                    editDialogFragment.show(mFragmentManager,
-                            FRAGMENT_EDIT_DIALOG_FRAGMENT);
+                 mCallback.addBottomSheetFrag(mTask.getUUID());
                 }
             });
 
-            mButtonShow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ShowTaskDialogFragment showTaskDialogFragment=
-                            ShowTaskDialogFragment.newInstance(mTask.getUUID());
-
-
-                    showTaskDialogFragment.show(mFragmentManager,
-                            FRAGMENT_SHOW_DIALOG_FRAGMENT);
-                    mOnUpdateUICallback.updateUI();
-                }
-            });
-
-
-            mButtonDelete.setOnClickListener(new View.OnClickListener() {
+/*            mButtonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mCallback.onTaskDeleted(mTask);
                     mOnUpdateUICallback.updateUI();
                 }
-            });
+            });*/
         }
 
 
@@ -155,25 +128,17 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
             mTaskInitDate.setText(mDateFormat.format(
                     task.getTaskDate()
             ));
-            mTaskInitTime.setText(mTimeFormat.format(
-                    task.getTaskTime()
-            ));
-            mTaskImg.setText(task.getTaskTitle().substring(0,1));
-
             mCallback.onTaskUpdated(task);
         }
-
     }
 
 
-    public interface OnTaskClickedListener{
+    public interface AdapterCallbacks {
 
         void onTaskDeleted(Task task);
         void onTaskUpdated(Task task);
-
-    }
-
-    public interface OnUpdateUI{
         void updateUI();
+        void addBottomSheetFrag(UUID taskId);
     }
+
 }
