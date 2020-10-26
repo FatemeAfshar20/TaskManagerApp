@@ -5,12 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.TaskBDRepository;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.DateFormat;
@@ -22,9 +22,9 @@ public class ShowTaskFragment extends DialogFragment {
     private Task mTask;
     private UUID mTaskId;
 
+    private AppCompatImageView mImgTask;
     private MaterialTextView mShowTitle,mShowContent,
             mShowTime,mShowDate,mShowState;
-    private MaterialButton mButtonClose;
 
     public ShowTaskFragment() {
         // Required empty public constructor
@@ -55,27 +55,17 @@ public class ShowTaskFragment extends DialogFragment {
                 container,
                 false);
         findElem(view);
-        setListener();
         initView(mTask);
         return view;
     }
 
     public void findElem(View view){
-        mShowTitle=view.findViewById(R.id.task_title_show);
-        mShowContent=view.findViewById(R.id.task_content_show);
-        mShowTime=view.findViewById(R.id.task_time_show);
-        mShowDate=view.findViewById(R.id.task_date_show);
-        mShowState=view.findViewById(R.id.task_state_show);
-        mButtonClose=view.findViewById(R.id.dialog_close_btn);
-    }
-
-    private void setListener(){
-        mButtonClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        mShowTitle=view.findViewById(R.id.title_show);
+        mShowContent=view.findViewById(R.id.content_show);
+        mShowTime=view.findViewById(R.id.time_show);
+        mShowDate=view.findViewById(R.id.date_show);
+        mShowState=view.findViewById(R.id.state_show);
+        mImgTask=view.findViewById(R.id.img_show);
     }
 
     private void initView(Task task){

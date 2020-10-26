@@ -8,12 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.taskmanagerapp.Controller.Fragment.BottomSheetFrag;
 import com.example.taskmanagerapp.Model.Task.Task;
-import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -22,34 +19,18 @@ import java.util.List;
 import java.util.UUID;
 
 public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
-    public static final String
-            FRAGMENT_EDIT_DIALOG_FRAGMENT =
-            "Edit Dialog Fragment";
-    public static final String
-            FRAGMENT_SHOW_DIALOG_FRAGMENT =
-            "Show Task Dialog Fragment";
-
     private List<Task> mUserTasks;
 
     public Context mContext;
 
-    public FragmentManager mFragmentManager;
-
-    private User mUser;
-
     private AdapterCallbacks mCallback;
 
-    public StateAdapter(List<Task> userTasks, Context context,
-                        FragmentManager fragmentManager, AdapterCallbacks callbacks) {
+    public StateAdapter(List<Task> userTasks, Context context, AdapterCallbacks callbacks) {
         mUserTasks = userTasks;
         mContext = context;
-        mFragmentManager=fragmentManager;
         mCallback =callbacks;
     }
 
-    public List<Task> getUserTasks() {
-        return mUserTasks;
-    }
 
     public void setUserTasks(List<Task> userTasks) {
         mUserTasks = userTasks;
@@ -106,14 +87,6 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
                  mCallback.addBottomSheetFrag(mTask.getUUID());
                 }
             });
-
-/*            mButtonDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mCallback.onTaskDeleted(mTask);
-                    mOnUpdateUICallback.updateUI();
-                }
-            });*/
         }
 
 
@@ -122,7 +95,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
             updateUI(task);
         }
 
-        private void updateUI(Task task) {
+        public void updateUI(Task task) {
             mTaskTitle.setText(task.getTaskTitle());
             mTaskContent.setText(task.getTaskContent());
             mTaskInitDate.setText(mDateFormat.format(
@@ -132,12 +105,8 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
         }
     }
 
-
     public interface AdapterCallbacks {
-
-        void onTaskDeleted(Task task);
         void onTaskUpdated(Task task);
-        void updateUI();
         void addBottomSheetFrag(UUID taskId);
     }
 

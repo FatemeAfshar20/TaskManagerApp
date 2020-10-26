@@ -1,7 +1,6 @@
 package com.example.taskmanagerapp.Controller.Fragment;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,8 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
+import android.widget.Toolbar;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
 
 import com.example.taskmanagerapp.Model.Task.Task;
@@ -34,43 +36,59 @@ public class AddTaskFragment extends Fragment {
     private TaskBDRepository mTaskDBRepository;
     private Task mTask;
 
-    private TextInputEditText mEditTitle,mEditContent;
-    private MaterialButton mButtonOK,
+    private TextInputEditText mEditTitle, mEditContent;
+    private AppCompatImageButton mButtonOK,
             mButtonCancel;
 
-    private DatePicker mDatePicker;
-    private TimePicker mTimePicker;
+    private MaterialButton mBtnSetDate, mBtnSetTime;
+
+    private Toolbar mToolbar;
+
+    private OnBackPressed mCallback;
 
     public AddTaskFragment() {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static AddTaskFragment newInstance(UUID uuid, TaskState taskState) {
+    public static AddTaskFragment newInstance(UUID userId, TaskState taskState) {
         AddTaskFragment fragment = new AddTaskFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_USER_ID, uuid);
-        args.putString(ARGS_TASK_STATE,taskState.toString()
+        args.putSerializable(ARG_USER_ID, userId);
+        args.putString(ARGS_TASK_STATE, taskState.toString()
         );
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if (context instanceof  OnBackPressed)
+            mCallback=(OnBackPressed) context;
+        else throw new
+                ClassCastException(
+                        "Must Be impelement OnBackPressed");
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UUID uuid = (UUID)
                 getArguments().getSerializable(ARG_USER_ID);
         mUser = UserDBRepository.getInstance(getContext()).get(uuid);
-        mTaskDBRepository=
+        mTaskDBRepository =
                 TaskBDRepository.getInstance(
                         getContext());
+
+        getActivity().setActionBar(mToolbar);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =inflater.inflate(R.layout.fragment_add_task,
+        View view = inflater.inflate(R.layout.fragment_add_task,
                 container,
                 false);
         findElem(view);
@@ -78,41 +96,49 @@ public class AddTaskFragment extends Fragment {
         return view;
     }
 
-    public void findElem(View view){
-        mEditTitle=view.findViewById(R.id.exist_task_title);
-        mEditContent=view.findViewById(R.id.exist_task_content);
-        mButtonOK=view.findViewById(R.id.exist_dialog_ok_btn);
-        mButtonCancel=view.findViewById(R.id.exist_dialog_cancel_btn);
-        mDatePicker=view.findViewById(R.id.date_picker_exist);
-        mTimePicker=view.findViewById(R.id.time_picker_exist);
+    public void findElem(View view) {
+        mEditTitle = view.findViewById(R.id.set_title);
+        mEditContent = view.findViewById(R.id.set_content);
+        mButtonOK = view.findViewById(R.id.btn_ok);
+        mButtonCancel = view.findViewById(R.id.btn_cancel);
+        mBtnSetDate = view.findViewById(R.id.set_date);
+        mBtnSetTime = view.findViewById(R.id.set_time);
+
+        mToolbar = view.findViewById(R.id.toolbar);
     }
 
     private void setListener() {
-       mButtonOK.setOnClickListener(new View.OnClickListener() {
+        mButtonOK.setOnClickListener(new View.OnClickListener() {
 
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
                 mTask = returnNewTask();
                 mTaskDBRepository.insert(mTask);
-                sendData();
+                mCallback.finishFragment(mTask.getTaskState());
             }
         });
 
         mButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mCallback.finishFragment(mTask.getTaskState());
             }
         });
-    }
 
-    private void sendData() {
-        Fragment fragment = getTargetFragment();
-        Intent data = new Intent();
-        data.putExtra(EXTRA_NEW_TASK, mTask);
-        fragment.onActivityResult(
-                getTargetRequestCode(), Activity.RESULT_OK, data);
+        mBtnSetTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO ...
+            }
+        });
+
+        mBtnSetDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO ...
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -129,15 +155,8 @@ public class AddTaskFragment extends Fragment {
             newTask.setTaskContent("");
         newTask.setTaskState(TaskState.valueOf(getArguments().getString(ARGS_TASK_STATE)));
 
-        if (getDatePicker() != null)
-            newTask.setTaskDate(getDate(getDatePicker()));
-        else
-            newTask.setTaskDate(new Date());
-
-        if (getTimePicker() != null)
-            newTask.setTaskTime(getTime(getTimePicker()));
-        else
-            newTask.setTaskTime(new Date());
+        newTask.setTaskDate(new Date());
+        newTask.setTaskTime(new Date());
 
         newTask.setUserId(mUser.getUUID());
         return newTask;
@@ -174,27 +193,8 @@ public class AddTaskFragment extends Fragment {
         return mEditContent.getText().toString();
     }
 
-    public MaterialButton getButtonOK() {
-        return mButtonOK;
+    public interface OnBackPressed {
+        void finishFragment(TaskState taskState);
     }
 
-    public MaterialButton getButtonCancel() {
-        return mButtonCancel;
-    }
-
-    public DatePicker getDatePicker() {
-        return mDatePicker;
-    }
-
-    public TimePicker getTimePicker() {
-        return mTimePicker;
-    }
-
-    public void setDatePicker(DatePicker datePicker) {
-        mDatePicker = datePicker;
-    }
-
-    public void setTimePicker(TimePicker timePicker) {
-        mTimePicker = timePicker;
-    }
 }

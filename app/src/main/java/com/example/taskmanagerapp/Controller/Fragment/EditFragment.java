@@ -10,6 +10,7 @@ import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
 
 import com.example.taskmanagerapp.Model.Task.Task;
@@ -22,30 +23,33 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 public class EditFragment extends Fragment {
-    public static final String ARG_OLD_TASK = "Old Task";
+    public static final String ARG_TASK_ID = "Task Id";
     public static final String BUNDLE_DATE_SELECTED = "Date user Selected";
     public static final String BUNDLE_TIME_SELECTED = "Time user Selected";
-    private Task mOldTask;
+    private Task mTask;
     private TaskBDRepository mTaskDBRepository;
 
     private TextInputEditText mEditTitle,mEditContent;
-    private MaterialButton mButtonOK,
-            mButtonCancel,mButtonClose;
+    private AppCompatImageButton mButtonOK,
+            mButtonCancel;
     private MaterialRadioButton mTodo,mDoing,mDone;
 
     private DatePicker mDatePicker;
     private TimePicker mTimePicker;
 
+    private MaterialButton mBtnDate,mBtnTime;
+
     public EditFragment() {
         // Required empty public constructor
     }
 
-    public static EditFragment newInstance(Task task) {
+    public static EditFragment newInstance(UUID taskId) {
         EditFragment fragment = new EditFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_OLD_TASK, task);
+        args.putSerializable(ARG_TASK_ID, taskId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,33 +58,46 @@ public class EditFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mOldTask = (Task) getArguments().get(ARG_OLD_TASK);
+        UUID taskId= (UUID) getArguments().get(ARG_TASK_ID);
         saveInstance(savedInstanceState);
         mTaskDBRepository=TaskBDRepository.getInstance(
                 getContext());
+
+        mTask =mTaskDBRepository.get(taskId);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_edit_dialog,
+        View view=inflater.inflate(R.layout.fragment_edit_task,
                 container,
                 false);
         findElem(view);
         setListener();
+        initView();
 
         return view;
     }
 
     public void findElem(View view){
-        mEditTitle=view.findViewById(R.id.edit_title);
-        mEditContent=view.findViewById(R.id.edit_content);
-        mButtonOK=view.findViewById(R.id.dialog_ok_btn);
-        mButtonCancel=view.findViewById(R.id.dialog_cancel_btn);
+        mEditTitle=view.findViewById(R.id.set_title);
+        mEditContent=view.findViewById(R.id.set_content);
+        mButtonOK=view.findViewById(R.id.btn_ok);
+        mButtonCancel=view.findViewById(R.id.btn_cancel);
+        mBtnDate=view.findViewById(R.id.set_date);
+        mBtnTime=view.findViewById(R.id.set_time);
 
         mTodo=view.findViewById(R.id.todo);
         mDoing=view.findViewById(R.id.doing);
         mDone=view.findViewById(R.id.done);
+    }
+
+
+    private void initView(){
+        mEditTitle.setText(mTask.getTaskTitle());
+        mEditContent.setText(mTask.getTaskContent());
+        mBtnDate.setText(mTask.getTaskDate().toString());
+        mBtnTime.setText(mTask.getTaskTime().toString());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -102,8 +119,7 @@ public class EditFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 userChangingTask();
-
-                mTaskDBRepository.update(mOldTask);
+                mTaskDBRepository.update(mTask);
             }
         });
 
@@ -120,26 +136,24 @@ public class EditFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void userChangingTask() {
         if (getEditTitle().equals(""))
-            mOldTask.setTaskTitle(getEditTitle());
+            mTask.setTaskTitle(getEditTitle());
 
         if (!getEditContent().equals(""))
-            mOldTask.setTaskContent(getEditContent());
+            mTask.setTaskContent(getEditContent());
 
         if (getTimePicker() != null)
-            mOldTask.setTaskTime(getNewTime(getTimePicker()));
+            mTask.setTaskTime(getNewTime(getTimePicker()));
 
         if (getDatePicker() != null)
-            mOldTask.setTaskDate(
+            mTask.setTaskDate(
                     getNewDate(getDatePicker()));
 
         if (isTodo())
-            mOldTask.setTaskState(TaskState.TODO);
+            mTask.setTaskState(TaskState.TODO);
         else if (isDoing())
-            mOldTask.setTaskState(TaskState.DOING);
+            mTask.setTaskState(TaskState.DOING);
         else if (isDone())
-            mOldTask.setTaskState(TaskState.DONE);
-
-      //  mOldTask.setUserId(mUser.getUUID());
+            mTask.setTaskState(TaskState.DONE);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

@@ -13,12 +13,12 @@
         android:background="@color/light_gray" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/show"
+        android:id="@+id/more"
         style="@style/BottomSheetTextStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/width_56"
-        android:text="@string/show"
-        app:icon="@drawable/ic_eye" />
+        android:text="@string/more"
+        app:icon="@drawable/ic_more" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/edit"

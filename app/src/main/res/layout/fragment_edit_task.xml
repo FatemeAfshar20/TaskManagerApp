@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/common_toolbar" />
+
+        <include layout="@layout/common_part_view" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/new_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/mrg_5"
+            android:padding="@dimen/pad_10"
+            android:text="@string/new_state"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <RadioGroup
+            android:id="@+id/radio_state_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/mrg_10"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/todo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/todo" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/doing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/doing" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="@string/done" />
+        </RadioGroup>
+
+    </LinearLayout>
+
+</ScrollView>

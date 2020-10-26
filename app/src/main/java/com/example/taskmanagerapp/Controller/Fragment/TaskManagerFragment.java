@@ -76,7 +76,6 @@ public class TaskManagerFragment extends Fragment {
                 R.layout.fragment_task_maneger,
                 container,
                 false);
-
         return view;
     }
 
@@ -93,10 +92,8 @@ public class TaskManagerFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
         super.onViewCreated(view, savedInstanceState);
         setupAdapter(view);
-
     }
 
     @Override

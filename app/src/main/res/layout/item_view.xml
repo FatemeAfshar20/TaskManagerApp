@@ -17,7 +17,8 @@
             android:id="@+id/img_task"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:src="@android:drawable/presence_busy"/>
+            android:src="@drawable/img_test"
+            />
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.textview.MaterialTextView
@@ -65,8 +66,8 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_below="@id/card_view"
-        android:background="@color/light_gray"
-        android:layout_margin="5dp"
+        android:background="#BDBDBA"
+        android:layout_margin="@dimen/mrg_10"
         />
 
 </RelativeLayout>

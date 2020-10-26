@@ -124,28 +124,17 @@ public class StateFragment extends Fragment {
     private void setupAdapter() {
         mStateAdapter=new StateAdapter(
                 mTaskRepository.getTaskStateList(mUserId,mStrTaskState)
-                , getContext(), getFragmentManager(),
+                , getContext(),
                 new StateAdapter.AdapterCallbacks() {
-                    @Override
-                    public void onTaskDeleted(Task task) {
-                        mTaskRepository.delete(task);
-                        updateAdapter();
-                    }
-
                     @Override
                     public void onTaskUpdated(Task task) {
 
                     }
 
                     @Override
-                    public void updateUI() {
-
-                    }
-
-                    @Override
                     public void addBottomSheetFrag(UUID taskId) {
-                            BottomSheetFrag bottomSheetFrag=
-                                    BottomSheetFrag.newInstance(taskId,TaskState.valueOf(mStrTaskState));
+                        BottomSheetFrag bottomSheetFrag=
+                                BottomSheetFrag.newInstance(taskId,TaskState.valueOf(mStrTaskState));
 
                         String tag = " Fragment Bottom Sheet";
                         bottomSheetFrag.show(getActivity().getSupportFragmentManager(), tag);
@@ -176,13 +165,12 @@ public class StateFragment extends Fragment {
         mButtonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.onClickAddTask(new Task().getUUID(),
-                        TaskState.valueOf(mStrTaskState));
+                mCallbacks.onClickAddTask(TaskState.valueOf(mStrTaskState));
             }
         });
     }
 
    public interface OnAddingTask{
-        void onClickAddTask(UUID taskId,TaskState taskState);
+        void onClickAddTask(TaskState taskState);
     }
 }
