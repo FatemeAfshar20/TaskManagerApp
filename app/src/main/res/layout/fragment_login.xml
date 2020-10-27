@@ -12,39 +12,48 @@
         android:layout_width="214dp"
         android:layout_height="173dp"
         android:background="@drawable/login_img"
-        android:layout_margin="@dimen/mrg_5"
+        android:layout_margin="@dimen/mrg_10"
         />
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="300dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:hint="@string/userneme"
+        android:layout_margin="@dimen/mrg_10"
+        android:background="@drawable/indigo_border"
+        >
 
         <EditText
             android:id="@+id/username"
-            android:layout_width="300dp"
-            android:layout_height="64dp"
-            android:layout_gravity="center"
-            android:background="@drawable/indigo_light_border"
-            android:hint="@string/userneme"
-            android:padding="10dp"
-            android:textColor="@color/black" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/pad_10"
+            android:layout_margin="@dimen/mrg_5"
+            android:background="@color/white"
+            android:textColor="@color/black"
+            />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="300dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:background="@drawable/indigo_light_border"
+        android:hint="@string/password"
+        android:inputType="textPassword">
 
         <EditText
             android:id="@+id/password"
-            android:layout_width="300dp"
-            android:layout_height="64dp"
-            android:layout_gravity="center"
-            android:background="@drawable/indigo_border"
-            android:hint="@string/password"
-            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:padding="@dimen/pad_10"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:layout_margin="@dimen/mrg_5"
+            android:background="@color/white"
+            />
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout

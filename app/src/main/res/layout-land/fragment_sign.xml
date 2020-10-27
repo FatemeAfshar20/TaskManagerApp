@@ -58,7 +58,7 @@
             android:layout_width="300dp"
             android:layout_height="64dp"
             android:layout_gravity="center"
-            android:background="@drawable/purple_so_light"
+            android:background="@drawable/purple_so_light_border"
             android:hint="@string/admin_code"
             android:padding="@dimen/pad_10"
             android:textColor="@color/black" />

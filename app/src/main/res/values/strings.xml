@@ -44,4 +44,12 @@
     <string name="delete">Delete</string>
     <string name="state">State</string>
     <string name="no_content">No content</string>
+
+    <string name="all_task_info">
+        Title: %1$s
+        Content: %2$s
+        State: %3$s
+        Date: %4$s
+        Time: %5$s
+    </string>
 </resources>

@@ -133,11 +133,8 @@ public class StateFragment extends Fragment {
 
                     @Override
                     public void addBottomSheetFrag(UUID taskId) {
-                        BottomSheetFrag bottomSheetFrag=
-                                BottomSheetFrag.newInstance(taskId,TaskState.valueOf(mStrTaskState));
-
-                        String tag = " Fragment Bottom Sheet";
-                        bottomSheetFrag.show(getActivity().getSupportFragmentManager(), tag);
+                            mCallbacks.onAddBottomSheetFragment(
+                                    taskId,mStrTaskState);
                     }
                 });
 
@@ -172,5 +169,6 @@ public class StateFragment extends Fragment {
 
    public interface OnAddingTask{
         void onClickAddTask(TaskState taskState);
+        void onAddBottomSheetFragment(UUID taskId,String taskState);
     }
 }

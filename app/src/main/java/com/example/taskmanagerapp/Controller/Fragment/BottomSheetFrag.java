@@ -1,9 +1,11 @@
 package com.example.taskmanagerapp.Controller.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ShareCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import com.example.taskmanagerapp.Repository.TaskBDRepository;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 
+import java.text.DateFormat;
 import java.util.UUID;
 
 /**
@@ -102,7 +105,13 @@ public class BottomSheetFrag extends BottomSheetDialogFragment {
         mBtnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent=ShareCompat.IntentBuilder
+                        .from(getActivity()).
+                                setText(getInfoTask()).
+                                setType("text/plain").getIntent();
 
+                if (intent.resolveActivity(getActivity().getPackageManager())!=null)
+                    startActivity(intent);
             }
         });
 
@@ -120,6 +129,18 @@ public class BottomSheetFrag extends BottomSheetDialogFragment {
                mCallback.onClickDeleteBtn(mTask);
             }
         });
+    }
+
+    private String getInfoTask(){
+
+        return getString(R.string.all_task_info,
+                mTask.getTaskTitle(),
+                mTask.getTaskContent(),
+                mTask.getTaskState().toString(),
+                DateFormat.getDateInstance(DateFormat.SHORT).
+                        format(mTask.getTaskDate()),
+                DateFormat.getTimeInstance(DateFormat.SHORT).
+                        format(mTask.getTaskTime()));
     }
 
     public interface onClickItem{

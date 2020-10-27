@@ -29,7 +29,6 @@ import java.util.UUID;
 public class TaskManagerActivity extends SingleFragment
 implements TaskManagerFragment.Callbacks,StateFragment.OnAddingTask
 ,AddTaskFragment.OnBackPressed,BottomSheetFrag.onClickItem{
-    public static final String FRAGMENT_BOTTOM_SHEET_DIALOG = "Bottom Sheet Dialog Fragment";
     private UUID mUserId;
     public static final String EXTRA_USER_ID =
             "com.example.taskmanagerapp.User Id";
@@ -69,6 +68,15 @@ implements TaskManagerFragment.Callbacks,StateFragment.OnAddingTask
     }
 
     @Override
+    public void onAddBottomSheetFragment(UUID taskId,String taskState) {
+        BottomSheetFrag bottomSheetFrag=
+                BottomSheetFrag.newInstance(taskId,TaskState.valueOf(taskState));
+
+        String tag = " Fragment Bottom Sheet";
+        bottomSheetFrag.show(getSupportFragmentManager(), tag);
+    }
+
+    @Override
     public void finishFragment(TaskState taskState) {
         getSupportFragmentManager().beginTransaction().
                 replace(R.id.fragment_container,
@@ -97,8 +105,8 @@ implements TaskManagerFragment.Callbacks,StateFragment.OnAddingTask
 
     @Override
     public void onClickDeleteBtn(Task task) {
-        StateFragment stateFragment=StateFragment.newInstance(
-                task.getTaskState().toString(),task.getUUID());
+        StateFragment stateFragment= (StateFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_container);
 
         stateFragment.updateUI();
     }
