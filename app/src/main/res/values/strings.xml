@@ -52,4 +52,7 @@
         Date: %4$s
         Time: %5$s
     </string>
+    <string name="go_to_user_task_manager">Go to user task manager</string>
+    <string name="number_task">Number Task: </string>
+    <string name="date_membership">Date Membership :</string>
 </resources>

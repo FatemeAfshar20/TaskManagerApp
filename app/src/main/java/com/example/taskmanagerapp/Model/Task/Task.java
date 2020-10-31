@@ -27,7 +27,7 @@ public class Task implements Serializable {
     private Date mTaskTime;
     @ColumnInfo(name = TaskColumns.USERID)
     private UUID mUserId;
-
+    @ColumnInfo(name = TaskColumns.IMAGEADDRESS)
     private String mImgAddress;
 
     public Task() {
@@ -40,9 +40,14 @@ public class Task implements Serializable {
         mTaskTime = new Date();
     }
 
-    public Task(UUID UUID, String taskTitle,
-                String taskContent, TaskState taskState,
-                Date taskDate, Date taskTime, UUID userId) {
+    public Task(UUID UUID,
+                String taskTitle,
+                String taskContent,
+                TaskState taskState,
+                Date taskDate,
+                Date taskTime,
+                UUID userId,
+                String imgAddress) {
         mUUID = UUID;
         mTaskTitle = taskTitle;
         mTaskContent = taskContent;
@@ -50,6 +55,7 @@ public class Task implements Serializable {
         mTaskDate = taskDate;
         mTaskTime = taskTime;
         mUserId = userId;
+        mImgAddress = imgAddress;
     }
 
     public UUID getUUID() {
@@ -121,7 +127,9 @@ public class Task implements Serializable {
         return mImgAddress;
     }
 
-    public void setImgAddress(String imgAddress) {
-        mImgAddress = imgAddress;
+    public void setImgAddress(String imgPath) {
+        mImgAddress = imgPath;
+
+
     }
 }

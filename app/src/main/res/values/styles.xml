@@ -34,4 +34,10 @@
     <style name="FloatingActionButtonBackgroundColor" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
         <item name="backgroundTint">@color/beauty_yellow</item>
     </style>
+
+    <style name="AdminItemTextStyle">
+        <item name="android:textSize">13sp</item>
+        <item name="android:padding">@dimen/pad_5</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

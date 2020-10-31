@@ -87,7 +87,6 @@ private void findElem(View view){
             @Override
             public void onClick(View v) {
                 SignActivity.start(getContext());
-                getActivity().finish();
             }
         });
 
@@ -123,7 +122,7 @@ private void findElem(View view){
 
     public static void returnToast(Context context, int msgId){
         Toast.makeText(context,msgId,Toast.LENGTH_LONG)
-                .show();;
+                .show();
     }
 
     public static void returnToast(Context context,String msg){

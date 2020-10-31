@@ -266,4 +266,5 @@ public class TaskBDRepository implements IRepository<Task> {
                 new TaskCursorWrapper(cursor);
         return taskCursorWrapper;
     }
+
 }

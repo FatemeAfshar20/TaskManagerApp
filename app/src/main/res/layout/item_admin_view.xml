@@ -1,73 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="80dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/beauty_yellow"
     android:layout_margin="@dimen/mrg_5"
     >
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/user__name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Kamran Jafari"
-        android:textSize="18sp"
-        android:textColor="@color/red"
-        android:padding="@dimen/pad_5"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_prof"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/img_admin_prof"
         android:layout_margin="@dimen/mrg_5"
-        android:textStyle="bold"
         />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/num_of_task_show"
+        android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="@dimen/mrg_5"
-        android:layout_toEndOf="@+id/user__name"
-        android:layout_toRightOf="@+id/user__name"
-        android:padding="@dimen/pad_5"
-        android:text="Number Of Task"
-        android:textColor="@color/indigo"
-        android:textSize="18sp"
-        tools:text="Number Of Task : 20" />
+        android:layout_toEndOf="@+id/img_prof"
+        android:layout_toRightOf="@+id/img_prof"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:layout_margin="@dimen/mrg_5"
+        tools:text="Kamran" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btn_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="#00FFFFFF"
+        android:src="@drawable/ic_menu"
+        android:layout_margin="@dimen/mrg_5"
+        />
 
     <com.google.android.material.textview.MaterialTextView
-    android:id="@+id/date_membership"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/num_of_task_show"
-    android:padding="@dimen/pad_5"
-    android:layout_margin="@dimen/mrg_5"
-    android:text="Number Of Task"
-    android:textStyle="bold"
-    android:textColor="@color/black"
-    android:textSize="18sp"
-    tools:text="Date Membership : 20"/>
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/show_all_task"
+        android:id="@+id/num_task_user"
+        style="@style/AdminItemTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="11dp"
-        android:background="#00FFFFFF"
-        android:pointerIcon="hand"
-        android:src="@drawable/ic_eye" />
+        android:layout_below="@+id/user_name"
+        android:layout_toEndOf="@+id/img_prof"
+        android:layout_toRightOf="@+id/img_prof"
+        android:layout_marginTop="@dimen/mrg_10"
+        android:text="@string/number_task"
+        />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/delete_task_admin"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/date_membership"
+        style="@style/AdminItemTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/user_name"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/show_all_task"
-        android:layout_marginTop="2dp"
-        android:layout_marginRight="5dp"
-        android:background="#00FFFFFF"
-        android:pointerIcon="hand"
-        android:src="@drawable/ic_trashcan" />
-
+        android:layout_marginTop="@dimen/mrg_10"
+        android:text="@string/date_membership"
+        />
 
 </RelativeLayout>

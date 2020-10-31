@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.R;
+import com.example.taskmanagerapp.Utils.DateUtils;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.DateFormat;
@@ -56,12 +57,11 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
 
     public class Holder extends RecyclerView.ViewHolder {
 
-        private DateFormat mDateFormat =
-                DateFormat.getDateInstance(DateFormat.SHORT);
         private AppCompatImageView mTaskImg;
         private AppCompatImageButton mButtonMenu;
         private MaterialTextView mTaskTitle, mTaskContent,
                 mTaskInitDate;
+        private AppCompatImageView mImageTask;
 
         private Task mTask;
 
@@ -78,6 +78,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
             mTaskContent = view.findViewById(R.id.content);
             mTaskInitDate = view.findViewById(R.id.task_date);
             mButtonMenu=view.findViewById(R.id.btn_menu);
+            mImageTask=view.findViewById(R.id.image_task);
         }
 
         private void setListener(){
@@ -98,7 +99,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
         public void updateUI(Task task) {
             mTaskTitle.setText(task.getTaskTitle());
             mTaskContent.setText(task.getTaskContent());
-            mTaskInitDate.setText(mDateFormat.format(
+            mTaskInitDate.setText(DateUtils.getShortDateFormat(
                     task.getTaskDate()
             ));
             mCallback.onTaskUpdated(task);

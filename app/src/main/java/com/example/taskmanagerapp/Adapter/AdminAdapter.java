@@ -12,24 +12,31 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskmanagerapp.Controller.Activity.TaskManagerActivity;
+import com.example.taskmanagerapp.Controller.Fragment.BottomSheetAdminFragment;
+import com.example.taskmanagerapp.Controller.Fragment.BottomSheetFrag;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.IRepository;
 import com.example.taskmanagerapp.Repository.TaskBDRepository;
 import com.example.taskmanagerapp.Repository.UserDBRepository;
+import com.example.taskmanagerapp.Utils.DateUtils;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
+import java.util.UUID;
 
 public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
     private List<User> mUserList;
     private Context mContext;
     private IRepository<User> mUserRepository;
+    private BottomSheetFragmentShow mCallbacks;
 
-    public AdminAdapter(List<User> userList, Context context) {
+    public AdminAdapter(List<User> userList, Context context
+            ,BottomSheetFragmentShow callbacks) {
         mUserList = userList;
         mContext = context;
         mUserRepository = UserDBRepository.getInstance(mContext);
+        mCallbacks=callbacks;
     }
 
     public List<User> getUserList() {
@@ -61,8 +68,7 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
     class Holder extends RecyclerView.ViewHolder {
         private MaterialTextView mUsername, mNumOfTask,
                 mDateMemberShip;
-        private AppCompatImageButton mButtonTaskShow,
-                mButtonTrashcan;
+        private AppCompatImageButton mButtonMenu;
 
         private User mUser = new User();
 
@@ -73,39 +79,36 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
         }
 
         private void findElem(View view) {
-            mUsername = view.findViewById(R.id.user__name);
-            mNumOfTask = view.findViewById(R.id.num_of_task_show);
+            mUsername = view.findViewById(R.id.user_name);
+            mNumOfTask = view.findViewById(R.id.num_task_user);
             mDateMemberShip = view.findViewById(R.id.date_membership);
-            mButtonTaskShow = view.findViewById(R.id.show_all_task);
-            mButtonTrashcan = view.findViewById(R.id.delete_task_admin);
+            mButtonMenu=view.findViewById(R.id.btn_menu);
         }
 
         public void bind(User user) {
             mUser = user;
             TaskBDRepository taskDBRepository =
                     TaskBDRepository.getInstance(mContext);
-         int numOfTask = taskDBRepository.
-                 getUserTask(mUser.getUUID()).size();
+            int numOfTask = taskDBRepository.
+                    getUserTask(mUser.getUUID()).size();
             mUsername.setText(user.getUsername());
-            mNumOfTask.setText("Number Of Task : " + numOfTask);
-            mDateMemberShip.setText(user.getMemberShip().toString());
+            mNumOfTask.setText(
+                    mNumOfTask.getText().toString() + numOfTask);
+            mDateMemberShip.setText(
+                    mDateMemberShip.getText().toString()+
+                            DateUtils.getShortDateFormat(user.getMemberShip()));
         }
 
         private void setListener() {
-            mButtonTaskShow.setOnClickListener(new View.OnClickListener() {
+            mButtonMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    TaskManagerActivity.start(mContext, mUser.getUUID());
-                }
-            });
-
-            mButtonTrashcan.setOnClickListener(new View.OnClickListener() {
-                @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                @Override
-                public void onClick(View v) {
-                    mUserRepository.delete(mUser);
+                        mCallbacks.getBottomSheetFrag(mUser.getUUID());
                 }
             });
         }
+    }
+    public interface BottomSheetFragmentShow{
+        void getBottomSheetFrag(UUID userId);
     }
 }

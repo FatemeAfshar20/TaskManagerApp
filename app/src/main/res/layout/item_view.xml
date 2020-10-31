@@ -63,11 +63,13 @@
         />
 
     <View
-        android:layout_width="match_parent"
+        android:layout_width="290dp"
         android:layout_height="2dp"
         android:layout_below="@id/card_view"
+        android:layout_alignParentRight="true"
         android:background="#BDBDBA"
-        android:layout_margin="@dimen/mrg_10"
+        android:layout_margin="@dimen/mrg_5"
+        android:layout_marginTop="@dimen/mrg_5"
         />
 
 </RelativeLayout>

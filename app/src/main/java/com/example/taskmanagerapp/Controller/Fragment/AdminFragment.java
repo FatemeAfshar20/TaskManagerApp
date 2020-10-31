@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toolbar;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -24,6 +25,8 @@ import com.example.taskmanagerapp.Repository.UserDBRepository;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AdminFragment#newInstance} factory method to
@@ -31,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class AdminFragment extends Fragment {
 
+    public static final String FRAGMENT_BOTTOM_SHEET_FRAGMENT = "Bottom Sheet Fragment";
     private RecyclerView mRecyclerView;
     private UserDBRepository mUserRepository;
     private AdminAdapter mAdminAdapter;
@@ -46,11 +50,17 @@ public class AdminFragment extends Fragment {
         return fragment;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mUserRepository= UserDBRepository.getInstance(getContext());
+        Toolbar toolbar=new Toolbar(getContext());
+
+        getActivity().setActionBar(toolbar);
+
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -59,7 +69,17 @@ public class AdminFragment extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_admin, container, false);
         findElem(view);
-        mAdminAdapter=new AdminAdapter(mUserRepository.getList(),getContext());
+        mAdminAdapter=new AdminAdapter(mUserRepository.getList(), getContext(), new AdminAdapter.BottomSheetFragmentShow() {
+            @Override
+            public void getBottomSheetFrag(UUID userId) {
+                BottomSheetAdminFragment
+                        bottomSheetAdminFragment=
+                        BottomSheetAdminFragment.newInstance(userId);
+
+                bottomSheetAdminFragment.show(getFragmentManager(),
+                        FRAGMENT_BOTTOM_SHEET_FRAGMENT);
+            }
+        });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdminAdapter);
         return view;

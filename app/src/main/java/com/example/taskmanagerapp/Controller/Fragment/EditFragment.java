@@ -1,7 +1,16 @@
 package com.example.taskmanagerapp.Controller.Fragment;
 
+import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +18,26 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.TaskBDRepository;
+import com.example.taskmanagerapp.Utils.DateUtils;
+import com.example.taskmanagerapp.Utils.PhotoUtils;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.radiobutton.MaterialRadioButton;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -29,18 +46,24 @@ public class EditFragment extends Fragment {
     public static final String ARG_TASK_ID = "Task Id";
     public static final String BUNDLE_DATE_SELECTED = "Date user Selected";
     public static final String BUNDLE_TIME_SELECTED = "Time user Selected";
+    public static final String TAG_EDIT_FRAGMENT = "Edit Fragment Tag";
+    public static final int REQUEST_CODE_CAMERA = 1;
+    public static final String AUTHORITY = "com.example.taskmanagerapp.fileprovider";
     private Task mTask;
     private TaskBDRepository mTaskDBRepository;
 
     private TextInputEditText mEditTitle,mEditContent;
     private AppCompatImageButton mButtonOK,
-            mButtonCancel;
+            mButtonCancel,mButtonCamera;
+    private AppCompatImageView mImageTask;
     private MaterialRadioButton mTodo,mDoing,mDone;
 
     private DatePicker mDatePicker;
     private TimePicker mTimePicker;
 
     private MaterialButton mBtnDate,mBtnTime;
+
+    private File mPhotoFile;
 
     public EditFragment() {
         // Required empty public constructor
@@ -79,6 +102,32 @@ public class EditFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode!= Activity.RESULT_OK || data==null)
+            return;
+        if (requestCode==REQUEST_CODE_CAMERA){
+            Uri photoUri = FileProvider.getUriForFile(getActivity(),
+                    AUTHORITY, mPhotoFile);
+
+            getActivity().revokeUriPermission(photoUri,
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+            updatePhoto();
+        }
+    }
+
+    public void updatePhoto() {
+        if (mPhotoFile == null || !mPhotoFile.exists())
+            return;
+
+        Bitmap image=  PhotoUtils.getScalePhoto(
+                mPhotoFile.getAbsolutePath(), getActivity());
+
+         mImageTask.setImageBitmap(image);
+    }
+
     public void findElem(View view){
         mEditTitle=view.findViewById(R.id.set_title);
         mEditContent=view.findViewById(R.id.set_content);
@@ -86,6 +135,9 @@ public class EditFragment extends Fragment {
         mButtonCancel=view.findViewById(R.id.btn_cancel);
         mBtnDate=view.findViewById(R.id.set_date);
         mBtnTime=view.findViewById(R.id.set_time);
+
+        mButtonCamera=view.findViewById(R.id.camera);
+        mImageTask=view.findViewById(R.id.image_task);
 
         mTodo=view.findViewById(R.id.todo);
         mDoing=view.findViewById(R.id.doing);
@@ -96,8 +148,9 @@ public class EditFragment extends Fragment {
     private void initView(){
         mEditTitle.setText(mTask.getTaskTitle());
         mEditContent.setText(mTask.getTaskContent());
-        mBtnDate.setText(mTask.getTaskDate().toString());
-        mBtnTime.setText(mTask.getTaskTime().toString());
+        mBtnDate.setText(DateUtils.getShortDateFormat(mTask.getTaskDate()));
+        mBtnTime.setText(DateUtils.getShortTimeFormat(mTask.getTaskTime()));
+        updatePhoto();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -120,6 +173,7 @@ public class EditFragment extends Fragment {
             public void onClick(View v) {
                 userChangingTask();
                 mTaskDBRepository.update(mTask);
+                getActivity().getFragmentManager().popBackStack();
             }
         });
 
@@ -128,9 +182,75 @@ public class EditFragment extends Fragment {
             public void onClick(View v) {
 
                 //TODO......
-
+                getActivity().onBackPressed();
             }
         });
+
+       mButtonCamera.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               intentPhoto();
+           }
+       });
+
+       mBtnDate.setOnClickListener(new View.OnClickListener() {
+           @RequiresApi(api = Build.VERSION_CODES.N)
+           @Override
+           public void onClick(View v) {
+               DatePickerDialog datePickerDialog=new DatePickerDialog(getContext());
+
+               datePickerDialog.show();
+
+               //TODO ....
+           }
+       });
+
+       mBtnTime.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               TimePickerDialog timePickerDialog=new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                   @Override
+                   public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                            //TODO ....
+                   }
+               },9,28,true);
+
+               timePickerDialog.show();
+           }
+       });
+    }
+
+
+    private File createImageFile() throws IOException {
+        String timeStamp=
+                new SimpleDateFormat(
+                        "yyyyMMdd_HHmmss").
+                        format(new Date());
+        String imageName="JPEG"+timeStamp+"_";
+        File storageDir =getActivity().getFilesDir();
+        File imageFile=File.createTempFile(imageName,
+                ".jpg",
+                storageDir);
+        mTask.setImgAddress(imageFile.getAbsolutePath());
+        return imageFile;
+    }
+    private void intentPhoto() {
+        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePicture.resolveActivity(getActivity().getPackageManager()) != null) {
+            mPhotoFile = null;
+            try {
+                mPhotoFile = createImageFile();
+            } catch (IOException e) {
+                Log.e(TAG_EDIT_FRAGMENT,
+                        "Device for Take Picture not found");
+            }
+        }
+        if (mPhotoFile != null) {
+            Uri photoUri = FileProvider.getUriForFile(getActivity(),
+                    AUTHORITY, mPhotoFile);
+            takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+            startActivityForResult(takePicture, REQUEST_CODE_CAMERA);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -183,11 +303,11 @@ public class EditFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        Date date=getNewDate(getDatePicker());
+        /*Date date=getNewDate(getDatePicker());
         outState.putSerializable(BUNDLE_DATE_SELECTED,date);
         TimePicker time=getTimePicker();
         outState.putSerializable(BUNDLE_TIME_SELECTED,
-                getCalender(time));
+                getCalender(time));*/
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -210,6 +330,8 @@ public class EditFragment extends Fragment {
                 return null;
         }
     }
+
+
 
     public String getEditTitle() {
         return mEditTitle.getText().toString();

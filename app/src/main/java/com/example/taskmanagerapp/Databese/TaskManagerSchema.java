@@ -29,6 +29,7 @@ public final class TaskManagerSchema {
             public static final String TIME="time";
             public static final String STATE="state";
             public static final String USERID="userId";
+            public static final String IMAGEADDRESS="image address";
         }
 
     }

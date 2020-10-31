@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.TaskBDRepository;
+import com.example.taskmanagerapp.Utils.DateUtils;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.DateFormat;
@@ -72,9 +73,7 @@ public class ShowTaskFragment extends DialogFragment {
         mShowTitle.setText(task.getTaskTitle());
         mShowContent.setText(task.getTaskContent());
         mShowState.setText(task.getTaskState().toString());
-        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
-        mShowDate.setText(dateFormat.format(task.getTaskDate()));
-        dateFormat =DateFormat.getTimeInstance(DateFormat.SHORT);
-        mShowTime.setText(dateFormat.format(task.getTaskTime()));
+        mShowDate.setText(DateUtils.getShortDateFormat(task.getTaskDate()));
+        mShowTime.setText(DateUtils.getShortTimeFormat(task.getTaskTime()));
     }
 }

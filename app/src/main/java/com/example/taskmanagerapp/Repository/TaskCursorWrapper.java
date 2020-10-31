@@ -35,7 +35,7 @@ public class TaskCursorWrapper extends CursorWrapper {
         UUID userId=UUID.fromString(
                 getString(getColumnIndex(TaskColumns.USERID)));
 
-        return new Task(uuid,title,content,taskState,date,time,userId);
+        return new Task();
     }
 
     private TaskState getTaskState(){

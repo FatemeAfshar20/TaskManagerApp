@@ -99,6 +99,7 @@ public class BottomSheetFrag extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                     mCallback.onClickMoreBtn(mTaskId);
+                    dismiss();
             }
         });
 
@@ -112,6 +113,8 @@ public class BottomSheetFrag extends BottomSheetDialogFragment {
 
                 if (intent.resolveActivity(getActivity().getPackageManager())!=null)
                     startActivity(intent);
+
+                dismiss();
             }
         });
 
@@ -119,6 +122,8 @@ public class BottomSheetFrag extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 mCallback.onClickEditBtn(mTaskId);
+
+                dismiss();
             }
         });
 
@@ -127,6 +132,8 @@ public class BottomSheetFrag extends BottomSheetDialogFragment {
             public void onClick(View v) {
                mRepository.delete(mTask);
                mCallback.onClickDeleteBtn(mTask);
+
+                dismiss();
             }
         });
     }

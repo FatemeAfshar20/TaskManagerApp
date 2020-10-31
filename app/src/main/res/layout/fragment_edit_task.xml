@@ -11,7 +11,8 @@
 
         <include layout="@layout/common_toolbar" />
 
-        <include layout="@layout/common_part_view" />
+        <include
+            layout="@layout/common_part_view" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/new_state"
