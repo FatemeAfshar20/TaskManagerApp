@@ -4,6 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -18,11 +21,13 @@ import com.example.taskmanagerapp.R;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
+public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> implements Filterable {
     public static final String
             FRAGMENT_EDIT_DIALOG_FRAGMENT =
             "Edit Dialog Fragment";
@@ -31,12 +36,11 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
             "Show Task Dialog Fragment";
 
     private List<Task> mUserTasks;
+    private List<Task> mSearchTasks;
 
     public Context mContext;
 
     public FragmentManager mFragmentManager;
-
-    private User mUser;
 
     private  OnTaskClickedListener mCallback;
 
@@ -49,6 +53,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
         mFragmentManager=fragmentManager;
         mCallback =callback;
         mOnUpdateUICallback =onUpdateUICallback;
+        mSearchTasks=new ArrayList<>(userTasks);
     }
 
     public List<Task> getUserTasks() {
@@ -75,6 +80,41 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> {
     @Override
     public int getItemCount() {
         return mUserTasks.size();
+    }
+
+
+    private Filter mFilterTask=new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Task> filterTaskList=new ArrayList<>();
+            if (constraint==null || constraint.length()==0)
+                filterTaskList.addAll(mSearchTasks);
+            else {
+                String filterPattern=constraint.toString().toLowerCase().trim();
+
+                for (Task task : mSearchTasks) {
+                    if (task.getTaskTitle().contains(filterPattern) || task.getTaskContent().contains(filterPattern))
+                        filterTaskList.add(task);
+                }
+            }
+            FilterResults filterResults=new FilterResults();
+            filterResults.values=filterTaskList;
+
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+                mUserTasks.clear();
+                mUserTasks.addAll((List) results.values);
+
+                notifyDataSetChanged();
+        }
+    };
+
+    @Override
+    public Filter getFilter() {
+        return mFilterTask;
     }
 
     public class Holder extends RecyclerView.ViewHolder {
