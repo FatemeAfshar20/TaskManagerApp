@@ -49,11 +49,11 @@
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/pad_10"
-            android:textColor="@color/black"
             android:layout_margin="@dimen/mrg_5"
             android:background="@color/white"
-            />
+            android:inputType="number|textPassword"
+            android:padding="@dimen/pad_10"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout

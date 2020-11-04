@@ -3,11 +3,19 @@ package com.example.taskmanagerapp.Controller.Fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatImageView;
+
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.SearchView;
+import android.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -64,6 +72,7 @@ public class StateFragment extends Fragment {
                     "Must be implement OnAddingTask interface");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,8 +84,11 @@ public class StateFragment extends Fragment {
 
         mStrTaskState=
                 getArguments().getString(ARG_STATE);
+
+        setHasOptionsMenu(true);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -86,10 +98,70 @@ public class StateFragment extends Fragment {
                container,
                false);
 
+
+        /*toolbar.inflateMenu(R.menu.menu_state);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                if (item.getItemId()==R.id.action_search) {
+                    Menu menu=toolbar.getMenu();
+
+                    MenuItem menuItem=menu.findItem(R.id.action_search);
+
+                    SearchView searchView = (SearchView) menuItem.getActionView();
+
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            mStateAdapter.getFilter().filter(newText);
+                            return false;
+                        }
+                    });
+
+                    return true;
+                }else
+                    return false;
+            }
+        });*/
+
         findElem(view);
         setListener();
         setupAdapter();
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_state,menu);
+
+        MenuItem searchItem=menu.findItem(R.id.action_search);
+
+        SearchView searchView= (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mStateAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 
     public void findElem(View view){

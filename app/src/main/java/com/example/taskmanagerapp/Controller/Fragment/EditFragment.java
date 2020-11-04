@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -89,6 +90,7 @@ public class EditFragment extends Fragment {
         mTask =mTaskDBRepository.get(taskId);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -99,6 +101,8 @@ public class EditFragment extends Fragment {
         setListener();
         initView();
 
+        Toolbar toolbar=view.findViewById(R.id.toolbar);
+        getActivity().setActionBar(toolbar);
         return view;
     }
 
