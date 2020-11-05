@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.taskmanagerapp.Controller.Activity.AdminActivity;
 import com.example.taskmanagerapp.Controller.Activity.SignActivity;
-import com.example.taskmanagerapp.Controller.Activity.TaskManagerActivity;
+import com.example.taskmanagerapp.Controller.Activity.StateActivity;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.UserDBRepository;
@@ -79,7 +79,7 @@ private void findElem(View view){
                     if (mUser.isAdmin())
                         AdminActivity.start(getContext());
                     else
-                        TaskManagerActivity.start(getContext(), mUser.getUUID());
+                        StateActivity.start(getContext(), mUser.getUUID());
             }
         });
 

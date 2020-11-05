@@ -8,11 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.taskmanagerapp.Controller.Activity.TaskManagerActivity;
+import com.example.taskmanagerapp.Controller.Activity.StateActivity;
 import com.example.taskmanagerapp.Model.User.User;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.IRepository;
-import com.example.taskmanagerapp.Repository.TaskBDRepository;
 import com.example.taskmanagerapp.Repository.UserDBRepository;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
@@ -77,7 +76,7 @@ public class BottomSheetAdminFragment extends BottomSheetDialogFragment {
         mBtnUserTasks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TaskManagerActivity.start(getContext(),mUser.getUUID());
+                StateActivity.start(getContext(),mUser.getUUID());
             }
         });
     }

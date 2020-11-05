@@ -122,7 +122,6 @@ public class BottomSheetFrag extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 mCallback.onClickEditBtn(mTaskId);
-
                 dismiss();
             }
         });
@@ -130,9 +129,7 @@ public class BottomSheetFrag extends BottomSheetDialogFragment {
         mBtnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               mRepository.delete(mTask);
                mCallback.onClickDeleteBtn(mTask);
-
                 dismiss();
             }
         });

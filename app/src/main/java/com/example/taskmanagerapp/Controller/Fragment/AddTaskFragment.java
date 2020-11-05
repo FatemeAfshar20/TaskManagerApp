@@ -66,8 +66,6 @@ public class AddTaskFragment extends Fragment {
 
     private Toolbar mToolbar;
 
-    private OnBackPressed mCallback;
-
     public AddTaskFragment() {
         // Required empty public constructor
     }
@@ -82,17 +80,6 @@ public class AddTaskFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        if (context instanceof  OnBackPressed)
-            mCallback=(OnBackPressed) context;
-        else throw new
-                ClassCastException(
-                        "Must Be impelement OnBackPressed");
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,9 +91,9 @@ public class AddTaskFragment extends Fragment {
                 TaskBDRepository.getInstance(
                         getContext());
 
-        getActivity().setActionBar(mToolbar);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -115,6 +102,9 @@ public class AddTaskFragment extends Fragment {
                 false);
         findElem(view);
         setListener();
+
+        Toolbar toolbar=view.findViewById(R.id.toolbar);
+        getActivity().setActionBar(toolbar);
         return view;
     }
 
@@ -166,14 +156,14 @@ public class AddTaskFragment extends Fragment {
             public void onClick(View v) {
                 mTask = returnNewTask();
                 mTaskDBRepository.insert(mTask);
-                mCallback.finishFragment(mTask.getTaskState());
+                getActivity().finish();
             }
         });
 
         mButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback.finishFragment(mTask.getTaskState());
+                getActivity().finish();
             }
         });
 
@@ -292,10 +282,6 @@ public class AddTaskFragment extends Fragment {
 
     public String getEditContent() {
         return mEditContent.getText().toString();
-    }
-
-    public interface OnBackPressed {
-        void finishFragment(TaskState taskState);
     }
 
 }

@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.taskmanagerapp.R;
 
-public abstract class SingleFragment extends AppCompatActivity {
+public abstract class SingleFragmentActivity extends AppCompatActivity {
 
     public abstract Fragment getFragment();
 

@@ -17,8 +17,11 @@ import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +33,10 @@ import com.example.taskmanagerapp.Model.Task.TaskState;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.TaskBDRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.List;
 import java.util.UUID;
 
 public class StateFragment extends Fragment {
@@ -65,7 +71,7 @@ public class StateFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof  OnAddingTask)
+    if (context instanceof  OnAddingTask)
             mCallbacks=(OnAddingTask) context;
         else
             throw new ClassCastException(
@@ -97,8 +103,6 @@ public class StateFragment extends Fragment {
        View view=inflater.inflate(R.layout.fragment_state,
                container,
                false);
-
-
         /*toolbar.inflateMenu(R.menu.menu_state);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -129,7 +133,6 @@ public class StateFragment extends Fragment {
                     return false;
             }
         });*/
-
         findElem(view);
         setListener();
         setupAdapter();
@@ -185,7 +188,7 @@ public class StateFragment extends Fragment {
         updateAdapter();
     }
 
-    private void updateAdapter() {
+    public void updateAdapter() {
         if (mStateAdapter != null)
             mStateAdapter.setUserTasks(mTaskRepository.
                     getTaskStateList(mUserId,mStrTaskState));
@@ -243,4 +246,5 @@ public class StateFragment extends Fragment {
         void onClickAddTask(TaskState taskState);
         void onAddBottomSheetFragment(UUID taskId,String taskState);
     }
+
 }

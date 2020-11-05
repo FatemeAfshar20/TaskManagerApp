@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -66,6 +67,8 @@ public class EditFragment extends Fragment {
 
     private File mPhotoFile;
 
+    private OnUpdateTask mOnUpdateTask;
+
     public EditFragment() {
         // Required empty public constructor
     }
@@ -76,6 +79,17 @@ public class EditFragment extends Fragment {
         args.putSerializable(ARG_TASK_ID, taskId);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if (context instanceof OnUpdateTask)
+            mOnUpdateTask= (OnUpdateTask) context;
+        else
+            throw new ClassCastException
+                    ("Must Be Implement OnUpdateTask Interface");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -177,16 +191,15 @@ public class EditFragment extends Fragment {
             public void onClick(View v) {
                 userChangingTask();
                 mTaskDBRepository.update(mTask);
-                getActivity().getFragmentManager().popBackStack();
+                mOnUpdateTask.onUpdateTask(mTask.getTaskState().toString(),mTask.getUserId());
+                getActivity().finish();
             }
         });
 
        mButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //TODO......
-                getActivity().onBackPressed();
+                getActivity().finish();
             }
         });
 
@@ -335,7 +348,9 @@ public class EditFragment extends Fragment {
         }
     }
 
-
+    public interface OnUpdateTask{
+        void onUpdateTask(String taskState,UUID userId);
+    }
 
     public String getEditTitle() {
         return mEditTitle.getText().toString();

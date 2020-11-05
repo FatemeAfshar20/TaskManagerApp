@@ -1,17 +1,14 @@
 package com.example.taskmanagerapp.Controller.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 
 import com.example.taskmanagerapp.Controller.Fragment.AdminFragment;
-import com.example.taskmanagerapp.Controller.SingleFragment;
-import com.example.taskmanagerapp.R;
+import com.example.taskmanagerapp.Controller.SingleFragmentActivity;
 
-public class AdminActivity extends SingleFragment {
+public class AdminActivity extends SingleFragmentActivity {
 
     public static void start(Context context) {
         Intent starter = new Intent(context, AdminActivity.class);
