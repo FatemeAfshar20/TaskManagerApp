@@ -3,7 +3,6 @@ package com.example.taskmanagerapp.Controller.Fragment;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -18,7 +17,6 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toolbar;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -52,11 +50,11 @@ public class AddTaskFragment extends Fragment {
     public static final String ARGS_TASK_STATE = "task state";
     private User mUser = new User();
     private TaskBDRepository mTaskDBRepository;
-    private Task mTask=new Task();
+    private Task mTask = new Task();
 
     private TextInputEditText mEditTitle, mEditContent;
     private AppCompatImageButton mButtonOK,
-            mButtonCancel,mButtonCamera;
+            mButtonCancel, mButtonCamera;
 
     private AppCompatImageView mImageTask;
 
@@ -103,7 +101,7 @@ public class AddTaskFragment extends Fragment {
         findElem(view);
         setListener();
 
-        Toolbar toolbar=view.findViewById(R.id.toolbar);
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
         getActivity().setActionBar(toolbar);
         return view;
     }
@@ -111,15 +109,15 @@ public class AddTaskFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode!= Activity.RESULT_OK || data==null)
+        if (resultCode != Activity.RESULT_OK || data == null)
             return;
-        if (requestCode==REQUEST_CODE_CAMERA){
+        if (requestCode == REQUEST_CODE_CAMERA) {
             Uri photoUri = FileProvider.getUriForFile(getActivity(),
                     AUTHORITY, mPhotoFile);
 
             getActivity().revokeUriPermission(photoUri,
                     Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-
+            mTask.setImgAddress(mPhotoFile.getAbsolutePath());
             updatePhoto();
         }
     }
@@ -128,8 +126,10 @@ public class AddTaskFragment extends Fragment {
         if (mPhotoFile == null || !mPhotoFile.exists())
             return;
 
-        Bitmap image=  PhotoUtils.getScalePhoto(
-                mPhotoFile.getAbsolutePath(), getActivity());
+        Bitmap image = PhotoUtils.getScalePhoto(
+                mPhotoFile.getAbsolutePath(),
+                mImageTask.getHeight(),
+                mImageTask.getWidth());
 
         mImageTask.setImageBitmap(image);
     }
@@ -142,8 +142,8 @@ public class AddTaskFragment extends Fragment {
         mBtnSetDate = view.findViewById(R.id.set_date);
         mBtnSetTime = view.findViewById(R.id.set_time);
 
-        mButtonCamera=view.findViewById(R.id.camera);
-        mImageTask=view.findViewById(R.id.image_task);
+        mButtonCamera = view.findViewById(R.id.camera);
+        mImageTask = view.findViewById(R.id.image_task);
 
         mToolbar = view.findViewById(R.id.toolbar);
     }
@@ -171,7 +171,7 @@ public class AddTaskFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                DatePickerDialog datePickerDialog=new DatePickerDialog(getContext());
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext());
 
                 datePickerDialog.show();
             }
@@ -180,12 +180,12 @@ public class AddTaskFragment extends Fragment {
         mBtnSetTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerDialog timePickerDialog=new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
                     }
-                },9,28,true);
+                }, 9, 28, true);
 
                 timePickerDialog.show();
             }
@@ -199,20 +199,20 @@ public class AddTaskFragment extends Fragment {
         });
     }
 
-
     private File createImageFile() throws IOException {
-        String timeStamp=
+        String timeStamp =
                 new SimpleDateFormat(
                         "yyyyMMdd_HHmmss").
                         format(new Date());
-        String imageName="JPEG"+timeStamp+"_";
-        File storageDir =getActivity().getFilesDir();
-        File imageFile=File.createTempFile(imageName,
+        String imageName = "JPEG" + timeStamp + "_";
+        File storageDir = getActivity().getFilesDir();
+        File imageFile = File.createTempFile(imageName,
                 ".jpg",
                 storageDir);
         mTask.setImgAddress(imageFile.getAbsolutePath());
         return imageFile;
     }
+
     private void intentPhoto() {
         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePicture.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -250,6 +250,10 @@ public class AddTaskFragment extends Fragment {
         newTask.setTaskTime(new Date());
 
         newTask.setUserId(mUser.getUUID());
+        if (!mPhotoFile.getAbsolutePath().equals(null))
+            newTask.setImgAddress(mPhotoFile.getAbsolutePath());
+        else
+            newTask.setImgAddress("");
         return newTask;
     }
 

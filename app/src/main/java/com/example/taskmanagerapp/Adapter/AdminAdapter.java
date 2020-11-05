@@ -5,9 +5,11 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.taskmanagerapp.Controller.Fragment.BottomSheetAdminFragment;
@@ -95,6 +97,7 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.Holder> {
             mDateMemberShip.setText(
                     mDateMemberShip.getText().toString()+
                             DateUtils.getShortDateFormat(user.getMemberShip()));
+
         }
 
         private void setListener() {

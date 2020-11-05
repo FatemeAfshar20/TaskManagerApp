@@ -129,7 +129,5 @@ public class Task implements Serializable {
 
     public void setImgAddress(String imgPath) {
         mImgAddress = imgPath;
-
-
     }
 }

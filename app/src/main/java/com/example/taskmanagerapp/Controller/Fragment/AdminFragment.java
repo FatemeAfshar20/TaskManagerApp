@@ -56,9 +56,6 @@ public class AdminFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mUserRepository= UserDBRepository.getInstance(getContext());
-        Toolbar toolbar=new Toolbar(getContext());
-
-        getActivity().setActionBar(toolbar);
 
         setHasOptionsMenu(true);
     }

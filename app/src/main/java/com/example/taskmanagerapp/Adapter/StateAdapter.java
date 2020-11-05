@@ -1,6 +1,8 @@
 package com.example.taskmanagerapp.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Utils.DateUtils;
+import com.example.taskmanagerapp.Utils.PhotoUtils;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.DateFormat;
@@ -121,7 +124,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> impl
             mTaskContent = view.findViewById(R.id.content);
             mTaskInitDate = view.findViewById(R.id.task_date);
             mButtonMenu=view.findViewById(R.id.btn_menu);
-            mImageTask=view.findViewById(R.id.image_task);
+            mImageTask=view.findViewById(R.id.img_task);
         }
 
         private void setListener(){
@@ -145,6 +148,10 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.Holder> impl
             mTaskInitDate.setText(DateUtils.getShortDateFormat(
                     task.getTaskDate()
             ));
+            Bitmap bitmap=PhotoUtils.getScalePhoto(
+                    mTask.getImgAddress(),
+                    (Activity) mContext);
+            mImageTask.setImageBitmap(bitmap);
             mCallback.onTaskUpdated(task);
         }
     }

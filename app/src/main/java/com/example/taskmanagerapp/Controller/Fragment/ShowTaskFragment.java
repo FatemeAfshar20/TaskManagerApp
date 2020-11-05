@@ -1,5 +1,6 @@
 package com.example.taskmanagerapp.Controller.Fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.example.taskmanagerapp.Model.Task.Task;
 import com.example.taskmanagerapp.R;
 import com.example.taskmanagerapp.Repository.TaskBDRepository;
 import com.example.taskmanagerapp.Utils.DateUtils;
+import com.example.taskmanagerapp.Utils.PhotoUtils;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.DateFormat;
@@ -75,5 +77,8 @@ public class ShowTaskFragment extends DialogFragment {
         mShowState.setText(task.getTaskState().toString());
         mShowDate.setText(DateUtils.getShortDateFormat(task.getTaskDate()));
         mShowTime.setText(DateUtils.getShortTimeFormat(task.getTaskTime()));
+        mImgTask.setImageBitmap(PhotoUtils.getScalePhoto(
+                mTask.getImgAddress(),
+                getActivity()));
     }
 }
