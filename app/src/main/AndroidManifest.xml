@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Controller.Activity.AddTaskActivity"></activity>
-        <activity android:name=".Controller.Activity.AddActivity" />
         <activity android:name=".Controller.Activity.ShowTaskActivity" />
         <activity
             android:name=".Controller.Activity.EditActivity"
@@ -30,7 +29,6 @@
         </activity>
         -->
         <activity android:name=".Controller.Activity.AdminActivity" />
-        <activity android:name=".Controller.Activity.TaskManagerActivity" />
         <activity android:name=".Controller.Activity.SignActivity" />
         <activity android:name=".Controller.Activity.LoginActivity">
             <intent-filter>

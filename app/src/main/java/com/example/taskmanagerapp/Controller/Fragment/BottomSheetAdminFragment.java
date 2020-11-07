@@ -80,8 +80,4 @@ public class BottomSheetAdminFragment extends BottomSheetDialogFragment {
             }
         });
     }
-
-    public interface OnItemUpdate{
-        void updateUI();
-    }
 }

@@ -195,7 +195,6 @@ public class StateFragment extends Fragment {
         mStateAdapter.notifyDataSetChanged();
     }
 
-
     private void setupAdapter() {
         mStateAdapter=new StateAdapter(
                 mTaskRepository.getTaskStateList(mUserId,mStrTaskState)

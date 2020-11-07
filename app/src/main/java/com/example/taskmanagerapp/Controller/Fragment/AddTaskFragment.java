@@ -3,6 +3,7 @@ package com.example.taskmanagerapp.Controller.Fragment;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +47,7 @@ public class AddTaskFragment extends Fragment {
     public static final String EXTRA_NEW_TASK = "com.example.taskmanagerapp.New Task";
     public static final int REQUEST_CODE_CAMERA = 1;
     public static final String AUTHORITY = "com.example.taskmanagerapp.fileprovider";
-    public static final String TAG_EDIT_FRAGMENT = "Edit Fragment Tag";
+    public static final String TAG = "Add Task Fragment Tag";
     public static final String ARG_USER_ID = "User Id";
     public static final String ARGS_TASK_STATE = "task state";
     private User mUser = new User();
@@ -172,7 +174,12 @@ public class AddTaskFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext());
-
+                datePickerDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                        return false;
+                    }
+                });
                 datePickerDialog.show();
             }
         });
@@ -181,9 +188,10 @@ public class AddTaskFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.M)
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
+                                mTask.setTaskTime(getTime(view));
                     }
                 }, 9, 28, true);
 
@@ -220,8 +228,8 @@ public class AddTaskFragment extends Fragment {
             try {
                 mPhotoFile = createImageFile();
             } catch (IOException e) {
-                Log.e(TAG_EDIT_FRAGMENT,
-                        "Device for Take Picture not found");
+                Log.e(TAG,
+                        "Error occurred while creating the File : "+e.getMessage());
             }
         }
         if (mPhotoFile != null) {
